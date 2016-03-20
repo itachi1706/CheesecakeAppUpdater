@@ -57,10 +57,21 @@ public class UpdaterHelper {
         return true;
     }
 
+    /**
+     * Generate Alert Dialog showing Changelogs
+     * @param sp Shared Preference Manager object
+     * @param activity Activity in which this method is called from
+     */
     public static void settingGenerateChangelog(SharedPreferences sp, Activity activity) {
         settingGenerateChangelog(sp, "version-changelog", activity);
     }
 
+    /**
+     * Generate Alert Dialog showing App Changelogs
+     * @param sp Shared Preference Manager object
+     * @param prefName Preference Key Name
+     * @param activity Activity in which the method is called from
+     */
     public static void settingGenerateChangelog(SharedPreferences sp, String prefName, Activity activity) {
         String changelog = sp.getString(prefName, "l");
         if (changelog.equals("l")) {

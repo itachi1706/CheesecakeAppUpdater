@@ -43,6 +43,13 @@ public class AppUpdateChecker extends AsyncTask<Void, Void, String> {
     private String changelogLocation;
     private String baseurl;
 
+    /**
+     * Initialize App Update Checker
+     * @param activity Android Activity calling the function
+     * @param sharedPrefs Shared Preference Manager Object
+     * @param notificationIcon The resource id of the icon to be used in any notifications
+     * @param baseurl Base URL to check updates from
+     */
     public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, int notificationIcon, String baseurl){
         this.mActivity = activity;
         this.sp = sharedPrefs;
@@ -51,6 +58,14 @@ public class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         this.baseurl = baseurl;
     }
 
+    /**
+     * Initialize App Update Checker
+     * @param activity Android Activity calling the function
+     * @param sharedPrefs Shared Preference Manager Object
+     * @param isMain Whether its calling from the Main activity (hence no need to reply to user if no updates)
+     * @param notificationIcon Resource ID of icon to be used in notifications
+     * @param baseurl Base Update Checker URL
+     */
     public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, boolean isMain, int notificationIcon, String baseurl){
         this.mActivity = activity;
         this.sp = sharedPrefs;
@@ -59,6 +74,14 @@ public class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         this.baseurl = baseurl;
     }
 
+    /**
+     * Initialize App Update Checker
+     * @param activity Android Activity calling the function
+     * @param sharedPrefs Shared Preference Manager Object
+     * @param notificationIcon Resource ID of icon to be used in notifications
+     * @param changelogLocation Key in Shared Preference where changelog is stored in
+     * @param baseurl Base Update Checker URL
+     */
     public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, int notificationIcon, String changelogLocation, String baseurl){
         this.mActivity = activity;
         this.sp = sharedPrefs;
@@ -67,6 +90,15 @@ public class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         this.baseurl = baseurl;
     }
 
+    /**
+     * Initialize App Update Checker
+     * @param activity Android Activity calling the function
+     * @param sharedPrefs Shared Preference Manager Object
+     * @param isMain Whether its calling from the Main activity (hence no need to reply to user if no updates)
+     * @param notificationIcon Resource ID of icon to be used in notifications
+     * @param changelogLocation Key in Shared Preference where changelog is stored in
+     * @param baseurl Base Update Checker URL
+     */
     public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, boolean isMain, int notificationIcon, String changelogLocation, String baseurl){
         this.mActivity = activity;
         this.sp = sharedPrefs;

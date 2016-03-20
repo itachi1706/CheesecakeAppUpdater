@@ -31,7 +31,15 @@ public class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean> {
     private int notificationicon;
     private boolean ready = false;
 
-    public DownloadLatestUpdate(Activity activity, NotificationCompat.Builder notificationBuilder,
+    /**
+     * Called from AppUpdateChecker if the user decides to invoke anything
+     * @param activity Activity in which AppUpdateChecker is called from
+     * @param notificationBuilder Notification Builder Object
+     * @param notifyManager Notification Manager Object
+     * @param notifcationID Notification ID
+     * @param notificationicon Icon for notification
+     */
+    protected DownloadLatestUpdate(Activity activity, NotificationCompat.Builder notificationBuilder,
                                 NotificationManager notifyManager, int notifcationID, int notificationicon) {
         this.activity = activity;
         this.notification = notificationBuilder;

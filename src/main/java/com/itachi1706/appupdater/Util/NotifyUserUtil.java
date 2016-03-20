@@ -13,6 +13,11 @@ import com.itachi1706.appupdater.R;
  */
 @SuppressWarnings("unused")
 public class NotifyUserUtil {
+    /**
+     * Creates a short dismissable snackbar object
+     * @param currentLayout Current View Layout
+     * @param message Message in Snackbar
+     */
     public static void showShortDismissSnackbar(View currentLayout, String message){
         Snackbar.make(currentLayout, message, Snackbar.LENGTH_SHORT)
                 .setAction(R.string.snackbar_action_dismiss, new View.OnClickListener() {
@@ -23,6 +28,11 @@ public class NotifyUserUtil {
                 }).show();
     }
 
+    /**
+     * Create a Short Toast Message
+     * @param context Application Context
+     * @param message Message to display in Toast
+     */
     public static void createShortToast(Context context, String message){
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
