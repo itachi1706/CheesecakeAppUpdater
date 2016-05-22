@@ -48,6 +48,13 @@ public class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean> {
         this.notificationicon = notificationicon;
     }
 
+    private boolean deleteLegacyDownloads() {
+        File folder = new File(activity.getApplicationContext().getExternalFilesDir(null) + File.separator + "download" + File.separator);
+        if (!folder.exists()) return true; // Dont have the folder so its deleted
+        File file = new File(folder, "app-update.apk"); // Try to find file to delete
+        return !file.exists() || file.delete(); // Tries to delete file if it exists
+    }
+
     @Override
     protected Boolean doInBackground(String... updateLink) {
         try {
@@ -61,7 +68,8 @@ public class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean> {
             publishProgress();
             Log.d("Updater", "Starting Download...");
 
-            filePATH = activity.getApplicationContext().getExternalFilesDir(null) + File.separator + "download" + File.separator;
+            if (!deleteLegacyDownloads()) Log.e("Updater", "Unable to delete legacy file. Skipping file deletion"); // Delete old downloaded apk
+            filePATH = activity.getApplicationContext().getExternalCacheDir() + File.separator + "download" + File.separator;
             File folder = new File(filePATH);
             if (!folder.exists()) {
                 if (!tryAndCreateFolder(folder)) {
