@@ -70,6 +70,7 @@ public class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         this.mActivity = activity;
         this.sp = sharedPrefs;
         this.main = isMain;
+        this.notificationIcon = notificationIcon;
         this.changelogLocation = "version-changelog";
         this.baseurl = baseurl;
     }
