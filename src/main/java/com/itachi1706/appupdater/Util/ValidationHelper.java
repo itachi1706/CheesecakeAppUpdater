@@ -29,9 +29,13 @@ public class ValidationHelper {
 
         return installer != null && mergedList.contains(installer);
     }
-    
+
     public static boolean checkSideloaded(Context context) {
         return !checkNotSideloaded(context);
+    }
+
+    public static String getInstallLocation(Context context) {
+        return context.getPackageManager().getInstallerPackageName(context.getPackageName());
     }
 
     public static int checkInstallLocation(Context context) {
