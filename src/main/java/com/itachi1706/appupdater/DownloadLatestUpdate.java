@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
@@ -165,8 +166,11 @@ public class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean> {
         Log.d("Updater", "Invoking Package Manager");
         //Invoke the Package Manager
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(new File(filePATH + "app-update.apk")), "application/vnd.android.package-archive");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        File file = new File(filePATH + "app-update.apk");
+        Log.d("DEBUG", "Retrieving from " + file.getAbsolutePath());
+        Uri contentUri = FileProvider.getUriForFile(activity.getBaseContext(), "com.itachi1706.appupdater.provider", file);
+        intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
         activity.startActivity(intent);
 
         //Notify User and add intent to invoke update
