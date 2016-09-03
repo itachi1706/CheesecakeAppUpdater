@@ -89,17 +89,19 @@ public class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean> {
             InputStream is = conn.getInputStream();
             byte[] buffer = new byte[1024];
             int len1;
-            int lastprogress = 0;
+            int lastProgress = 0;
+            long lastNotification = 0;
+            final int NOTIFICATION_DURATION = 500; // twice a second (500ms)
             while ((len1 = is.read(buffer)) != -1) {
                 fos.write(buffer, 0, len1);
                 downloadSize += len1;
-                if (downloadSize % 80 == 0) {
-                    float progress = (downloadSize / totalSize) * 100;
-                    if (Math.round(progress) > lastprogress) {
-                        Log.d("Updater", "Download Size: " + downloadSize + "/" + totalSize);
-                        lastprogress = Math.round(progress);
-                        publishProgress(progress, downloadSize, (float) totalSize);
-                    }
+                float progress = (downloadSize / totalSize) * 100;
+                long notifyTime = System.currentTimeMillis();
+                if ((Math.round(progress) > lastProgress) && (notifyTime - lastNotification) > NOTIFICATION_DURATION) {
+                    Log.d("Updater", "Download Size: " + downloadSize + "/" + totalSize);
+                    lastProgress = Math.round(progress);
+                    lastNotification = notifyTime;
+                    publishProgress(progress, downloadSize, (float) totalSize);
                 }
             }
             fos.close();
