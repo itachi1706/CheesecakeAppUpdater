@@ -15,7 +15,7 @@ import com.itachi1706.appupdater.Objects.AppUpdateObject;
  * Created by Kenneth on 3/3/2016.
  * For com.itachi1706.appupdate.Util in AppUpdater
  */
-public class UpdaterHelper {
+public final class UpdaterHelper {
 
     public static int HTTP_QUERY_TIMEOUT = 15000; //15 seconds timeout
 
@@ -39,13 +39,14 @@ public class UpdaterHelper {
 
     /**
      * Determines if an app can check for update
-     * NOTE: This requires you to have a "updatewifi" checkbox preference to utilize
+     * NOTE: This requires you to have a "updateOnWifi" checkbox preference to utilize
+     * Edited 3/9: The utility will now handle this on its own assuming you invoke {@link com.itachi1706.appupdater.SettingsInitializer}
      * @param sp Shared Preference of the Application to get "updatewifi" check from
      * @param context The application context
      * @return True if app can check for updates, false otherwise
      */
     public static boolean canCheckUpdate(SharedPreferences sp, Context context) {
-        if (sp.getBoolean("updatewifi", false) && !ConnectivityHelper.isWifiConnection(context)) {
+        if (sp.getBoolean("updateOnWifi", false) && !ConnectivityHelper.isWifiConnection(context)) {
             Log.i("Updater", "Not on WIFI, Ignore Update Checking");
             return false;
         }

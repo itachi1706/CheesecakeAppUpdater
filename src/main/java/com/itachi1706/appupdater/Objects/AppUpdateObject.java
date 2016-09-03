@@ -5,7 +5,7 @@ package com.itachi1706.appupdater.Objects;
  * For com.itachi1706.appupdate.Objects in AppUpdater
  */
 @SuppressWarnings("unused")
-public class AppUpdateObject {
+public final class AppUpdateObject {
     private int index;
     private String id, packageName, appName, dateCreated, latestVersion, latestVersionCode, apptype;
     private AppUpdateMessageObject[] updateMessage;

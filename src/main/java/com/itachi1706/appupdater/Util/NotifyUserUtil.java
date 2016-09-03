@@ -12,7 +12,7 @@ import com.itachi1706.appupdater.R;
  * For com.itachi1706.appupdate.Util in AppUpdater.
  */
 @SuppressWarnings("unused")
-public class NotifyUserUtil {
+public final class NotifyUserUtil {
     /**
      * Creates a short dismissable snackbar object
      * @param currentLayout Current View Layout

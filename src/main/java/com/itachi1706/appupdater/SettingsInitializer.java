@@ -11,12 +11,13 @@ import android.preference.PreferenceManager;
 
 import com.itachi1706.appupdater.Util.UpdaterHelper;
 import com.itachi1706.appupdater.Util.ValidationHelper;
+import com.itachi1706.appupdater.internal.AppUpdateChecker;
 
 /**
  * Created by Kenneth on 28/8/2016.
  * for com.itachi1706.appupdater in CheesecakeUtilities
  */
-public class SettingsInitializer {
+public final class SettingsInitializer {
 
     private Activity context;
     private int mLauncherIcon;

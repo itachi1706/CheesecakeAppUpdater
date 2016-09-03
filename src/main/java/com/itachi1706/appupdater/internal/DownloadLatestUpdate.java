@@ -1,4 +1,4 @@
-package com.itachi1706.appupdater;
+package com.itachi1706.appupdater.internal;
 
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -10,6 +10,8 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
+import com.itachi1706.appupdater.R;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,9 +21,10 @@ import java.net.URL;
 
 /**
  * Created by itachi1706 on 2/20/2016.
- * For com.itachi1706.appupdate in AppUpdater.
+ * For com.itachi1706.appupdate.internal in AppUpdater.
+ * NOT FOR NON LIBRARY USE
  */
-public class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean> {
+public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean> {
     private Activity activity;
     Exception except = null;
     private Uri link;

@@ -1,4 +1,4 @@
-package com.itachi1706.appupdater;
+package com.itachi1706.appupdater.internal;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,6 +16,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.itachi1706.appupdater.Objects.AppUpdateObject;
 import com.itachi1706.appupdater.Objects.UpdateShell;
+import com.itachi1706.appupdater.R;
 import com.itachi1706.appupdater.Util.NotifyUserUtil;
 import com.itachi1706.appupdater.Util.UpdaterHelper;
 
@@ -30,9 +31,10 @@ import java.util.Random;
 
 /**
  * Created by itachi1706 on 2/20/2016.
- * For com.itachi1706.appupdate in AppUpdater.
+ * For com.itachi1706.appupdate.internal in AppUpdater.
+ * NOT FOR NON LIBRARY USE
  */
-public class AppUpdateChecker extends AsyncTask<Void, Void, String> {
+public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
 
     private Activity mActivity;
     private Exception except = null;

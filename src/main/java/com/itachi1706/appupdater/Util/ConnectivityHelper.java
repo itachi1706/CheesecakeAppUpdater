@@ -10,7 +10,7 @@ import android.net.NetworkInfo;
  * NOTE: Requires android.permission.ACCESS_NETWORK_STATE permission
  */
 @SuppressWarnings("unused")
-public class ConnectivityHelper {
+public final class ConnectivityHelper {
 
     /**
      * Gets the Network Info Object

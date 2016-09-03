@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Kenneth on 20/8/2016.
  * for com.itachi1706.appupdater.Util in AppUpdater
  */
-public class ValidationHelper {
+public final class ValidationHelper {
 
     public static final int GOOGLE_PLAY = 1;    //com.android.vending, com.google.android.feedback
     public static final int AMAZON = 2;         //com.amazon.venezia
