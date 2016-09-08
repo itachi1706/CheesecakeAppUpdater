@@ -173,7 +173,9 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
         Intent intent = new Intent(Intent.ACTION_VIEW);
         File file = new File(filePATH + "app-update.apk");
         Log.d("DEBUG", "Retrieving from " + file.getAbsolutePath());
-        Uri contentUri = FileProvider.getUriForFile(activity.getBaseContext(), "com.itachi1706.appupdater.provider", file);
+        Log.i("Downloader", "Invoking Content Provider " + activity.getApplicationContext().getPackageName() + ".appupdater.provider");
+        Uri contentUri = FileProvider.getUriForFile(activity.getBaseContext(), activity.getApplicationContext().getPackageName()
+                + ".appupdater.provider", file);
         intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
         activity.startActivity(intent);
