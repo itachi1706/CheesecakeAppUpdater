@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -125,7 +126,14 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
             double downloadMB = (double) Math.round((progress[1] / 1024.0 / 1024.0 * 100)) / 100;
             double downloadSizeMB = (double) Math.round((progress[2] / 1024.0 / 1024.0 * 100)) / 100;
             notification.setProgress(100, Math.round(progress[0]), false);
-            notification.setContentText("Downloading new update... (" + downloadMB + "/" + downloadSizeMB + "MB)");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                // Nougat onwards will have a new progress style
+                notification.setSubText(Math.round(progress[0]) + "%");
+                notification.setContentText("(" + downloadMB + "/" + downloadSizeMB + "MB)");
+            } else {
+                notification.setContentInfo(Math.round(progress[0]) + "%");
+                notification.setContentText("Downloading new update... (" + downloadMB + "/" + downloadSizeMB + "MB)");
+            }
             manager.notify(notificationID, notification.build());
         } else {
             notification.setProgress(0, 0, true);
@@ -137,6 +145,11 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
     protected void onPostExecute(Boolean passed) {
         Log.d("Updater", "Processing download");
         notification.setAutoCancel(true).setOngoing(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            notification.setSubText(null);
+        } else {
+            notification.setContentInfo(null);
+        }
         if (!passed) {
             //Update failed, update notification
             if (except != null) {
@@ -173,11 +186,18 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
         Intent intent = new Intent(Intent.ACTION_VIEW);
         File file = new File(filePATH + "app-update.apk");
         Log.d("DEBUG", "Retrieving from " + file.getAbsolutePath());
-        Log.i("Downloader", "Invoking Content Provider " + activity.getApplicationContext().getPackageName() + ".appupdater.provider");
-        Uri contentUri = FileProvider.getUriForFile(activity.getBaseContext(), activity.getApplicationContext().getPackageName()
-                + ".appupdater.provider", file);
-        intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Log.i("Downloader", "Post-Nougat: Using new Content URI method");
+            Log.i("Downloader", "Invoking Content Provider " + activity.getApplicationContext().getPackageName() + ".appupdater.provider");
+            Uri contentUri = FileProvider.getUriForFile(activity.getBaseContext(), activity.getApplicationContext().getPackageName()
+                    + ".appupdater.provider", file);
+            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } else {
+            Log.i("Downloader", "Pre-Nougat: Fallbacking to old method as they dont support contenturis");
+            intent.setDataAndType(Uri.fromFile(new File(filePATH + "app-update.apk")), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         activity.startActivity(intent);
 
         //Notify User and add intent to invoke update
