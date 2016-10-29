@@ -26,7 +26,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -39,7 +38,6 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
     private Activity mActivity;
     private Exception except = null;
     private SharedPreferences sp;
-    ArrayList<String> changelogStrings = new ArrayList<>();
     private boolean main = false;
     private int notificationIcon;
     private String changelogLocation;
@@ -136,11 +134,9 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             StringBuilder str = new StringBuilder();
             String line;
-            changelogStrings.clear();
             while((line = reader.readLine()) != null)
             {
                 str.append(line).append("\n");
-                changelogStrings.add(line);
             }
             in.close();
             tmp = str.toString();

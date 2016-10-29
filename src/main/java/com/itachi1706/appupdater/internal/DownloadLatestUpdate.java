@@ -27,7 +27,7 @@ import java.net.URL;
  */
 public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean> {
     private Activity activity;
-    Exception except = null;
+    private Exception except = null;
     private Uri link;
     private String filePATH;
     private NotificationCompat.Builder notification;
