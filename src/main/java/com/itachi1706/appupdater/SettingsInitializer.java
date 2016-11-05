@@ -10,6 +10,8 @@ import android.os.AsyncTask;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.customtabs.CustomTabsIntent;
+import android.util.TypedValue;
 
 import com.itachi1706.appupdater.Util.UpdaterHelper;
 import com.itachi1706.appupdater.Util.ValidationHelper;
@@ -165,12 +167,18 @@ public final class SettingsInitializer {
             }
         });
 
+        TypedValue colorTmp = new TypedValue();
+        context.getTheme().resolveAttribute(R.attr.colorPrimary, colorTmp, true);
+        final int colorPrimary = colorTmp.data;
+        final CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setToolbarColor(colorPrimary)
+                .enableUrlBarHiding().setShowTitle(true)
+                .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
+                .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build();
+
         fragment.findPreference("get_old_app").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(mLegacyLink));
-                context.startActivity(i);
+                customTabsIntent.launchUrl(context, Uri.parse(mLegacyLink));
                 return false;
             }
         });
@@ -178,9 +186,7 @@ public final class SettingsInitializer {
         fragment.findPreference("get_latest_app").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(mUpdateLink));
-                context.startActivity(i);
+                customTabsIntent.launchUrl(context, Uri.parse(mUpdateLink));
                 return false;
             }
         });
