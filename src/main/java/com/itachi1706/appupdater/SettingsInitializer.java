@@ -3,6 +3,8 @@ package com.itachi1706.appupdater;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.Preference;
@@ -13,10 +15,13 @@ import com.itachi1706.appupdater.Util.UpdaterHelper;
 import com.itachi1706.appupdater.Util.ValidationHelper;
 import com.itachi1706.appupdater.internal.AppUpdateChecker;
 
+import java.security.InvalidParameterException;
+
 /**
  * Created by Kenneth on 28/8/2016.
  * for com.itachi1706.appupdater in CheesecakeUtilities
  */
+@SuppressWarnings("unused")
 public final class SettingsInitializer {
 
     private Activity context;
@@ -40,22 +45,100 @@ public final class SettingsInitializer {
     }
 
     /**
-     * Explodes settings in your preference fragment
-     * @param fragment The preference fragment object
+     * Initializes new Settings Initializer
+     * NOTE: This is only for exploding info settings. If you want the updater setting, either use the other constructor
+     * or set a launcher icon, serverURL, legacyLink and updateLink
+     * @param activity Activity object that calls this
      */
-    public void explodeSettings(PreferenceFragment fragment) {
-        explodeSettings(fragment, true, true);
+    public SettingsInitializer(Activity activity) {
+        this.context = activity;
+    }
+    public SettingsInitializer setmLauncherIcon(int mLauncherIcon) {
+        this.mLauncherIcon = mLauncherIcon;
+        return this;
+    }
+
+    public SettingsInitializer setmServerUrl(String mServerUrl) {
+        this.mServerUrl = mServerUrl;
+        return this;
+    }
+
+    public SettingsInitializer setmLegacyLink(String mLegacyLink) {
+        this.mLegacyLink = mLegacyLink;
+        return this;
+    }
+    public SettingsInitializer setmUpdateLink(String mUpdateLink) {
+        this.mUpdateLink = mUpdateLink;
+        return this;
+    }
+
+    private boolean hasAllNeededForUpdate() {
+        return !(this.mUpdateLink == null || this.mLegacyLink == null || this.mServerUrl == null);
     }
 
     /**
-     * Explodes settings in your preference fragment
+     * Explodes general info settings in your preference fragment
+     * NOTE: This is automatically exploded if you use a EasterEgg fragment
+     * @param fragment The preference fragment object
+     */
+    @SuppressWarnings("WeakerAccess")
+    public SettingsInitializer explodeInfoSettings(final PreferenceFragment fragment) {
+        final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        fragment.addPreferencesFromResource(R.xml.pref_appinfo);
+
+        //Debug Info Get
+        String version = "NULL", packName = "NULL";
+        int versionCode = 0;
+        try {
+            PackageInfo pInfo = fragment.getActivity().getPackageManager().getPackageInfo(fragment.getActivity().getPackageName(), 0);
+            version = pInfo.versionName;
+            packName = pInfo.packageName;
+            versionCode = pInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        Preference verPref = fragment.findPreference("view_app_version");
+        verPref.setSummary(version + "-b" + versionCode);
+        fragment.findPreference("view_app_name").setSummary(packName);
+        fragment.findPreference("view_sdk_version").setSummary(android.os.Build.VERSION.RELEASE);
+        fragment.findPreference("vDevInfo").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                fragment.startActivity(new Intent(fragment.getActivity(), DebugInfoActivity.class));
+                return true;
+            }
+        });
+        return this;
+    }
+
+    /**
+     * Explodes updater settings in your preference fragment
+     * @param fragment The preference fragment object
+     * @deprecated Use {@link #explodeUpdaterSettings(PreferenceFragment) instead}
+     */
+    public SettingsInitializer explodeSettings(PreferenceFragment fragment) {
+        return explodeUpdaterSettings(fragment, true, true);
+    }
+
+    /**
+     * Explodes updater settings in your preference fragment
+     * @param fragment The preference fragment object
+     */
+    public SettingsInitializer explodeUpdaterSettings(PreferenceFragment fragment) {
+        return explodeUpdaterSettings(fragment, true, true);
+    }
+
+    /**
+     * Explodes updater settings in your preference fragment
      * @param fragment The preference fragment object
      * @param showOnlyForSideload Do not show any field if app is not sideloaded
      * @param showInstallLocation Only show install location field if app is sideloaded
      */
-    public void explodeSettings(PreferenceFragment fragment, boolean showOnlyForSideload, boolean showInstallLocation) {
+    @SuppressWarnings("WeakerAccess")
+    public SettingsInitializer explodeUpdaterSettings(PreferenceFragment fragment, boolean showOnlyForSideload, boolean showInstallLocation) {
+        if (!hasAllNeededForUpdate()) throw new InvalidParameterException("You need to set the appropriate setters for this to work");
         if (showOnlyForSideload && !ValidationHelper.checkSideloaded(context) && !showInstallLocation)
-            return; // Sideloaded
+            return this; // Sideloaded
 
         if (showOnlyForSideload && showInstallLocation && !ValidationHelper.checkSideloaded(context)) {
             // Expand minimal
@@ -69,7 +152,7 @@ public final class SettingsInitializer {
                 default: installLocation = "Sideloaded";
             }
             fragment.findPreference("installer_from").setSummary(installLocation);
-            return;
+            return this;
         }
 
         final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
@@ -119,5 +202,6 @@ public final class SettingsInitializer {
             default: installLocation = "Sideloaded";
         }
         fragment.findPreference("installer_from").setSummary(installLocation);
+        return this;
     }
 }

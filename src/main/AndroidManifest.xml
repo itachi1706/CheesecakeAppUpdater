@@ -20,6 +20,10 @@
 
         </provider>
 
+        <activity
+            android:name=".DebugInfoActivity"
+            android:label="@string/title_activity_general_settings" />
+
     </application>
 
 </manifest>
