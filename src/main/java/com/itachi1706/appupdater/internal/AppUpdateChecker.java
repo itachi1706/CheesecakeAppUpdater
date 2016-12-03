@@ -14,6 +14,7 @@ import android.text.Html;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.itachi1706.appupdater.Objects.AppUpdateObject;
 import com.itachi1706.appupdater.Objects.UpdateShell;
 import com.itachi1706.appupdater.R;
@@ -155,7 +156,13 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         Log.d("Debug", changelog);
 
         Gson gson = new Gson();
-        UpdateShell shell = gson.fromJson(changelog, UpdateShell.class);
+        UpdateShell shell;
+        try {
+            shell = gson.fromJson(changelog, UpdateShell.class);
+        } catch (JsonSyntaxException e) {
+            Log.e("Updater", "Invalid JSON, might not have internet");
+            return;
+        }
         if (shell == null)
             return;
         if (shell.getError() == 20) {
