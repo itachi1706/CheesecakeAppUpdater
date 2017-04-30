@@ -217,6 +217,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         String message = "Latest Version: " + updater.getLatestVersion() + "<br /><br />";
         message += UpdaterHelper.getChangelogStringFromArray(updater.getUpdateMessage());
         if (!mActivity.isFinishing()) {
+            //noinspection deprecation
             new AlertDialog.Builder(mActivity).setTitle("A New Update is Available!")
                     .setMessage(Html.fromHtml(message))
                     .setNegativeButton("Don't Update", null)

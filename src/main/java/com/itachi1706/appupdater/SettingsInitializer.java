@@ -85,7 +85,6 @@ public final class SettingsInitializer {
      */
     @SuppressWarnings("WeakerAccess")
     public SettingsInitializer explodeInfoSettings(final PreferenceFragment fragment) {
-        final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         fragment.addPreferencesFromResource(R.xml.pref_appinfo);
 
         //Debug Info Get
