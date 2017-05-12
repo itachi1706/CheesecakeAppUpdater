@@ -55,6 +55,11 @@ public final class UpdaterHelper {
             Log.w("Updater", "No internet connection, skipping WiFi checking");
             return false;
         }
+
+        if (ConnectivityHelper.shouldThrottle(context)) {
+            Log.w("Updater", "Currently on metered connection with Data Saver enabled, skipping check");
+            return false;
+        }
         return true;
     }
 
