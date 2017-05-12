@@ -96,9 +96,8 @@ public final class UpdaterHelper {
                 String message = "Latest Version: " + updater.getLatestVersion() + "<br /><br />";
                 message += UpdaterHelper.getChangelogStringFromArray(updater.getUpdateMessage());
 
-                //noinspection deprecation
                 new AlertDialog.Builder(activity).setTitle("Changelog")
-                        .setMessage(Html.fromHtml(message)).setPositiveButton("Close", null).show();
+                        .setMessage(DeprecationHelper.Html.fromHtml(message)).setPositiveButton("Close", null).show();
             }
         }
     }

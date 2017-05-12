@@ -18,6 +18,7 @@ import com.google.gson.JsonSyntaxException;
 import com.itachi1706.appupdater.Objects.AppUpdateObject;
 import com.itachi1706.appupdater.Objects.UpdateShell;
 import com.itachi1706.appupdater.R;
+import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.appupdater.Util.NotifyUserUtil;
 import com.itachi1706.appupdater.Util.UpdaterHelper;
 
@@ -217,9 +218,8 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         String message = "Latest Version: " + updater.getLatestVersion() + "<br /><br />";
         message += UpdaterHelper.getChangelogStringFromArray(updater.getUpdateMessage());
         if (!mActivity.isFinishing()) {
-            //noinspection deprecation
             new AlertDialog.Builder(mActivity).setTitle("A New Update is Available!")
-                    .setMessage(Html.fromHtml(message))
+                    .setMessage(DeprecationHelper.Html.fromHtml(message))
                     .setNegativeButton("Don't Update", null)
                     .setPositiveButton("Update", new DialogInterface.OnClickListener() {
                         @Override
