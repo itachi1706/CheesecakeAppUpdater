@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.Html;
 import android.util.Log;
 
 import com.google.gson.Gson;

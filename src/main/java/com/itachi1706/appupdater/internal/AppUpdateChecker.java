@@ -10,7 +10,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.support.v7.app.NotificationCompat;
-import android.text.Html;
 import android.util.Log;
 
 import com.google.gson.Gson;
