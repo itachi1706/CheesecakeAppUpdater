@@ -1,5 +1,6 @@
 package com.itachi1706.appupdater.Util;
 
+import android.content.Context;
 import android.os.Build;
 import android.text.Spanned;
 
@@ -31,6 +32,13 @@ public class DeprecationHelper {
         public static long getAvailableBlocks(android.os.StatFs statFs) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) return statFs.getAvailableBlocksLong();
             else return statFs.getAvailableBlocks();
+        }
+    }
+
+    public static class TextView {
+        public static void setTextAppearance(android.widget.TextView textView, Context context, int resId) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) textView.setTextAppearance(context, resId);
+            else textView.setTextAppearance(resId);
         }
     }
 }
