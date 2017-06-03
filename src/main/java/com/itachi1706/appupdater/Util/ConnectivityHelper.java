@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 
 /**
@@ -13,16 +14,24 @@ import android.support.annotation.RequiresApi;
  */
 @SuppressWarnings("unused")
 public final class ConnectivityHelper {
+    
+    public static final int NO_CONNECTION = -1;
 
     /**
      * Gets the Network Info Object
      * @param context Context
      * @return Network Info
      */
+    @Nullable
     private static NetworkInfo getNetworkInfo(Context context) {
         ConnectivityManager cm = getConnectivityManager(context);
 
         return cm.getActiveNetworkInfo();
+    }
+    
+    private static int getNetworkType(NetworkInfo networkInfo) {
+        if (networkInfo == null) return NO_CONNECTION;
+        else return networkInfo.getType();
     }
 
     /**
@@ -51,7 +60,7 @@ public final class ConnectivityHelper {
      */
     public static boolean isWifiConnection(Context context) {
         NetworkInfo activeNetwork = getNetworkInfo(context);
-        return activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+        return activeNetwork != null && getNetworkType(activeNetwork) == ConnectivityManager.TYPE_WIFI;
     }
 
     /**
@@ -61,7 +70,7 @@ public final class ConnectivityHelper {
      */
     public static boolean isCellularConnection(Context context) {
         NetworkInfo activeNetwork = getNetworkInfo(context);
-        return activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE;
+        return activeNetwork != null && getNetworkType(activeNetwork) == ConnectivityManager.TYPE_MOBILE;
     }
 
     /**
@@ -70,7 +79,7 @@ public final class ConnectivityHelper {
      * @return Active Netwrok Type (ConnectivityManager.TYPE_WIFI etc.)
      */
     public static int getActiveNetworkType(Context context) {
-        return getNetworkInfo(context).getType();
+        return getNetworkType(getNetworkInfo(context));
     }
 
     /**
