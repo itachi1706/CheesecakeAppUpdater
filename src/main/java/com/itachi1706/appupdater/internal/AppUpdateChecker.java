@@ -5,15 +5,18 @@ import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.itachi1706.appupdater.NewUpdateActivity;
 import com.itachi1706.appupdater.Objects.AppUpdateObject;
 import com.itachi1706.appupdater.Objects.UpdateShell;
 import com.itachi1706.appupdater.R;
@@ -43,6 +46,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
     private int notificationIcon;
     private String changelogLocation;
     private String baseurl;
+    private boolean fullScreen;
 
     /**
      * Initialize App Update Checker
@@ -50,13 +54,15 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
      * @param sharedPrefs Shared Preference Manager Object
      * @param notificationIcon The resource id of the icon to be used in any notifications
      * @param baseurl Base URL to check updates from
+     * @param fullScreen Whether to use a Full Screen activity or not
      */
-    public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, int notificationIcon, String baseurl){
+    public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, int notificationIcon, String baseurl, boolean fullScreen){
         this.mActivity = activity;
         this.sp = sharedPrefs;
         this.notificationIcon = notificationIcon;
         this.changelogLocation = "version-changelog";
         this.baseurl = baseurl;
+        this.fullScreen = fullScreen;
     }
 
     /**
@@ -66,14 +72,17 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
      * @param isMain Whether its calling from the Main activity (hence no need to reply to user if no updates)
      * @param notificationIcon Resource ID of icon to be used in notifications
      * @param baseurl Base Update Checker URL
+     * @param fullScreen Whether to use a Full Screen activity or not
      */
-    public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, boolean isMain, int notificationIcon, String baseurl){
+    public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, boolean isMain, int notificationIcon,
+                            String baseurl, boolean fullScreen){
         this.mActivity = activity;
         this.sp = sharedPrefs;
         this.main = isMain;
         this.notificationIcon = notificationIcon;
         this.changelogLocation = "version-changelog";
         this.baseurl = baseurl;
+        this.fullScreen = fullScreen;
     }
 
     /**
@@ -83,13 +92,16 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
      * @param notificationIcon Resource ID of icon to be used in notifications
      * @param changelogLocation Key in Shared Preference where changelog is stored in
      * @param baseurl Base Update Checker URL
+     * @param fullScreen Whether to use a Full Screen activity or not
      */
-    public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, int notificationIcon, String changelogLocation, String baseurl){
+    public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, int notificationIcon,
+                            String changelogLocation, String baseurl, boolean fullScreen){
         this.mActivity = activity;
         this.sp = sharedPrefs;
         this.notificationIcon = notificationIcon;
         this.changelogLocation = changelogLocation;
         this.baseurl = baseurl;
+        this.fullScreen = fullScreen;
     }
 
     /**
@@ -100,13 +112,17 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
      * @param notificationIcon Resource ID of icon to be used in notifications
      * @param changelogLocation Key in Shared Preference where changelog is stored in
      * @param baseurl Base Update Checker URL
+     * @param fullScreen Whether to use a Full Screen activity or not
      */
-    public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, boolean isMain, int notificationIcon, String changelogLocation, String baseurl){
+    public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, boolean isMain, int notificationIcon,
+                            String changelogLocation, String baseurl, boolean fullScreen){
         this.mActivity = activity;
         this.sp = sharedPrefs;
         this.main = isMain;
+        this.notificationIcon = notificationIcon;
         this.changelogLocation = changelogLocation;
         this.baseurl = baseurl;
+        this.fullScreen = fullScreen;
     }
 
 
@@ -217,23 +233,31 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         String message = "Latest Version: " + updater.getLatestVersion() + "<br /><br />";
         message += UpdaterHelper.getChangelogStringFromArray(updater.getUpdateMessage());
         if (!mActivity.isFinishing()) {
-            new AlertDialog.Builder(mActivity).setTitle("A New Update is Available!")
-                    .setMessage(DeprecationHelper.Html.fromHtml(message))
-                    .setNegativeButton("Don't Update", null)
-                    .setPositiveButton("Update", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            NotificationManager manager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mActivity);
-                            mBuilder.setContentTitle(mActivity.getString(R.string.notification_title_starting_download)).setContentText(mActivity.getString(R.string.notification_content_starting_download))
-                                    .setProgress(0, 0, true).setSmallIcon(notificationIcon).setAutoCancel(false)
-                                    .setOngoing(true).setTicker(mActivity.getString(R.string.notification_ticker_starting_download));
-                            Random random = new Random();
-                            int notificationId = random.nextInt();
-                            manager.notify(notificationId, mBuilder.build());
-                            new DownloadLatestUpdate(mActivity, mBuilder, manager, notificationId, notificationIcon).executeOnExecutor(THREAD_POOL_EXECUTOR, updateLink);
-                        }
-                    }).show();
+            if (fullScreen && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+                // Launch Full Screen Updater
+                Intent intent = new Intent(mActivity, NewUpdateActivity.class);
+                intent.putExtra("update", gson.toJson(updater));
+                intent.putExtra("nicon", notificationIcon);
+                mActivity.startActivity(intent);
+            } else {
+                new AlertDialog.Builder(mActivity).setTitle("A New Update is Available!")
+                        .setMessage(DeprecationHelper.Html.fromHtml(message))
+                        .setNegativeButton("Don't Update", null)
+                        .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                NotificationManager manager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
+                                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mActivity);
+                                mBuilder.setContentTitle(mActivity.getString(R.string.notification_title_starting_download)).setContentText(mActivity.getString(R.string.notification_content_starting_download))
+                                        .setProgress(0, 0, true).setSmallIcon(notificationIcon).setAutoCancel(false)
+                                        .setOngoing(true).setTicker(mActivity.getString(R.string.notification_ticker_starting_download));
+                                Random random = new Random();
+                                int notificationId = random.nextInt();
+                                manager.notify(notificationId, mBuilder.build());
+                                new DownloadLatestUpdate(mActivity, mBuilder, manager, notificationId, notificationIcon).executeOnExecutor(THREAD_POOL_EXECUTOR, updateLink);
+                            }
+                        }).show();
+            }
         }
     }
 

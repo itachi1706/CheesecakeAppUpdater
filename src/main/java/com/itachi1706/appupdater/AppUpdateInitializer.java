@@ -19,12 +19,21 @@ public final class AppUpdateInitializer {
     private SharedPreferences sp;
     private int mNotificationIcon;
     private String baseURL;
+    private boolean fullscreen = false;
 
     public AppUpdateInitializer(Activity mActivity, SharedPreferences sp, int mNotificationIcon, String baseURL) {
         this.mActivity = mActivity;
         this.sp = sp;
         this.mNotificationIcon = mNotificationIcon;
         this.baseURL = baseURL;
+    }
+
+    public AppUpdateInitializer(Activity mActivity, SharedPreferences sp, int mNotificationIcon, String baseURL, boolean fullscreen) {
+        this.mActivity = mActivity;
+        this.sp = sp;
+        this.mNotificationIcon = mNotificationIcon;
+        this.baseURL = baseURL;
+        this.fullscreen = fullscreen;
     }
 
     /**
@@ -58,6 +67,6 @@ public final class AppUpdateInitializer {
 
     private void update() {
         Log.i("Updater", "Checking for new updates...");
-        new AppUpdateChecker(mActivity, sp, true, mNotificationIcon, baseURL).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new AppUpdateChecker(mActivity, sp, true, mNotificationIcon, baseURL, fullscreen).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }

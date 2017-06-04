@@ -21,4 +21,6 @@
     <string name="snackbar_action_dismiss">DISMISS</string>
     <string name="toast_cannot_contact_update_server">Unable to contact update server to check for updates</string>
     <string name="toast_cannot_check_update">Unable to do app update check</string>
+    <string name="redownload">Redownload</string>
+    <string name="download">Download</string>
 </resources>
