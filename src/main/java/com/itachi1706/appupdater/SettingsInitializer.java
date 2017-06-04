@@ -28,6 +28,7 @@ public final class SettingsInitializer {
 
     private Activity context;
     private int mLauncherIcon;
+    private boolean fullscreen = false;
     private String mServerUrl, mLegacyLink, mUpdateLink;
 
     /**
@@ -44,6 +45,24 @@ public final class SettingsInitializer {
         this.mServerUrl = serverUrl;
         this.mLegacyLink = legacyLink;
         this.mUpdateLink = updateLink;
+    }
+
+    /**
+     * Initializes new Settings Initializer
+     * @param activity Activity object that calls this
+     * @param launcher_icon Resource Id to an icon to show for any notifications
+     * @param serverUrl Base Server URL
+     * @param legacyLink URL To full list of app downloads
+     * @param updateLink URL to latest app download
+     * @param fullscreen Use Full Screen Update Activity
+     */
+    public SettingsInitializer(Activity activity, int launcher_icon, String serverUrl, String legacyLink, String updateLink, boolean fullscreen) {
+        this.context = activity;
+        this.mLauncherIcon = launcher_icon;
+        this.mServerUrl = serverUrl;
+        this.mLegacyLink = legacyLink;
+        this.mUpdateLink = updateLink;
+        this.fullscreen = fullscreen;
     }
 
     /**
@@ -161,7 +180,7 @@ public final class SettingsInitializer {
         fragment.findPreference("launch_updater").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                new AppUpdateChecker(context, sp, mLauncherIcon, mServerUrl).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                new AppUpdateChecker(context, sp, mLauncherIcon, mServerUrl, fullscreen).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 return false;
             }
         });
