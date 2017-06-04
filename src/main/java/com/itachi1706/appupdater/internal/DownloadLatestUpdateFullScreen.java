@@ -42,6 +42,7 @@ public final class DownloadLatestUpdateFullScreen extends AsyncTask<String, Floa
 
     @Override
     protected Boolean doInBackground(String... updateLink) {
+        ready = false;
         try {
             URL url = new URL(updateLink[0]);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -105,9 +106,11 @@ public final class DownloadLatestUpdateFullScreen extends AsyncTask<String, Floa
         Bundle bundle = new Bundle();
         bundle.putBoolean("ready", ready);
         if (ready) {
-            bundle.putFloat("download", progress[1]);
-            bundle.putFloat("total", progress[2]);
-            bundle.putFloat("progress", progress[0]);
+            if (progress.length >= 3) {
+                bundle.putFloat("download", progress[1]);
+                bundle.putFloat("total", progress[2]);
+                bundle.putFloat("progress", progress[0]);
+            }
         }
         msg.setData(bundle);
         handler.sendMessage(msg);

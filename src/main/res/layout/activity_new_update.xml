@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,6 +18,7 @@
         android:layout_marginStart="13dp"
         android:layout_marginTop="13dp"
         android:text="What's New in this version"
+        android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -31,7 +31,7 @@
         android:layout_alignStart="@+id/lblWhatsNew"
         android:layout_below="@+id/lblWhatsNew"
         android:layout_marginTop="14dp"
-        android:maxLines="8"
+        android:maxLines="6"
         android:text="TextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\n" />
 
     <Button
@@ -50,33 +50,34 @@
         android:id="@+id/lblDlUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Downloading New Update"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/btnEnableUnknown"
         android:layout_alignLeft="@+id/lblUnknownSource"
-        android:layout_alignStart="@+id/lblUnknownSource" />
+        android:layout_alignStart="@+id/lblUnknownSource"
+        android:layout_below="@+id/btnEnableUnknown"
+        android:layout_marginTop="8dp"
+        android:text="2) Downloading New Update"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/lblUnknownSource"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text='1) Enable "Unknown Sources"'
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@+id/btnMore"
         android:layout_alignLeft="@+id/btnMore"
         android:layout_alignStart="@+id/btnMore"
-        android:layout_centerVertical="true"
-        android:text='Enable "Unknown Sources"'
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_marginTop="14dp" />
 
     <TextView
         android:id="@+id/lblInstallUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Install Update"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/btnDownload"
         android:layout_alignLeft="@+id/btnDownload"
-        android:layout_alignStart="@+id/btnDownload" />
+        android:layout_alignStart="@+id/btnDownload"
+        android:layout_below="@+id/btnDownload"
+        android:layout_marginTop="16dp"
+        android:text="3) Install Update"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
         android:id="@+id/btnEnableUnknown"
@@ -122,6 +123,7 @@
             android:id="@+id/pbProgress"
             style="?android:attr/progressBarStyleHorizontal"
             android:progress="100"
+            android:paddingRight="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="90.35" />

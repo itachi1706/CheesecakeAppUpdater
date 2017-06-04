@@ -15,6 +15,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -57,10 +58,6 @@ public class NewUpdateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSupportActionBar() != null && getSupportActionBar().isShowing()) {
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
 
         if (!getIntent().hasExtra("update")) {
             Log.e(TAG, "No Update Message in intent. Exiting");
@@ -69,6 +66,12 @@ public class NewUpdateActivity extends AppCompatActivity {
         } else {
             Gson gson = new Gson();
             update = gson.fromJson(getIntent().getStringExtra("update"), AppUpdateObject.class);
+        }
+
+        if (getSupportActionBar() != null && getSupportActionBar().isShowing()) {
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Version " + update.getLatestVersion() + " is available!");
         }
         
         if (getIntent().hasExtra("nicon")) notificationIcon = getIntent().getExtras().getInt("nicon");
@@ -119,7 +122,8 @@ public class NewUpdateActivity extends AppCompatActivity {
         for (AppUpdateMessageObject m : update.getUpdateMessage()) {
             if (m.getVersionCode().equalsIgnoreCase(update.getLatestVersionCode())) {
                 // Done
-                String lbl = m.getLabels().replace("<font color=\\\"green\\\">LATEST<\\/font>", "").trim();
+                String lbl = m.getLabels().replace("<font color=\"green\">LATEST</font>", "").trim();
+                Log.d(TAG, lbl);
                 updateMessage = "";
                 if (!lbl.isEmpty()) updateMessage += lbl + "<br/>";
                 updateMessage += m.getUpdateText().replace("\r\n", "<br/>");
@@ -168,7 +172,7 @@ public class NewUpdateActivity extends AppCompatActivity {
         showMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(getParent()).setTitle("Changelog")
+                new AlertDialog.Builder(NewUpdateActivity.this).setTitle("Changelog")
                         .setMessage(DeprecationHelper.Html.fromHtml(fullUpdateMessage))
                         .setPositiveButton(R.string.dialog_action_positive_close, null).show();
             }
@@ -190,8 +194,9 @@ public class NewUpdateActivity extends AppCompatActivity {
             // Presume not enabled
             Log.e(TAG, "Presuming Unknown Sources Unchecked");
         }
-        if (isNonPlayAppAllowed) enableUnknown.setVisibility(View.GONE);
-        else enableUnknown.setVisibility(View.VISIBLE);
+
+        if (isNonPlayAppAllowed) enableUnknown.setEnabled(false);
+        else enableUnknown.setEnabled(true);
         if (updateLink.isEmpty()) download.setVisibility(View.GONE);
         else download.setVisibility(View.VISIBLE);
         progressLayout.setVisibility(View.GONE);
@@ -200,11 +205,11 @@ public class NewUpdateActivity extends AppCompatActivity {
         if (f.exists()) {
             download.setVisibility(View.VISIBLE);
             download.setText(R.string.redownload);
-            install.setVisibility(View.VISIBLE);
+            install.setEnabled(true);
         } else {
             download.setVisibility(View.VISIBLE);
             download.setText(R.string.download);
-            install.setVisibility(View.GONE);
+            install.setEnabled(false);
         }
     }
 
@@ -214,8 +219,7 @@ public class NewUpdateActivity extends AppCompatActivity {
         if (folder.exists()) {
             File f = new File(folder, fileName);
             if (f.exists()) {
-                //noinspection ResultOfMethodCallIgnored
-                f.delete();
+                Log.i(TAG, "Delete File status: " + f.delete());
             }
         }
     }
@@ -240,7 +244,7 @@ public class NewUpdateActivity extends AppCompatActivity {
                     if (ready) {
                         float dl = msg.getData().getFloat("download");
                         float dlt = msg.getData().getFloat("total");
-                        float dlp = msg.getData().getFloat("progressText");
+                        float dlp = msg.getData().getFloat("progress");
                         activity.updateNotification(true, dlp, dl, dlt);
                     } else activity.updateNotification(false);
                     break;
@@ -293,7 +297,7 @@ public class NewUpdateActivity extends AppCompatActivity {
         // Reenable download button, reset progressText bar, delete failed download
         download.setVisibility(View.VISIBLE);
         progressLayout.setVisibility(View.GONE);
-        install.setVisibility(View.GONE);
+        install.setEnabled(false);
         download.setText("Download");
         deleteDownload();
 
@@ -334,7 +338,7 @@ public class NewUpdateActivity extends AppCompatActivity {
         progressLayout.setVisibility(View.VISIBLE);
         download.setVisibility(View.VISIBLE);
         download.setText(R.string.redownload);
-        install.setVisibility(View.VISIBLE);
+        install.setEnabled(true);
 
         //Notify User and add intent to invoke update
         if (notification == null) return;
@@ -345,5 +349,16 @@ public class NewUpdateActivity extends AppCompatActivity {
                 .setAutoCancel(true).setContentIntent(pendingIntent)
                 .setSmallIcon(notificationIcon).setProgress(0, 0, false);
         manager.notify(notificationId, notification.build());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
