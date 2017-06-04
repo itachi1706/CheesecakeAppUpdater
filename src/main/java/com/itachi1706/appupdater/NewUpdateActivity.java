@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.itachi1706.appupdater.Objects.AppUpdateMessageObject;
@@ -47,6 +48,7 @@ public class NewUpdateActivity extends AppCompatActivity {
     private String fullUpdateMessage, updateLink, filePath, fileName;
     private AppUpdateObject update;
     private Intent installIntent;
+    private boolean processing = false;
     private int notificationIcon;
     private UpdateHandler mHandler;
 
@@ -146,10 +148,15 @@ public class NewUpdateActivity extends AppCompatActivity {
                 deleteDownload();
 
                 download.setVisibility(View.GONE);
+                install.setEnabled(false);
                 progressLayout.setVisibility(View.VISIBLE);
                 progressBar.setProgress(0);
                 progressBar.setIndeterminate(true);
-                progressText.setText("0%");
+                progressText.setText(getString(R.string.progress, 0f));
+                processing = true;
+                if (getSupportActionBar() != null && getSupportActionBar().isShowing()) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                }
 
                 notification = new NotificationCompat.Builder(getApplicationContext());
                 notification.setContentTitle(getApplicationContext().getString(R.string.notification_title_starting_download))
@@ -208,7 +215,7 @@ public class NewUpdateActivity extends AppCompatActivity {
             progressLayout.setVisibility(View.VISIBLE);
             progressBar.setProgress(100);
             progressBar.setIndeterminate(false);
-            progressText.setText(getString(R.string.progress, 100));
+            progressText.setText(getString(R.string.progress, 100f));
         } else {
             download.setVisibility(View.VISIBLE);
             download.setText(R.string.download);
@@ -263,6 +270,10 @@ public class NewUpdateActivity extends AppCompatActivity {
 
     private void handleProcessDownload() {
         Log.d(TAG, "Processing download");
+        if (getSupportActionBar() != null && getSupportActionBar().isShowing()) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        processing = false;
         if (notification == null) return;
         notification.setAutoCancel(true).setOngoing(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -270,6 +281,12 @@ public class NewUpdateActivity extends AppCompatActivity {
         } else {
             notification.setContentInfo(null);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!processing) super.onBackPressed();
+        else Toast.makeText(getApplicationContext(), "Unable to exit while updating", Toast.LENGTH_SHORT).show();
     }
 
     private void updateNotification(boolean ready, Float... progress) {
@@ -336,7 +353,7 @@ public class NewUpdateActivity extends AppCompatActivity {
 
     private void handleSuccess() {
         // Download button becomes redownload button, 100% progressText bar, enable install button
-        progressText.setText(getString(R.string.progress, 100));
+        progressText.setText(getString(R.string.progress, 100f));
         progressBar.setProgress(100);
         progressBar.setIndeterminate(false);
         progressLayout.setVisibility(View.VISIBLE);

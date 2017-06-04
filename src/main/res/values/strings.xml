@@ -23,7 +23,7 @@
     <string name="toast_cannot_check_update">Unable to do app update check</string>
     <string name="redownload">Redownload</string>
     <string name="download">Download</string>
-    <string name="progress">%1$d%%</string>
+    <string name="progress">%1$.0f%%</string>
     <string name="install">Install</string>
     <string name="lbl_install_update">3) Install Update</string>
     <string name="lbl_unknown_enable">1) Enable Unknown Sources</string>
