@@ -150,7 +150,7 @@ public final class SettingsInitializer {
                 case ValidationHelper.GOOGLE_PLAY: installLocation = "Google Play (" + location + ")"; break;
                 case ValidationHelper.AMAZON: installLocation = "Amazon App Store (" + location + ")"; break;
                 case ValidationHelper.SIDELOAD:
-                default: installLocation = "Sideloaded";
+                default: installLocation = "Sideloaded"; if (location != null) installLocation += " (" + location + ")"; break;
             }
             fragment.findPreference("installer_from").setSummary(installLocation);
             return this;

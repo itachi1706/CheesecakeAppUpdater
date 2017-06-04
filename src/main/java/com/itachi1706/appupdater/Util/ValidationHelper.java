@@ -35,11 +35,19 @@ public final class ValidationHelper {
     }
 
     public static String getInstallLocation(Context context) {
-        return context.getPackageManager().getInstallerPackageName(context.getPackageName());
+        return getInstallLocation(context, context.getPackageName());
+    }
+
+    public static String getInstallLocation(Context context, String packageName) {
+        return context.getPackageManager().getInstallerPackageName(packageName);
     }
 
     public static int checkInstallLocation(Context context) {
-        final String installer = context.getPackageManager().getInstallerPackageName(context.getPackageName());
+        return checkInstallLocation(context, context.getPackageName());
+    }
+
+    public static int checkInstallLocation(Context context, String packageName) {
+        final String installer = getInstallLocation(context, packageName);
         if (installer == null) return SIDELOAD;
         if (playstoreList.contains(installer)) return GOOGLE_PLAY;
         if (amazonList.contains(installer)) return AMAZON;
