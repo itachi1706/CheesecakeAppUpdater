@@ -199,17 +199,21 @@ public class NewUpdateActivity extends AppCompatActivity {
         else enableUnknown.setEnabled(true);
         if (updateLink.isEmpty()) download.setVisibility(View.GONE);
         else download.setVisibility(View.VISIBLE);
-        progressLayout.setVisibility(View.GONE);
 
         File f = new File(filePath, fileName);
         if (f.exists()) {
             download.setVisibility(View.VISIBLE);
             download.setText(R.string.redownload);
             install.setEnabled(true);
+            progressLayout.setVisibility(View.VISIBLE);
+            progressBar.setProgress(100);
+            progressBar.setIndeterminate(false);
+            progressText.setText("100%");
         } else {
             download.setVisibility(View.VISIBLE);
             download.setText(R.string.download);
             install.setEnabled(false);
+            progressLayout.setVisibility(View.GONE);
         }
     }
 
