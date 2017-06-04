@@ -45,7 +45,6 @@ public final class SettingsInitializer {
         this.mServerUrl = serverUrl;
         this.mLegacyLink = legacyLink;
         this.mUpdateLink = updateLink;
-        this.fullscreen = fullscreen;
     }
 
     /**

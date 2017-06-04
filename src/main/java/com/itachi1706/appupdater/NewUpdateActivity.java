@@ -208,7 +208,7 @@ public class NewUpdateActivity extends AppCompatActivity {
             progressLayout.setVisibility(View.VISIBLE);
             progressBar.setProgress(100);
             progressBar.setIndeterminate(false);
-            progressText.setText("100%");
+            progressText.setText(getString(R.string.progress, 100));
         } else {
             download.setVisibility(View.VISIBLE);
             download.setText(R.string.download);
@@ -281,7 +281,7 @@ public class NewUpdateActivity extends AppCompatActivity {
             notification.setProgress(100, Math.round(progress[0]), false);
             progressBar.setIndeterminate(false);
             progressBar.setProgress(Math.round(progress[0]));
-            progressText.setText(Math.round(progress[0]) + "%");
+            progressText.setText(getString(R.string.progress, progress[0]));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 // Nougat onwards will have a new progressText style
                 notification.setSubText(Math.round(progress[0]) + "%");
@@ -302,7 +302,7 @@ public class NewUpdateActivity extends AppCompatActivity {
         download.setVisibility(View.VISIBLE);
         progressLayout.setVisibility(View.GONE);
         install.setEnabled(false);
-        download.setText("Download");
+        download.setText(R.string.download);
         deleteDownload();
 
         if (notification == null) return;
@@ -336,7 +336,7 @@ public class NewUpdateActivity extends AppCompatActivity {
 
     private void handleSuccess() {
         // Download button becomes redownload button, 100% progressText bar, enable install button
-        progressText.setText("100%");
+        progressText.setText(getString(R.string.progress, 100));
         progressBar.setProgress(100);
         progressBar.setIndeterminate(false);
         progressLayout.setVisibility(View.VISIBLE);

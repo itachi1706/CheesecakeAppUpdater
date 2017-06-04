@@ -17,7 +17,7 @@
         android:layout_marginLeft="13dp"
         android:layout_marginStart="13dp"
         android:layout_marginTop="13dp"
-        android:text="What's New in this version"
+        android:text="@string/what_new"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -31,8 +31,7 @@
         android:layout_alignStart="@+id/lblWhatsNew"
         android:layout_below="@+id/lblWhatsNew"
         android:layout_marginTop="14dp"
-        android:maxLines="6"
-        android:text="TextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\n" />
+        android:maxLines="6" />
 
     <Button
         android:id="@+id/btnMore"
@@ -44,7 +43,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignStart="@+id/tvUpdateMsg"
         android:layout_below="@+id/tvUpdateMsg"
-        android:text="Show More" />
+        android:text="@string/show_more" />
 
     <TextView
         android:id="@+id/lblDlUpdate"
@@ -54,14 +53,14 @@
         android:layout_alignStart="@+id/lblUnknownSource"
         android:layout_below="@+id/btnEnableUnknown"
         android:layout_marginTop="8dp"
-        android:text="2) Downloading New Update"
+        android:text="@string/lbl_dl_update"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/lblUnknownSource"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text='1) Enable "Unknown Sources"'
+        android:text="@string/lbl_unknown_enable"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_below="@+id/btnMore"
         android:layout_alignLeft="@+id/btnMore"
@@ -76,14 +75,14 @@
         android:layout_alignStart="@+id/btnDownload"
         android:layout_below="@+id/btnDownload"
         android:layout_marginTop="16dp"
-        android:text="3) Install Update"
+        android:text="@string/lbl_install_update"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
         android:id="@+id/btnEnableUnknown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enable"
+        android:text="@string/enable"
         android:layout_below="@+id/lblUnknownSource"
         android:layout_alignLeft="@+id/lblUnknownSource"
         android:layout_alignStart="@+id/lblUnknownSource" />
@@ -105,7 +104,7 @@
         android:layout_alignLeft="@+id/lblInstallUpdate"
         android:layout_alignStart="@+id/lblInstallUpdate"
         android:layout_below="@+id/lblInstallUpdate"
-        android:text="Install" />
+        android:text="@string/install" />
 
     <LinearLayout
         android:id="@+id/ll_progress"
@@ -124,6 +123,9 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:progress="100"
             android:paddingRight="4dp"
+            android:paddingLeft="0dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="90.35" />
@@ -137,7 +139,7 @@
             android:id="@+id/tvProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="100%" />
+            android:text="@string/progress" />
 
     </LinearLayout>
 
