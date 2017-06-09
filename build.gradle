@@ -1,5 +1,10 @@
 apply plugin: 'com.android.library'
 
+repositories {
+        maven { url 'https://maven.google.com' // Alternative URL is 'https://dl.google.com/dl/android/maven2/' }
+    }
+}
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
