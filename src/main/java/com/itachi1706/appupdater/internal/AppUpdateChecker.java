@@ -2,6 +2,7 @@ package com.itachi1706.appupdater.internal;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,9 +10,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -233,7 +235,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         String message = "Latest Version: " + updater.getLatestVersion() + "<br /><br />";
         message += UpdaterHelper.getChangelogStringFromArray(updater.getUpdateMessage());
         if (!mActivity.isFinishing()) {
-            if (fullScreen && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+            if (fullScreen && Build.VERSION.SDK_INT <= Build.VERSION_CODES.O) {
                 // Launch Full Screen Updater
                 Intent intent = new Intent(mActivity, NewUpdateActivity.class);
                 intent.putExtra("update", gson.toJson(updater));
@@ -247,7 +249,15 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 NotificationManager manager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-                                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mActivity);
+                                // Create the Notification Channel
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                    NotificationChannel mChannel = new NotificationChannel(UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL, "App Updates", NotificationManager.IMPORTANCE_DEFAULT);
+                                    mChannel.setDescription("Notifications when updating the application");
+                                    mChannel.enableLights(true);
+                                    mChannel.setLightColor(Color.GREEN);
+                                    manager.createNotificationChannel(mChannel);
+                                }
+                                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mActivity, UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL);
                                 mBuilder.setContentTitle(mActivity.getString(R.string.notification_title_starting_download)).setContentText(mActivity.getString(R.string.notification_content_starting_download))
                                         .setProgress(0, 0, true).setSmallIcon(notificationIcon).setAutoCancel(false)
                                         .setOngoing(true).setTicker(mActivity.getString(R.string.notification_ticker_starting_download));

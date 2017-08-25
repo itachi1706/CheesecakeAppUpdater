@@ -17,6 +17,7 @@ import com.itachi1706.appupdater.Objects.AppUpdateObject;
 public final class UpdaterHelper {
 
     public static int HTTP_QUERY_TIMEOUT = 15000; //15 seconds timeout
+    public static String UPDATER_NOTIFICATION_CHANNEL = "app_update_channel";
 
     /**
      * Retrieves the changelog of the device

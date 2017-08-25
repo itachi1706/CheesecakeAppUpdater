@@ -11,9 +11,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -138,7 +138,10 @@ public class NewUpdateActivity extends AppCompatActivity {
         enableUnknown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES));
+                else
+                    startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS));
             }
         });
         
@@ -158,7 +161,7 @@ public class NewUpdateActivity extends AppCompatActivity {
                     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                 }
 
-                notification = new NotificationCompat.Builder(getApplicationContext());
+                notification = new NotificationCompat.Builder(getApplicationContext(), UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL);
                 notification.setContentTitle(getApplicationContext().getString(R.string.notification_title_starting_download))
                         .setContentText(getApplicationContext().getString(R.string.notification_content_starting_download))
                         .setProgress(0, 0, true).setSmallIcon(notificationIcon).setAutoCancel(false)
@@ -194,12 +197,17 @@ public class NewUpdateActivity extends AppCompatActivity {
 
         // Check for all the buttons/hide
         boolean isNonPlayAppAllowed = false;
-        try {
-            isNonPlayAppAllowed = Settings.Secure.getInt(getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS) == 1;
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-            // Presume not enabled
-            Log.e(TAG, "Presuming Unknown Sources Unchecked");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            isNonPlayAppAllowed = getPackageManager().canRequestPackageInstalls();
+        } else {
+            try {
+                //noinspection deprecation
+                isNonPlayAppAllowed = Settings.Secure.getInt(getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS) == 1;
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+                // Presume not enabled
+                Log.e(TAG, "Presuming Unknown Sources Unchecked");
+            }
         }
 
         if (isNonPlayAppAllowed) enableUnknown.setEnabled(false);
