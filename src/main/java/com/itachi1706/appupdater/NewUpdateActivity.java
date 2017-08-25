@@ -84,14 +84,14 @@ public class NewUpdateActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_new_update);
 
-        showMore = (Button) findViewById(R.id.btnMore);
-        enableUnknown = (Button) findViewById(R.id.btnEnableUnknown);
-        download = (Button) findViewById(R.id.btnDownload);
-        install = (Button) findViewById(R.id.btnInstall);
-        progressBar = (ProgressBar) findViewById(R.id.pbProgress);
-        updateMessages = (TextView) findViewById(R.id.tvUpdateMsg);
-        progressText = (TextView) findViewById(R.id.tvProgress);
-        progressLayout = (LinearLayout) findViewById(R.id.ll_progress);
+        showMore = findViewById(R.id.btnMore);
+        enableUnknown = findViewById(R.id.btnEnableUnknown);
+        download = findViewById(R.id.btnDownload);
+        install = findViewById(R.id.btnInstall);
+        progressBar = findViewById(R.id.pbProgress);
+        updateMessages = findViewById(R.id.tvUpdateMsg);
+        progressText = findViewById(R.id.tvProgress);
+        progressLayout = findViewById(R.id.ll_progress);
         manager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Processing
