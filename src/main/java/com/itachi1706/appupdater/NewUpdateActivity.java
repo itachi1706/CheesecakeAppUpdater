@@ -1,10 +1,12 @@
 package com.itachi1706.appupdater;
 
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -189,6 +191,15 @@ public class NewUpdateActivity extends AppCompatActivity {
         });
 
         updateMessages.setText(DeprecationHelper.Html.fromHtml(updateMessage));
+
+        // Create the Notification Channel needed for the app
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL, "App Updates", NotificationManager.IMPORTANCE_DEFAULT);
+            mChannel.setDescription("Notifications when updating the application");
+            mChannel.enableLights(true);
+            mChannel.setLightColor(Color.GREEN);
+            manager.createNotificationChannel(mChannel);
+        }
     }
 
     @Override
