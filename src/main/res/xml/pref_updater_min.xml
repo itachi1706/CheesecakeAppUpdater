@@ -3,6 +3,7 @@
 
     <PreferenceCategory android:title="Updater" android:key="info_updater">
         <Preference android:title="Installed From" android:key="installer_from" android:selectable="false" />
+        <Preference android:title="Open Source License Information" android:key="view_oss" android:summary="View Open Source License Information" />
     </PreferenceCategory>
 
 </PreferenceScreen>

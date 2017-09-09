@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsIntent;
@@ -28,7 +29,8 @@ public final class SettingsInitializer {
 
     private Activity context;
     private int mLauncherIcon;
-    private boolean fullscreen = false;
+    private boolean fullscreen = false, oss = false;
+    private Preference.OnPreferenceClickListener ossListener = null;
     private String mServerUrl, mLegacyLink, mUpdateLink;
 
     /**
@@ -93,6 +95,17 @@ public final class SettingsInitializer {
         return this;
     }
 
+    /**
+     * To enable the Open Source License Preference where on user click, you could use to show the licenses in your app
+     * @param enabled Whether to show the preference or not
+     * @param listener Action to do when user clicks on the app (null for no action)
+     */
+    public SettingsInitializer setOpenSourceLicenseInfo(boolean enabled, Preference.OnPreferenceClickListener listener) {
+        this.oss = enabled;
+        this.ossListener = listener;
+        return this;
+    }
+
     private boolean hasAllNeededForUpdate() {
         return !(this.mUpdateLink == null || this.mLegacyLink == null || this.mServerUrl == null);
     }
@@ -128,6 +141,9 @@ public final class SettingsInitializer {
                 return true;
             }
         });
+        // Check to enable Open Source License View or not
+        if (!this.oss) ((PreferenceCategory) fragment.findPreference("info_updater")).removePreference(fragment.findPreference("view_oss"));
+        else fragment.findPreference("view_oss").setOnPreferenceClickListener(ossListener);
         return this;
     }
 
