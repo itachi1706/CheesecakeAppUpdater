@@ -8,7 +8,6 @@
         <Preference android:title="Get Latest App Version" android:key="get_latest_app" android:summary="Launch a webpage to get the latest release of the application!"/>
         <Preference android:title="Get Legacy Versions of App" android:key="get_old_app" android:summary="Launch a webpage to get older releases of the application!"/>
         <Preference android:title="View Changelog" android:key="android_changelog" android:summary="View Changelog Information" />
-        <Preference android:title="Open Source License Information" android:key="view_oss" android:summary="View Open Source License Information" />
         <Preference android:title="Installed From" android:key="installer_from" android:selectable="false" />
     </PreferenceCategory>
 

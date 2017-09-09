@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -20,11 +21,19 @@ import android.widget.Toast;
  */
 public abstract class EasterEggResMusicPrefFragment extends PreferenceFragment {
 
+    public void addEggMethods() {
+        addEggMethods(false, null);
+    }
+
     /**
      * Should be called when implementing the easter egg
      */
-    public void addEggMethods() {
+    public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener) {
         addPreferencesFromResource(R.xml.pref_appinfo);
+
+        // Check to enable Open Source License View or not
+        findPreference("view_oss").setOnPreferenceClickListener(openSourceListener);
+        if (!openSource) ((PreferenceCategory) findPreference("info_updater")).removePreference(findPreference("view_oss"));
 
         //Debug Info Get
         String version = "NULL", packName = "NULL";

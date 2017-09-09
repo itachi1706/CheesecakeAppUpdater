@@ -97,6 +97,7 @@ public final class SettingsInitializer {
 
     /**
      * To enable the Open Source License Preference where on user click, you could use to show the licenses in your app
+     * NOTE: If you use a EasterEgg fragment, set openSource to true and provide the listener there instead
      * @param enabled Whether to show the preference or not
      * @param listener Action to do when user clicks on the app (null for no action)
      */
@@ -142,8 +143,8 @@ public final class SettingsInitializer {
             }
         });
         // Check to enable Open Source License View or not
+        fragment.findPreference("view_oss").setOnPreferenceClickListener(ossListener);
         if (!this.oss) ((PreferenceCategory) fragment.findPreference("info_updater")).removePreference(fragment.findPreference("view_oss"));
-        else fragment.findPreference("view_oss").setOnPreferenceClickListener(ossListener);
         return this;
     }
 
