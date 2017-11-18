@@ -194,7 +194,7 @@ public class NewUpdateActivity extends AppCompatActivity {
 
         // Create the Notification Channel needed for the app
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mChannel = new NotificationChannel(UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL, "App Updates", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel mChannel = new NotificationChannel(UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL, "App Updates", NotificationManager.IMPORTANCE_LOW);
             mChannel.setDescription("Notifications when updating the application");
             mChannel.enableLights(true);
             mChannel.setLightColor(Color.GREEN);
