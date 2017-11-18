@@ -144,7 +144,7 @@ public final class SettingsInitializer {
         });
         // Check to enable Open Source License View or not
         fragment.findPreference("view_oss").setOnPreferenceClickListener(ossListener);
-        if (!this.oss) ((PreferenceCategory) fragment.findPreference("info_updater")).removePreference(fragment.findPreference("view_oss"));
+        if (!this.oss) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("view_oss"));
         return this;
     }
 

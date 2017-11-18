@@ -33,7 +33,7 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragment {
 
         // Check to enable Open Source License View or not
         findPreference("view_oss").setOnPreferenceClickListener(openSourceListener);
-        if (!openSource) ((PreferenceCategory) findPreference("info_updater")).removePreference(findPreference("view_oss"));
+        if (!openSource) ((PreferenceCategory) findPreference("info_category")).removePreference(findPreference("view_oss"));
 
         //Debug Info Get
         String version = "NULL", packName = "NULL";
