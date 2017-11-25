@@ -1,5 +1,6 @@
 package com.itachi1706.appupdater.extlib.fingerprint;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -230,7 +231,7 @@ public class FingerprintDialog extends DialogFragment
         mCallback.onFingerprintDialogVerifyPassword(this, mPassword.getText().toString());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @SuppressLint("NewApi")
     public void notifyPasswordValidation(boolean valid) {
         final MaterialDialog dialog = (MaterialDialog) getDialog();
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
