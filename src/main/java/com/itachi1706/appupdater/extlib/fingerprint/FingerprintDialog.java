@@ -133,13 +133,13 @@ public class FingerprintDialog extends DialogFragment
         assert v != null;
         mFingerprintContent = v.findViewById(R.id.fingerprint_container);
         mBackupContent = v.findViewById(R.id.backup_container);
-        mPassword = (EditText) v.findViewById(R.id.password);
+        mPassword = v.findViewById(R.id.password);
         mPassword.setOnEditorActionListener(this);
-        mPasswordDescriptionTextView = (TextView) v.findViewById(R.id.password_description);
-        mUseFingerprintFutureCheckBox = (CheckBox) v.findViewById(R.id.use_fingerprint_in_future_check);
-        mNewFingerprintEnrolledTextView = (TextView) v.findViewById(R.id.new_fingerprint_enrolled_description);
-        mFingerprintIcon = (ImageView) v.findViewById(R.id.fingerprint_icon);
-        mFingerprintStatus = (TextView) v.findViewById(R.id.fingerprint_status);
+        mPasswordDescriptionTextView = v.findViewById(R.id.password_description);
+        mUseFingerprintFutureCheckBox = v.findViewById(R.id.use_fingerprint_in_future_check);
+        mNewFingerprintEnrolledTextView = v.findViewById(R.id.new_fingerprint_enrolled_description);
+        mFingerprintIcon = v.findViewById(R.id.fingerprint_icon);
+        mFingerprintStatus = v.findViewById(R.id.fingerprint_status);
         mFingerprintStatus.setText(R.string.initializing);
 
         return dialog;

@@ -29,7 +29,7 @@ class FingerprintLibBase {
 
         mInputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            MUtils.initBase(context, this);
+            MarshmallowUtils.initBase(context, this);
     }
 
     protected void deinitBase() {
@@ -65,7 +65,7 @@ class FingerprintLibBase {
      * the key was generated.
      */
     protected boolean initCipher() {
-        return MUtils.initCipher(this);
+        return MarshmallowUtils.initCipher(this);
     }
 
     /**

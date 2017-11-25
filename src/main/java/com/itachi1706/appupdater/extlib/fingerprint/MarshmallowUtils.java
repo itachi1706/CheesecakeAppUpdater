@@ -26,9 +26,9 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
 @TargetApi(Build.VERSION_CODES.M)
-class MUtils {
+class MarshmallowUtils {
 
-    private MUtils() {
+    private MarshmallowUtils() {
     }
 
     public static boolean isFingerprintRegistered(FingerprintLib fingerprintLib) {

@@ -122,11 +122,11 @@ public class FingerprintLib extends FingerprintLibBase {
     @TargetApi(Build.VERSION_CODES.M)
     public boolean isFingerprintRegistered() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                MUtils.isFingerprintRegistered(this);
+                MarshmallowUtils.isFingerprintRegistered(this);
     }
 
     public boolean isFingerprintAuthAvailable() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                MUtils.isFingerprintAuthAvailable(this);
+                MarshmallowUtils.isFingerprintAuthAvailable(this);
     }
 }
