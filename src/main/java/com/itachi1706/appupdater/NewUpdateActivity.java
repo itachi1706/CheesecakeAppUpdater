@@ -78,7 +78,10 @@ public class NewUpdateActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Version " + update.getLatestVersion() + " is available!");
         }
         
-        if (getIntent().hasExtra("nicon")) notificationIcon = getIntent().getExtras().getInt("nicon");
+        if (getIntent().hasExtra("nicon")) {
+            //noinspection ConstantConditions
+            notificationIcon = getIntent().getExtras().getInt("nicon");
+        }
         else {
             Log.e(TAG, "No Notification Icon. Exiting");
             finish();

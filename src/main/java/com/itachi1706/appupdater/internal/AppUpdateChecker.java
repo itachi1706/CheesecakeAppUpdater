@@ -235,7 +235,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         String message = "Latest Version: " + updater.getLatestVersion() + "<br /><br />";
         message += UpdaterHelper.getChangelogStringFromArray(updater.getUpdateMessage());
         if (!mActivity.isFinishing()) {
-            if (fullScreen && Build.VERSION.SDK_INT <= Build.VERSION_CODES.O) {
+            if (fullScreen && Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
                 // Launch Full Screen Updater
                 Intent intent = new Intent(mActivity, NewUpdateActivity.class);
                 intent.putExtra("update", gson.toJson(updater));
