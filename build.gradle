@@ -22,10 +22,14 @@ android {
     }
 }
 
+ext {
+    supportLibraryVersion = '27.0.1'
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.google.code.gson:gson:2.8.2'
-    implementation 'com.android.support:design:27.0.1'
-    implementation 'com.android.support:customtabs:27.0.1'
+    implementation "com.android.support:design:$supportLibraryVersion"
+    implementation "com.android.support:customtabs:$supportLibraryVersion"
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
 }
