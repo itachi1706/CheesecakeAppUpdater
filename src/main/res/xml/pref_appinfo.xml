@@ -7,6 +7,8 @@
         <Preference android:summary="None" android:title="Android Version" android:key="view_sdk_version" android:selectable="false"/>
         <Preference android:title="Open Source License Information" android:key="view_oss" android:summary="View Open Source License Information" />
         <Preference android:title="View Device Info" android:key="vDevInfo" android:summary="View information of your device"/>
+        <CheckBoxPreference android:title="Analytics" android:summary="Uncheck to disable sending of analytics data"
+            android:key="ca_analytics" android:defaultValue="true" />
     </PreferenceCategory>
 
 </PreferenceScreen>
