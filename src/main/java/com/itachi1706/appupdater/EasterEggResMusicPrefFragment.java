@@ -120,7 +120,7 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragment {
         endEgg();
     }
 
-    private void startEgg() {
+    public void startEgg() {
         if (!isActive) {
             mp = MediaPlayer.create(getActivity(), getMusicResource());
             mp.start();
