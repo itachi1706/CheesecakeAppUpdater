@@ -43,6 +43,7 @@ public abstract class EasterEggResMultiMusicPrefFragment extends EasterEggResMus
             randomizeNumber();
             mp = MediaPlayer.create(getActivity(), getMusicResource());
             mp.start();
+            mp.setOnCompletionListener(this);
             isActive = true;
         }
     }
