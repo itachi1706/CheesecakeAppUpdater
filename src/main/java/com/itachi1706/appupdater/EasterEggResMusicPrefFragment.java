@@ -8,6 +8,7 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,7 +20,7 @@ import android.widget.Toast;
 /**
  * Easter Egg Fragment. Call {@link #addEggMethods()} in your onCreate() method (e.g super.addEggMethods()) to add the easter egg and relevant stuff
  */
-public abstract class EasterEggResMusicPrefFragment extends PreferenceFragment {
+public abstract class EasterEggResMusicPrefFragment extends PreferenceFragment implements MediaPlayer.OnCompletionListener {
 
     public void addEggMethods() {
         addEggMethods(false, null);
@@ -69,8 +70,7 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragment {
                                 .setAction(getStopEggButtonText(), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Snackbar.make(getActivity().findViewById(android.R.id.content), getEndEggMessage(), Snackbar.LENGTH_SHORT).show();
-                                        endEgg();
+                                        killEgg();
                                     }
                                 }).show();
                         return false;
@@ -124,6 +124,7 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragment {
         if (!isActive) {
             mp = MediaPlayer.create(getActivity(), getMusicResource());
             mp.start();
+            mp.setOnCompletionListener(this);
             isActive = true;
         }
     }
@@ -139,6 +140,18 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragment {
             mp.release();
             mp = null;
         }
+    }
+
+    private void killEgg() {
+        Log.i("Egg", "Killing egg");
+        Snackbar.make(getActivity().findViewById(android.R.id.content), getEndEggMessage(), Snackbar.LENGTH_SHORT).show();
+        endEgg();
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        Log.i("Egg", "Completed song. Ending...");
+        killEgg();
     }
 
     /**
