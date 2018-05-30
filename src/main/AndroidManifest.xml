@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <uses-permission-sdk-23 android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
@@ -23,7 +25,7 @@
 
         <activity
             android:name=".DebugInfoActivity"
-            android:label="@string/title_activity_general_settings" />
+            android:label="@string/title_activity_debug_settings" />
         <activity android:name=".NewUpdateActivity" android:label="New Update Available!" />
     </application>
 
