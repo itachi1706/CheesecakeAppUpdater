@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -66,28 +67,28 @@ public final class ValidationHelper {
     }
 
     // Signature Validation
-    @Nullable
+    @NonNull
     public static String getSignatureForValidation(Context context) {
         PackageManager pm = context.getPackageManager();
-        Signature[] signatures = null;
+        Signature[] signatures;
         try {
             PackageInfo pInfo;
             try {
                 pInfo = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
             } catch (RuntimeException e) {
                 Log.e("ValidationHelper", "Failed to get package info. Signature cannot be validated");
-                return null;
+                return "error";
             }
             signatures = pInfo.signatures;
             return getSignatureString(signatures[0]).trim();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             Log.e("ValidationHelper", "Failed to get package info. Signature cannot be validated");
-            return null;
+            return "error";
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             Log.e("ValidationHelper", "Algorithm not recognized on this Android Version, signature cannot be validated");
-            return null;
+            return "error";
         }
     }
 
