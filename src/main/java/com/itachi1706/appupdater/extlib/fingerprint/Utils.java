@@ -2,7 +2,7 @@ package com.itachi1706.appupdater.extlib.fingerprint;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.AttrRes;
+import androidx.annotation.AttrRes;
 
 class Utils {
 

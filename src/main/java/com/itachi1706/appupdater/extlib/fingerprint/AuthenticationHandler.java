@@ -6,7 +6,7 @@ import android.content.Context;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.CancellationSignal;
-import android.support.annotation.RequiresPermission;
+import androidx.annotation.RequiresPermission;
 
 @TargetApi(Build.VERSION_CODES.M)
 class AuthenticationHandler extends FingerprintManager.AuthenticationCallback {
