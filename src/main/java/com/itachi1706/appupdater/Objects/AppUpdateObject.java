@@ -10,6 +10,9 @@ public final class AppUpdateObject {
     private String id, packageName, appName, dateCreated, latestVersion, latestVersionCode, apptype;
     private AppUpdateMessageObject[] updateMessage;
 
+    public AppUpdateObject() {
+    }
+
     public int getIndex() {
         return index;
     }

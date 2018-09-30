@@ -9,6 +9,8 @@ public final class AppUpdateMessageObject {
     private int index;
     private String id, appid, updateText, dateModified, versionCode, versionName, labels, url;
 
+    public AppUpdateMessageObject() {}
+
     public int getIndex() {
         return index;
     }

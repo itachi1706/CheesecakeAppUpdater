@@ -13,7 +13,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
-import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -33,6 +32,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Random;
+
+import androidx.core.app.NotificationCompat;
 
 /**
  * Created by itachi1706 on 2/20/2016.

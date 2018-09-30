@@ -9,6 +9,9 @@ public final class UpdateShell {
     private AppUpdateObject msg;
     private int error;
 
+    public UpdateShell() {
+    }
+
     public AppUpdateObject getMsg() {
         return msg;
     }
