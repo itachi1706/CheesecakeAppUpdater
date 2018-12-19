@@ -5,12 +5,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.preference.PreferenceManager;
-import androidx.annotation.Nullable;
-import androidx.annotation.WorkerThread;
 
 import com.itachi1706.appupdater.BuildConfig;
 import com.itachi1706.appupdater.Objects.CAAnalytics;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 /**
  * Created by Kenneth on 17/3/2018.
@@ -30,7 +30,7 @@ public class AnalyticsHelper {
      * @param defaultMode Whether it should be enabled by default or not
      */
     public AnalyticsHelper(Context context, boolean defaultMode) {
-        this.mSharedPreference = PreferenceManager.getDefaultSharedPreferences(context);
+        this.mSharedPreference = PrefHelper.getDefaultSharedPreferences(context);
         this.mDefaultMode = defaultMode;
         try {
             this.pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);

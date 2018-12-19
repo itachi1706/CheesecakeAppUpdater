@@ -10,15 +10,16 @@ import android.os.AsyncTask;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import androidx.browser.customtabs.CustomTabsIntent;
 import android.util.TypedValue;
 
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.appupdater.Util.UpdaterHelper;
 import com.itachi1706.appupdater.Util.ValidationHelper;
 import com.itachi1706.appupdater.internal.AppUpdateChecker;
 
 import java.security.InvalidParameterException;
+
+import androidx.browser.customtabs.CustomTabsIntent;
 
 /**
  * Created by Kenneth on 28/8/2016.
@@ -192,7 +193,7 @@ public final class SettingsInitializer {
             return this;
         }
 
-        final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        final SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(context);
         fragment.addPreferencesFromResource(R.xml.pref_updater);
         fragment.findPreference("launch_updater").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
