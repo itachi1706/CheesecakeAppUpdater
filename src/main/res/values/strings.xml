@@ -32,6 +32,7 @@
     <string name="show_more">Show More</string>
     <string name="what_new">What\'s New in this version</string>
     <string name="enable">Enable</string>
+    <string name="menu_share_logs">Share Logs</string>
     <!-- Fingerprint -->
     <string name="fingerprint_description">Confirm fingerprint to continue.</string>
     <string name="fingerprint_hint">Touch sensor</string>

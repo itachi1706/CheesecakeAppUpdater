@@ -7,10 +7,11 @@ import android.media.MediaPlayer;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
-import com.google.android.material.snackbar.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * Created by Kenneth on 5/11/2016.
@@ -55,6 +56,13 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragment i
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 startActivity(new Intent(getActivity(), DebugInfoActivity.class));
+                return true;
+            }
+        });
+        findPreference("vAppLog").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(getActivity(), ViewLogsActivity.class));
                 return true;
             }
         });

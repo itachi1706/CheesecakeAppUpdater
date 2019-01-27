@@ -143,6 +143,13 @@ public final class SettingsInitializer {
                 return true;
             }
         });
+        fragment.findPreference("vAppLog").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                fragment.startActivity(new Intent(fragment.getActivity(), ViewLogsActivity.class));
+                return true;
+            }
+        });
         // Check to enable Open Source License View or not
         fragment.findPreference("view_oss").setOnPreferenceClickListener(ossListener);
         if (!this.oss) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("view_oss"));
