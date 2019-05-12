@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         tools:ignore="UnusedAttribute">
         <provider
-            android:name="androidx.core.content.FileProvider"
+            android:name=".internal.UpdaterFileProvider"
             android:authorities="${applicationId}.appupdater.provider"
             android:exported="false"
             android:grantUriPermissions="true">
