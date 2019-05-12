@@ -12,14 +12,14 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.util.TypedValue;
 
+import androidx.browser.customtabs.CustomTabsIntent;
+
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.appupdater.Util.UpdaterHelper;
 import com.itachi1706.appupdater.Util.ValidationHelper;
 import com.itachi1706.appupdater.internal.AppUpdateChecker;
 
 import java.security.InvalidParameterException;
-
-import androidx.browser.customtabs.CustomTabsIntent;
 
 /**
  * Created by Kenneth on 28/8/2016.
@@ -33,6 +33,7 @@ public final class SettingsInitializer {
     private boolean fullscreen = false, oss = false;
     private Preference.OnPreferenceClickListener ossListener = null;
     private String mServerUrl, mLegacyLink, mUpdateLink;
+    private boolean mInternalCache = false;
 
     /**
      * Initializes new Settings Initializer
@@ -93,6 +94,10 @@ public final class SettingsInitializer {
     }
     public SettingsInitializer setmUpdateLink(String mUpdateLink) {
         this.mUpdateLink = mUpdateLink;
+        return this;
+    }
+    public SettingsInitializer setmInternalCache(boolean internalCache) {
+        this.mInternalCache = internalCache;
         return this;
     }
 
@@ -205,7 +210,7 @@ public final class SettingsInitializer {
         fragment.findPreference("launch_updater").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                new AppUpdateChecker(context, sp, mLauncherIcon, mServerUrl, fullscreen).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                new AppUpdateChecker(context, sp, mLauncherIcon, mServerUrl, fullscreen, mInternalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 return false;
             }
         });

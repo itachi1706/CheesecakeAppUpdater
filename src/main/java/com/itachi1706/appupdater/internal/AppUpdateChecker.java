@@ -15,6 +15,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.itachi1706.appupdater.NewUpdateActivity;
@@ -33,8 +35,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Random;
 
-import androidx.core.app.NotificationCompat;
-
 /**
  * Created by itachi1706 on 2/20/2016.
  * For com.itachi1706.appupdate.internal in AppUpdater.
@@ -50,6 +50,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
     private String changelogLocation;
     private String baseurl;
     private boolean fullScreen;
+    private boolean internalCache;
 
     /**
      * Initialize App Update Checker
@@ -58,14 +59,16 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
      * @param notificationIcon The resource id of the icon to be used in any notifications
      * @param baseurl Base URL to check updates from
      * @param fullScreen Whether to use a Full Screen activity or not
+     * @param internalCache Whether to save update APK file in internal or external cache
      */
-    public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, int notificationIcon, String baseurl, boolean fullScreen){
+    public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, int notificationIcon, String baseurl, boolean fullScreen, boolean internalCache){
         this.mActivity = activity;
         this.sp = sharedPrefs;
         this.notificationIcon = notificationIcon;
         this.changelogLocation = "version-changelog";
         this.baseurl = baseurl;
         this.fullScreen = fullScreen;
+        this.internalCache = internalCache;
     }
 
     /**
@@ -76,9 +79,10 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
      * @param notificationIcon Resource ID of icon to be used in notifications
      * @param baseurl Base Update Checker URL
      * @param fullScreen Whether to use a Full Screen activity or not
+     * @param internalCache Whether to save update APK file in internal or external cache
      */
     public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, boolean isMain, int notificationIcon,
-                            String baseurl, boolean fullScreen){
+                            String baseurl, boolean fullScreen, boolean internalCache){
         this.mActivity = activity;
         this.sp = sharedPrefs;
         this.main = isMain;
@@ -86,6 +90,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         this.changelogLocation = "version-changelog";
         this.baseurl = baseurl;
         this.fullScreen = fullScreen;
+        this.internalCache = internalCache;
     }
 
     /**
@@ -96,15 +101,17 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
      * @param changelogLocation Key in Shared Preference where changelog is stored in
      * @param baseurl Base Update Checker URL
      * @param fullScreen Whether to use a Full Screen activity or not
+     * @param internalCache Whether to save update APK file in internal or external cache
      */
     public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, int notificationIcon,
-                            String changelogLocation, String baseurl, boolean fullScreen){
+                            String changelogLocation, String baseurl, boolean fullScreen, boolean internalCache){
         this.mActivity = activity;
         this.sp = sharedPrefs;
         this.notificationIcon = notificationIcon;
         this.changelogLocation = changelogLocation;
         this.baseurl = baseurl;
         this.fullScreen = fullScreen;
+        this.internalCache = internalCache;
     }
 
     /**
@@ -116,9 +123,10 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
      * @param changelogLocation Key in Shared Preference where changelog is stored in
      * @param baseurl Base Update Checker URL
      * @param fullScreen Whether to use a Full Screen activity or not
+     * @param internalCache Whether to save update APK file in internal or external cache
      */
     public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, boolean isMain, int notificationIcon,
-                            String changelogLocation, String baseurl, boolean fullScreen){
+                            String changelogLocation, String baseurl, boolean fullScreen, boolean internalCache){
         this.mActivity = activity;
         this.sp = sharedPrefs;
         this.main = isMain;
@@ -126,6 +134,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         this.changelogLocation = changelogLocation;
         this.baseurl = baseurl;
         this.fullScreen = fullScreen;
+        this.internalCache = internalCache;
     }
 
 
@@ -241,6 +250,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
                 Intent intent = new Intent(mActivity, NewUpdateActivity.class);
                 intent.putExtra("update", gson.toJson(updater));
                 intent.putExtra("nicon", notificationIcon);
+                intent.putExtra("internalCache", internalCache);
                 mActivity.startActivity(intent);
             } else {
                 new AlertDialog.Builder(mActivity).setTitle("A New Update is Available!")
@@ -265,7 +275,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
                                 Random random = new Random();
                                 int notificationId = random.nextInt();
                                 manager.notify(notificationId, mBuilder.build());
-                                new DownloadLatestUpdate(mActivity, mBuilder, manager, notificationId, notificationIcon).executeOnExecutor(THREAD_POOL_EXECUTOR, updateLink);
+                                new DownloadLatestUpdate(mActivity, mBuilder, manager, notificationId, notificationIcon, internalCache).executeOnExecutor(THREAD_POOL_EXECUTOR, updateLink);
                             }
                         }).show();
             }

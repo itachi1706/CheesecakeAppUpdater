@@ -21,7 +21,7 @@ import java.net.URL;
  * NOT FOR NON LIBRARY USE
  */
 public final class DownloadLatestUpdateFullScreen extends AsyncTask<String, Float, Boolean> {
-    private File externalCacheDir;
+    private File cacheDir;
     private Exception except = null;
     private String filePath;
     private String version;
@@ -30,12 +30,12 @@ public final class DownloadLatestUpdateFullScreen extends AsyncTask<String, Floa
 
     /**
      * Called from AppUpdateChecker if the user decides to invoke anything
-     * @param externalCacheDir External Cache Folder
+     * @param cacheDir External Cache Folder
      * @param version Version Number of the Update
      * @param handler Handler to talk back to the context
      */
-    public DownloadLatestUpdateFullScreen(File externalCacheDir, String version, Handler handler) {
-        this.externalCacheDir = externalCacheDir;
+    public DownloadLatestUpdateFullScreen(File cacheDir, String version, Handler handler) {
+        this.cacheDir = cacheDir;
         this.version = version;
         this.handler = handler;
     }
@@ -53,7 +53,8 @@ public final class DownloadLatestUpdateFullScreen extends AsyncTask<String, Floa
             publishProgress();
             Log.d("Updater", "Starting Download...");
 
-            filePath = externalCacheDir + File.separator + "download" + File.separator;
+            filePath = cacheDir + File.separator + "download" + File.separator;
+            Log.i("Updater", "Downloading to " + filePath);
             File folder = new File(filePath);
             if (!folder.exists()) {
                 if (!tryAndCreateFolder(folder)) {

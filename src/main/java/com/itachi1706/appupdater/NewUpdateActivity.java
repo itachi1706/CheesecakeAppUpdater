@@ -13,9 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.FileProvider;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.FileProvider;
 
 import com.google.gson.Gson;
 import com.itachi1706.appupdater.Objects.AppUpdateMessageObject;
@@ -56,6 +57,7 @@ public class NewUpdateActivity extends AppCompatActivity {
 
     private NotificationCompat.Builder notification = null;
     private int notificationId;
+    private boolean internalCache = false;
 
     private static final String TAG = "NewUpdateAct";
 
@@ -71,6 +73,8 @@ public class NewUpdateActivity extends AppCompatActivity {
             Gson gson = new Gson();
             update = gson.fromJson(getIntent().getStringExtra("update"), AppUpdateObject.class);
         }
+
+        internalCache = getIntent().getBooleanExtra("internalCache", false);
 
         if (getSupportActionBar() != null && getSupportActionBar().isShowing()) {
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
@@ -100,7 +104,7 @@ public class NewUpdateActivity extends AppCompatActivity {
         manager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Processing
-        filePath = getApplicationContext().getExternalCacheDir() + File.separator + "download" + File.separator;
+        filePath = ((internalCache) ? getApplicationContext().getCacheDir() : getApplicationContext().getExternalCacheDir()) + File.separator + "download" + File.separator;
         fileName = "app-update_" + update.getLatestVersion() + ".apk";
         mHandler = new UpdateHandler(this);
         Random random = new Random();
@@ -172,7 +176,7 @@ public class NewUpdateActivity extends AppCompatActivity {
                         .setProgress(0, 0, true).setSmallIcon(notificationIcon).setAutoCancel(false)
                         .setOngoing(true).setTicker(getApplicationContext().getString(R.string.notification_ticker_starting_download));
                 manager.notify(notificationId, notification.build());
-                new DownloadLatestUpdateFullScreen(getApplicationContext().getExternalCacheDir(),
+                new DownloadLatestUpdateFullScreen((internalCache) ? getApplicationContext().getCacheDir() : getApplicationContext().getExternalCacheDir(),
                         update.getLatestVersion(), mHandler).executeOnExecutor(THREAD_POOL_EXECUTOR, updateLink);
             }
         });
@@ -215,7 +219,6 @@ public class NewUpdateActivity extends AppCompatActivity {
             isNonPlayAppAllowed = getPackageManager().canRequestPackageInstalls();
         } else {
             try {
-                //noinspection deprecation
                 isNonPlayAppAllowed = Settings.Secure.getInt(getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS) == 1;
             } catch (Settings.SettingNotFoundException e) {
                 e.printStackTrace();
@@ -396,12 +399,10 @@ public class NewUpdateActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -7,9 +7,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.util.Log;
+
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
-import android.util.Log;
 
 import com.itachi1706.appupdater.R;
 
@@ -29,12 +30,12 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
     private Activity activity;
     private Exception except = null;
     private Uri link;
-    private String filePATH;
+    private String filePath;
     private NotificationCompat.Builder notification;
     private NotificationManager manager;
     private int notificationID;
     private int notificationicon;
-    private boolean ready = false;
+    private boolean ready = false, internalCache = false;
 
     /**
      * Called from AppUpdateChecker if the user decides to invoke anything
@@ -43,14 +44,16 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
      * @param notifyManager Notification Manager Object
      * @param notifcationID Notification ID
      * @param notificationicon Icon for notification
+     * @param internalCache Whether to save update APK file in internal or external cache
      */
     protected DownloadLatestUpdate(Activity activity, NotificationCompat.Builder notificationBuilder,
-                                NotificationManager notifyManager, int notifcationID, int notificationicon) {
+                                NotificationManager notifyManager, int notifcationID, int notificationicon, boolean internalCache) {
         this.activity = activity;
         this.notification = notificationBuilder;
         this.manager = notifyManager;
         this.notificationID = notifcationID;
         this.notificationicon = notificationicon;
+        this.internalCache = internalCache;
     }
 
     private boolean deleteLegacyDownloads() {
@@ -74,8 +77,9 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
             Log.d("Updater", "Starting Download...");
 
             if (!deleteLegacyDownloads()) Log.e("Updater", "Unable to delete legacy file. Skipping file deletion"); // Delete old downloaded apk
-            filePATH = activity.getApplicationContext().getExternalCacheDir() + File.separator + "download" + File.separator;
-            File folder = new File(filePATH);
+            filePath = ((this.internalCache) ? activity.getApplicationContext().getCacheDir() : activity.getApplicationContext().getExternalCacheDir()) + File.separator + "download" + File.separator;
+            Log.i("Updater", "Downloading to " + filePath);
+            File folder = new File(filePath);
             if (!folder.exists()) {
                 if (!tryAndCreateFolder(folder)) {
                     Log.d("Updater", "Cannot Create Folder. Not Downloading");
@@ -184,7 +188,7 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
         Log.d("Updater", "Invoking Package Manager");
         //Invoke the Package Manager
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        File file = new File(filePATH + "app-update.apk");
+        File file = new File(filePath + "app-update.apk");
         Log.d("DEBUG", "Retrieving from " + file.getAbsolutePath());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Log.i("Downloader", "Post-Nougat: Using new Content URI method");
@@ -195,7 +199,7 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
             Log.i("Downloader", "Pre-Nougat: Fallbacking to old method as they dont support contenturis");
-            intent.setDataAndType(Uri.fromFile(new File(filePATH + "app-update.apk")), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.fromFile(new File(filePath + "app-update.apk")), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         activity.startActivity(intent);
@@ -218,9 +222,9 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
                 boolean check;
                 do {
                     rename++;
-                    check = folder.renameTo(new File(filePATH + "_" + rename));
+                    check = folder.renameTo(new File(filePath + "_" + rename));
                 } while (!check);
-                folder = new File(filePATH);
+                folder = new File(filePath);
             }
             return folder.mkdir();
         }
