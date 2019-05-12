@@ -111,7 +111,8 @@ public class NewUpdateActivity extends AppCompatActivity {
         notificationId = random.nextInt();
         
         // Generate Intent
-        installIntent = new Intent(Intent.ACTION_VIEW);
+        installIntent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+        installIntent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
         File file = new File(filePath + fileName);
         Log.d(TAG, "Retrieving from " + file.getAbsolutePath());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

@@ -187,7 +187,8 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
 
         Log.d("Updater", "Invoking Package Manager");
         //Invoke the Package Manager
-        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+        intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
         File file = new File(filePath + "app-update.apk");
         Log.d("DEBUG", "Retrieving from " + file.getAbsolutePath());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
