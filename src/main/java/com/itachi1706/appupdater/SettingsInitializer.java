@@ -12,6 +12,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.util.TypedValue;
 
+import androidx.annotation.DrawableRes;
 import androidx.browser.customtabs.CustomTabsIntent;
 
 import com.itachi1706.appupdater.Util.PrefHelper;
@@ -28,12 +29,18 @@ import java.security.InvalidParameterException;
 @SuppressWarnings("unused")
 public final class SettingsInitializer {
 
-    private Activity context;
-    private int mLauncherIcon;
+    @Deprecated private Activity context;
+    @Deprecated private int notificationIcon;
     private boolean fullscreen = false, oss = false;
     private Preference.OnPreferenceClickListener ossListener = null;
-    private String mServerUrl, mLegacyLink, mUpdateLink;
-    private boolean mInternalCache = false;
+    @Deprecated private String serverUrl, legacyLink, updateLink;
+    private boolean internalCache = false;
+    private boolean showOnlyForSideload = true, showInstallLocation = true;
+
+    /**
+     * Initializes new Settings Initializer
+     */
+    public SettingsInitializer() {}
 
     /**
      * Initializes new Settings Initializer
@@ -42,13 +49,16 @@ public final class SettingsInitializer {
      * @param serverUrl Base Server URL
      * @param legacyLink URL To full list of app downloads
      * @param updateLink URL to latest app download
+     * @deprecated Use the relevant flag setting methods and {@link SettingsInitializer#explodeUpdaterSettings(Activity, int, String, String, String, PreferenceFragment)}
+     * in {@link SettingsInitializer} and the new {@link SettingsInitializer#SettingsInitializer()} constructor instead
      */
+    @Deprecated
     public SettingsInitializer(Activity activity, int launcher_icon, String serverUrl, String legacyLink, String updateLink) {
         this.context = activity;
-        this.mLauncherIcon = launcher_icon;
-        this.mServerUrl = serverUrl;
-        this.mLegacyLink = legacyLink;
-        this.mUpdateLink = updateLink;
+        this.notificationIcon = launcher_icon;
+        this.serverUrl = serverUrl;
+        this.legacyLink = legacyLink;
+        this.updateLink = updateLink;
     }
 
     /**
@@ -59,45 +69,60 @@ public final class SettingsInitializer {
      * @param legacyLink URL To full list of app downloads
      * @param updateLink URL to latest app download
      * @param fullscreen Use Full Screen Update Activity
+     * @deprecated Use the relevant flag setting methods and {@link SettingsInitializer#explodeUpdaterSettings(Activity, int, String, String, String, PreferenceFragment)}
+     * in {@link SettingsInitializer} and the new {@link SettingsInitializer#SettingsInitializer()} constructor instead
      */
+    @Deprecated
     public SettingsInitializer(Activity activity, int launcher_icon, String serverUrl, String legacyLink, String updateLink, boolean fullscreen) {
         this.context = activity;
-        this.mLauncherIcon = launcher_icon;
-        this.mServerUrl = serverUrl;
-        this.mLegacyLink = legacyLink;
-        this.mUpdateLink = updateLink;
+        this.notificationIcon = launcher_icon;
+        this.serverUrl = serverUrl;
+        this.legacyLink = legacyLink;
+        this.updateLink = updateLink;
         this.fullscreen = fullscreen;
     }
 
     /**
-     * Initializes new Settings Initializer
-     * NOTE: This is only for exploding info settings. If you want the updater setting, either use the other constructor
-     * or set a launcher icon, serverURL, legacyLink and updateLink
-     * @param activity Activity object that calls this
+     * Sets if we should use the fullscreen version of the updater
+     * @param fullscreen To use full screen updater activity or not
+     * @return This object instance for chaining
      */
-    public SettingsInitializer(Activity activity) {
-        this.context = activity;
-    }
-    public SettingsInitializer setmLauncherIcon(int mLauncherIcon) {
-        this.mLauncherIcon = mLauncherIcon;
+    public SettingsInitializer setFullscreen(boolean fullscreen) {
+        this.fullscreen = fullscreen;
         return this;
     }
 
-    public SettingsInitializer setmServerUrl(String mServerUrl) {
-        this.mServerUrl = mServerUrl;
+    /**
+     * Sets a flag to hide fields if app is not sideloaded
+     * This is true by default to prevent Google Play from flagging it
+     * @param showOnlyForSideload Do not show any field if app is not sideloaded
+     * @return The object to allow chaining
+     */
+    public SettingsInitializer showOnlyForSideload(boolean showOnlyForSideload) {
+        this.showOnlyForSideload = showOnlyForSideload;
         return this;
     }
 
-    public SettingsInitializer setmLegacyLink(String mLegacyLink) {
-        this.mLegacyLink = mLegacyLink;
+    /**
+     * Sets if we should use the fullscreen version of the updater
+     * @param showInstallLocation Only show install location field if app is sideloaded
+     * @return This object instance for chaining
+     */
+    public SettingsInitializer showInstallLocation(boolean showInstallLocation) {
+        this.fullscreen = showInstallLocation;
         return this;
     }
-    public SettingsInitializer setmUpdateLink(String mUpdateLink) {
-        this.mUpdateLink = mUpdateLink;
-        return this;
-    }
-    public SettingsInitializer setmInternalCache(boolean internalCache) {
-        this.mInternalCache = internalCache;
+
+    /**
+     * Sets if app updates should be saved into the internal or external cache
+     * Internal: /data/data/packagename/cache/download
+     * External: /sdcard/Android/data/packagename/cache/download
+     *
+     * @param internalCache To save to internal cache if true, external cache if false
+     * @return This object instance for chaining
+     */
+    public SettingsInitializer setInternalCache(boolean internalCache) {
+        this.internalCache = internalCache;
         return this;
     }
 
@@ -113,8 +138,9 @@ public final class SettingsInitializer {
         return this;
     }
 
+    @Deprecated
     private boolean hasAllNeededForUpdate() {
-        return !(this.mUpdateLink == null || this.mLegacyLink == null || this.mServerUrl == null);
+        return !(this.updateLink == null || this.legacyLink == null || this.serverUrl == null);
     }
 
     /**
@@ -122,7 +148,6 @@ public final class SettingsInitializer {
      * NOTE: This is automatically exploded if you use a EasterEgg fragment
      * @param fragment The preference fragment object
      */
-    @SuppressWarnings("WeakerAccess")
     public SettingsInitializer explodeInfoSettings(final PreferenceFragment fragment) {
         fragment.addPreferencesFromResource(R.xml.pref_appinfo);
 
@@ -164,8 +189,9 @@ public final class SettingsInitializer {
     /**
      * Explodes updater settings in your preference fragment
      * @param fragment The preference fragment object
-     * @deprecated Use {@link #explodeUpdaterSettings(PreferenceFragment) instead}
+     * @deprecated Use {@link #explodeUpdaterSettings(Activity, int, String, String, String, PreferenceFragment)} instead}
      */
+    @Deprecated
     public SettingsInitializer explodeSettings(PreferenceFragment fragment) {
         return explodeUpdaterSettings(fragment, true, true);
     }
@@ -173,20 +199,27 @@ public final class SettingsInitializer {
     /**
      * Explodes updater settings in your preference fragment
      * @param fragment The preference fragment object
+     * @deprecated Use {@link #explodeUpdaterSettings(Activity, int, String, String, String, PreferenceFragment)} instead
      */
+    @Deprecated
     public SettingsInitializer explodeUpdaterSettings(PreferenceFragment fragment) {
         return explodeUpdaterSettings(fragment, true, true);
     }
 
     /**
      * Explodes updater settings in your preference fragment
+     * @param activity The activity object
+     * @param notificationIcon Notification Icon Resource ID
+     * @param serverUrl Base Server URL
+     * @param legacyLink URL To full list of app downloads
+     * @param updateLink URL to latest app download
      * @param fragment The preference fragment object
-     * @param showOnlyForSideload Do not show any field if app is not sideloaded
-     * @param showInstallLocation Only show install location field if app is sideloaded
+     * @return The instance of this object for chaining
      */
-    @SuppressWarnings("WeakerAccess")
-    public SettingsInitializer explodeUpdaterSettings(PreferenceFragment fragment, boolean showOnlyForSideload, boolean showInstallLocation) {
-        if (!hasAllNeededForUpdate()) throw new InvalidParameterException("You need to set the appropriate setters for this to work");
+    public SettingsInitializer explodeUpdaterSettings(Activity activity, @DrawableRes final int notificationIcon,
+                                                      final String serverUrl, final String legacyLink, final String updateLink,
+                                                      PreferenceFragment fragment) {
+        final Activity context = activity;
         if (showOnlyForSideload && !ValidationHelper.checkSideloaded(context) && !showInstallLocation)
             return this; // Sideloaded
 
@@ -210,7 +243,7 @@ public final class SettingsInitializer {
         fragment.findPreference("launch_updater").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                new AppUpdateChecker(context, sp, mLauncherIcon, mServerUrl, fullscreen, mInternalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                new AppUpdateChecker(context, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 return false;
             }
         });
@@ -226,7 +259,7 @@ public final class SettingsInitializer {
         fragment.findPreference("get_old_app").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                customTabsIntent.launchUrl(context, Uri.parse(mLegacyLink));
+                customTabsIntent.launchUrl(context, Uri.parse(legacyLink));
                 return false;
             }
         });
@@ -234,7 +267,7 @@ public final class SettingsInitializer {
         fragment.findPreference("get_latest_app").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                customTabsIntent.launchUrl(context, Uri.parse(mUpdateLink));
+                customTabsIntent.launchUrl(context, Uri.parse(updateLink));
                 return false;
             }
         });
@@ -257,5 +290,22 @@ public final class SettingsInitializer {
         }
         fragment.findPreference("installer_from").setSummary(installLocation);
         return this;
+    }
+
+    /**
+     * Explodes updater settings in your preference fragment
+     * @param fragment The preference fragment object
+     * @param showOnlyForSideload Do not show any field if app is not sideloaded
+     * @param showInstallLocation Only show install location field if app is sideloaded
+     * @deprecated Use {@link SettingsInitializer#explodeUpdaterSettings(Activity, int, String, String, String, PreferenceFragment)} instead
+     * Note that {@link #showOnlyForSideload(boolean)} and {@link #showInstallLocation(boolean)} now exists as flag setters
+     */
+    @Deprecated
+    @SuppressWarnings("WeakerAccess")
+    public SettingsInitializer explodeUpdaterSettings(PreferenceFragment fragment, boolean showOnlyForSideload, boolean showInstallLocation) {
+        this.showOnlyForSideload = showOnlyForSideload;
+        this.showInstallLocation = showInstallLocation;
+        if (!hasAllNeededForUpdate()) throw new InvalidParameterException("You need to set the appropriate setters for this to work");
+        return explodeUpdaterSettings(this.context, this.notificationIcon, this.serverUrl, this.legacyLink, this.updateLink, fragment);
     }
 }

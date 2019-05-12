@@ -41,8 +41,8 @@ public final class AppUpdateInitializer {
 
     /**
      * Sets a flag to store the update apk file in the internal cache instead of external
-     * Internal: /data/data/packagename/cache
-     * External: /sdcard/Android/data/packagename/cache
+     * Internal: /data/data/packagename/cache/download
+     * External: /sdcard/Android/data/packagename/cache/download
      *
      * @param storeInInternalCache true to store in internal cache, false to store in external cache
      * @return The object to allow chaining
