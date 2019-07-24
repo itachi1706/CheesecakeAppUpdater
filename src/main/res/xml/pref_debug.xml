@@ -16,7 +16,6 @@
         <Preference android:title="Product ID" android:key="view_id_ver" android:summary="Unavailable" android:selectable="false"/>
         <Preference android:title="Product" android:key="view_product_ver" android:summary="Unavailable" android:selectable="false"/>
         <Preference android:title="Radio" android:key="view_radio_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Serial" android:key="view_serial_ver" android:summary="Unavailable" android:selectable="false"/>
         <Preference android:title="Tags" android:key="view_tags_ver" android:summary="Unavailable" android:selectable="false"/>
         <Preference android:title="Type" android:key="view_type_ver" android:summary="Unavailable" android:selectable="false"/>
         <Preference android:title="User" android:key="view_user_ver" android:summary="Unavailable" android:selectable="false"/>
