@@ -3,9 +3,9 @@ package com.itachi1706.appupdater;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceFragmentCompat;
 
 
 public class DebugInfoActivity extends AppCompatActivity {
@@ -13,7 +13,7 @@ public class DebugInfoActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new GeneralPreferenceFragment())
                 .commit();
     }
@@ -23,11 +23,10 @@ public class DebugInfoActivity extends AppCompatActivity {
      * This fragment shows general preferences only. It is used when the
      * activity is showing a two-pane settings UI.
      */
-    public static class GeneralPreferenceFragment extends PreferenceFragment {
+    public static class GeneralPreferenceFragment extends PreferenceFragmentCompat {
+        @SuppressWarnings("ConstantConditions")
         @Override
-        @SuppressWarnings("deprecation")
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.pref_debug);
             getPreferenceManager().setSharedPreferencesMode(MODE_MULTI_PROCESS);

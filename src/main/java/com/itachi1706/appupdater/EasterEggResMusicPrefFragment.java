@@ -4,24 +4,24 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 
 /**
  * Created by Kenneth on 5/11/2016.
  * for com.itachi1706.appupdater in CheesecakeAppUpdater
- */
-
-/**
+ *
  * Easter Egg Fragment. Call {@link #addEggMethods()} in your onCreate() method (e.g super.addEggMethods()) to add the easter egg and relevant stuff
  */
-public abstract class EasterEggResMusicPrefFragment extends PreferenceFragment implements MediaPlayer.OnCompletionListener {
+@SuppressWarnings("ConstantConditions")
+public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCompat implements MediaPlayer.OnCompletionListener {
 
     public void addEggMethods() {
         addEggMethods(false, null);
