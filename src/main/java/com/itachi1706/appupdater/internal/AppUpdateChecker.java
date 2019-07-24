@@ -25,14 +25,10 @@ import com.itachi1706.appupdater.Objects.UpdateShell;
 import com.itachi1706.appupdater.R;
 import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.appupdater.Util.NotifyUserUtil;
+import com.itachi1706.appupdater.Util.URLHelper;
 import com.itachi1706.appupdater.Util.UpdaterHelper;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Random;
 
 /**
@@ -152,23 +148,11 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
             packageName = "";
         }
         url += packageName;
+        URLHelper urlHelper = new URLHelper(url);
+
         String tmp = "";
         try {
-            URL urlConn = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection) urlConn.openConnection();
-            conn.setConnectTimeout(UpdaterHelper.HTTP_QUERY_TIMEOUT);
-            conn.setReadTimeout(UpdaterHelper.HTTP_QUERY_TIMEOUT);
-            InputStream in = conn.getInputStream();
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            StringBuilder str = new StringBuilder();
-            String line;
-            while((line = reader.readLine()) != null)
-            {
-                str.append(line).append("\n");
-            }
-            in.close();
-            tmp = str.toString();
+            tmp = urlHelper.executeString();
         } catch (IOException e) {
             e.printStackTrace();
         }
