@@ -12,6 +12,7 @@ import android.util.TypedValue;
 
 import androidx.annotation.DrawableRes;
 import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.content.pm.PackageInfoCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
@@ -345,7 +346,7 @@ public final class SettingsInitializer {
             PackageInfo pInfo = fragment.getActivity().getPackageManager().getPackageInfo(fragment.getActivity().getPackageName(), 0);
             version = pInfo.versionName;
             packName = pInfo.packageName;
-            versionCode = pInfo.getLongVersionCode();
+            versionCode = PackageInfoCompat.getLongVersionCode(pInfo);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
