@@ -27,15 +27,23 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCo
         addEggMethods(false, null);
     }
 
+    public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener) {
+        addEggMethods(openSource, openSourceListener, false, null);
+    }
+
     /**
      * Should be called when implementing the easter egg
      */
-    public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener) {
+    public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener, boolean aboutApp, Preference.OnPreferenceClickListener aboutAppListener) {
         addPreferencesFromResource(R.xml.pref_appinfo);
 
         // Check to enable Open Source License View or not
         findPreference("view_oss").setOnPreferenceClickListener(openSourceListener);
         if (!openSource) ((PreferenceCategory) findPreference("info_category")).removePreference(findPreference("view_oss"));
+
+        // Check to enable About App View or not
+        findPreference("aboutapp").setOnPreferenceClickListener(aboutAppListener);
+        if (!aboutApp) ((PreferenceCategory) findPreference("info_category")).removePreference(findPreference("aboutapp"));
 
         //Debug Info Get
         String version = "NULL", packName = "NULL";

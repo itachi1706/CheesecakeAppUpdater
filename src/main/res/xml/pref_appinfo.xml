@@ -6,6 +6,7 @@
         <Preference android:title="Package Name" android:key="view_app_name" android:selectable="false" />
         <Preference android:summary="None" android:title="Android Version" android:key="view_sdk_version" android:selectable="false"/>
         <Preference android:title="Open Source License Information" android:key="view_oss" android:summary="View Open Source License Information" />
+        <Preference android:title="About this app" android:key="aboutapp" android:summary="View information about this application" />
         <Preference android:title="View Device Info" android:key="vDevInfo" android:summary="View information of your device"/>
         <Preference android:title="View App Logs" android:key="vAppLog" android:summary="View the application log data"/>
         <SwitchPreference android:title="Analytics" android:summary="Uncheck to disable sending of analytics data"

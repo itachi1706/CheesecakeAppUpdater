@@ -11,6 +11,7 @@ import android.preference.PreferenceFragment;
 import android.util.TypedValue;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.content.pm.PackageInfoCompat;
 import androidx.preference.Preference;
@@ -33,9 +34,9 @@ public final class SettingsInitializer {
 
     @Deprecated private Activity context;
     @Deprecated private int notificationIcon;
-    private boolean fullscreen = false, oss = false;
+    private boolean fullscreen = false, oss = false, aboutapp = false;
     @Deprecated private android.preference.Preference.OnPreferenceClickListener ossListenerDeprecated = null;
-    private Preference.OnPreferenceClickListener ossListener = null;
+    private Preference.OnPreferenceClickListener ossListener = null, aboutAppListener = null;
     @Deprecated private String serverUrl, legacyLink, updateLink;
     private boolean internalCache = false;
     private boolean showOnlyForSideload = true, showInstallLocation = true;
@@ -149,9 +150,21 @@ public final class SettingsInitializer {
      * @param enabled Whether to show the preference or not
      * @param listener Action to do when user clicks on the app (null for no action)
      */
-    public SettingsInitializer setOpenSourceLicenseInfo(boolean enabled, Preference.OnPreferenceClickListener listener) {
+    public SettingsInitializer setOpenSourceLicenseInfo(boolean enabled, @Nullable Preference.OnPreferenceClickListener listener) {
         this.oss = enabled;
         this.ossListener = listener;
+        return this;
+    }
+
+    /**
+     * To enable the About App Preference where on user click, you could use to display information about the application
+     * NOTE: If you use a EasterEgg fragment, set aboutApp to true and provide the listener there instead
+     * @param enabled Whether to show the preference or not
+     * @param listener Action to do when user clicks on the app (null for no action)
+     */
+    public SettingsInitializer setAboutApp(boolean enabled, @Nullable Preference.OnPreferenceClickListener listener) {
+        this.aboutapp = enabled;
+        this.aboutAppListener = listener;
         return this;
     }
 
@@ -202,6 +215,7 @@ public final class SettingsInitializer {
         // Check to enable Open Source License View or not
         fragment.findPreference("view_oss").setOnPreferenceClickListener(ossListenerDeprecated);
         if (!this.oss) ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("view_oss"));
+        ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("aboutapp")); // Permenantly remove for this
         return this;
     }
 
@@ -371,6 +385,9 @@ public final class SettingsInitializer {
         // Check to enable Open Source License View or not
         fragment.findPreference("view_oss").setOnPreferenceClickListener(ossListener);
         if (!this.oss) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("view_oss"));
+        // Check to enable About App View or not
+        fragment.findPreference("aboutapp").setOnPreferenceClickListener(aboutAppListener);
+        if (!this.aboutapp) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("aboutapp"));
         return this;
     }
 
