@@ -103,6 +103,12 @@ public class NewUpdateActivity extends AppCompatActivity {
         progressLayout = findViewById(R.id.ll_progress);
         manager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
+        TextView unknownSource = findViewById(R.id.lblUnknownSource);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            unknownSource.setText(R.string.lbl_unknown_enable_api_26);
+            enableUnknown.setText(R.string.grant);
+        }
+
         // Processing
         filePath = ((internalCache) ? getApplicationContext().getCacheDir() : getApplicationContext().getExternalCacheDir()) + File.separator + "download" + File.separator;
         fileName = "app-update_" + update.getLatestVersion() + ".apk";

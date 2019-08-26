@@ -28,6 +28,8 @@
     <string name="install">Install</string>
     <string name="lbl_install_update">3) Install Update</string>
     <string name="lbl_unknown_enable">1) Enable Unknown Sources</string>
+    <string name="lbl_unknown_enable_api_26">1) Grant Install Unknown App Permission</string>
+    <string name="grant">Grant</string>
     <string name="lbl_dl_update">2) Downloading New Update</string>
     <string name="show_more">Show More</string>
     <string name="what_new">What\'s New in this version</string>
