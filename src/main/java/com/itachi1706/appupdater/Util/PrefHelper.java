@@ -3,6 +3,7 @@ package com.itachi1706.appupdater.Util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -53,5 +54,23 @@ public class PrefHelper {
     public static void changeDarkModeTheme(int newTheme, String themeName) {
         Log.i("AppThemeChanger", "Switching over to " + themeName + " mode");
         AppCompatDelegate.setDefaultNightMode(newTheme);
+    }
+
+    /**
+     * Does the handling of theme changes natively
+     * @param switchedTheme Either of the values "light", "dark", "battery" or "default"
+     */
+    public static void handleDefaultThemeSwitch(String switchedTheme) {
+        switch (String.valueOf(switchedTheme)) {
+            case "light": changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_NO, "Light");break;
+            case "dark": changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_YES, "Dark");break;
+            case "battery": changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, "Battery Saver");break;
+            case "default": changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, "System Default");break;
+            default:
+                // Set as battery saver default if P and below
+                changeDarkModeTheme((Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) ? AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
+                        "Unknown mode, falling back to default");
+                break;
+        }
     }
 }
