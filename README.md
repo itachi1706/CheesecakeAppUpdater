@@ -5,6 +5,9 @@ CheesecakeAppUpdater
 [![GitHub Actions](https://github.com/itachi1706/CheesecakeAppUpdater/workflows/Android%20CI/badge.svg)](https://github.com/itachi1706/CheesecakeAppUpdater/actions)
 [![GitHub release](https://img.shields.io/github/release/itachi1706/CheesecakeAppUpdater.svg)](https://github.com/itachi1706/CheesecakeAppUpdater/releases) 
 [![GitHub license](https://img.shields.io/github/license/itachi1706/CheesecakeAppUpdater.svg)](https://github.com/itachi1706/CheesecakeAppUpdater/blob/master/LICENSE) 
+[![Code Climate](https://codeclimate.com/github/itachi1706/CheesecakeAppUpdater/badges/gpa.svg)](https://codeclimate.com/github/itachi1706/CheesecakeAppUpdater) 
+[![Test Coverage](https://codeclimate.com/github/itachi1706/CheesecakeAppUpdater/badges/coverage.svg)](https://codeclimate.com/github/itachi1706/CheesecakeAppUpdater/coverage) 
+[![Issue Count](https://codeclimate.com/github/itachi1706/CheesecakeAppUpdater/badges/issue_count.svg)](https://codeclimate.com/github/itachi1706/CheesecakeAppUpdater)
 
 **NOTE: We are in the midst of allowing an easier way to access through JCenter, use the Bintray method in the meantime**
 
