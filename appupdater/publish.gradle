@@ -29,7 +29,7 @@ artifacts {
 }
 
 version android.defaultConfig.versionName
-group 'com.itachi1706'
+group 'com.itachi1706.appupdater'
 
 install {
     repositories.mavenInstaller {
