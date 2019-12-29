@@ -33,6 +33,10 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCo
 
     /**
      * Should be called when implementing the easter egg
+     * @param openSource true if to enable OSS license view
+     * @param openSourceListener OSS license view listener
+     * @param aboutApp true if to enable about app view
+     * @param aboutAppListener About App View Listener
      */
     public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener, boolean aboutApp, Preference.OnPreferenceClickListener aboutAppListener) {
         addPreferencesFromResource(R.xml.pref_appinfo);

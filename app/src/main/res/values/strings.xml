@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Cheesecake App Updater Sample</string>
+    <string name="btn_view_settings">View Settings Page</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="link_legacy">https://github.com/itachi1706/CheesecakeAppUpdater</string>
+    <string name="link_updates">https://github.com/itachi1706/CheesecakeAppUpdater</string>
+</resources>

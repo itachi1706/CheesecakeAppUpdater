@@ -135,6 +135,7 @@ public final class SettingsInitializer {
      * NOTE: If you use a EasterEgg fragment, set openSource to true and provide the listener there instead
      * @param enabled Whether to show the preference or not
      * @param listener Action to do when user clicks on the app (null for no action)
+     * @return The instance itself
      * @deprecated Use {{@link #setOpenSourceLicenseInfo(boolean, Preference.OnPreferenceClickListener)} instead
      */
     @Deprecated
@@ -149,6 +150,7 @@ public final class SettingsInitializer {
      * NOTE: If you use a EasterEgg fragment, set openSource to true and provide the listener there instead
      * @param enabled Whether to show the preference or not
      * @param listener Action to do when user clicks on the app (null for no action)
+     * @return The instance itself
      */
     public SettingsInitializer setOpenSourceLicenseInfo(boolean enabled, @Nullable Preference.OnPreferenceClickListener listener) {
         this.oss = enabled;
@@ -161,6 +163,7 @@ public final class SettingsInitializer {
      * NOTE: If you use a EasterEgg fragment, set aboutApp to true and provide the listener there instead
      * @param enabled Whether to show the preference or not
      * @param listener Action to do when user clicks on the app (null for no action)
+     * @return The instance itself
      */
     public SettingsInitializer setAboutApp(boolean enabled, @Nullable Preference.OnPreferenceClickListener listener) {
         this.aboutapp = enabled;
@@ -177,6 +180,7 @@ public final class SettingsInitializer {
      * Explodes general info settings in your preference fragment
      * NOTE: This is automatically exploded if you use a EasterEgg fragment
      * @param fragment The preference fragment object
+     * @return The instance itself
      * @deprecated Use {@link #explodeInfoSettings(PreferenceFragmentCompat)} instead
      */
     @Deprecated
@@ -222,6 +226,7 @@ public final class SettingsInitializer {
     /**
      * Explodes updater settings in your preference fragment
      * @param fragment The preference fragment object
+     * @return The instance itself
      * @deprecated Use {@link #explodeUpdaterSettings(Activity, int, String, String, String, PreferenceFragment)} instead}
      */
     @Deprecated
@@ -232,6 +237,7 @@ public final class SettingsInitializer {
     /**
      * Explodes updater settings in your preference fragment
      * @param fragment The preference fragment object
+     * @return The instance itself
      * @deprecated Use {@link #explodeUpdaterSettings(Activity, int, String, String, String, PreferenceFragment)} instead
      */
     @Deprecated
@@ -332,6 +338,7 @@ public final class SettingsInitializer {
      * @param fragment The preference fragment object
      * @param showOnlyForSideload Do not show any field if app is not sideloaded
      * @param showInstallLocation Only show install location field if app is sideloaded
+     * @return The instance itself
      * @deprecated Use {@link SettingsInitializer#explodeUpdaterSettings(Activity, int, String, String, String, PreferenceFragment)} instead
      * Note that {@link #showOnlyForSideload(boolean)} and {@link #showInstallLocation(boolean)} now exists as flag setters
      */
@@ -348,6 +355,7 @@ public final class SettingsInitializer {
      * Explodes general info settings in your preference fragment
      * NOTE: This is automatically exploded if you use a EasterEgg fragment
      * @param fragment The preference fragment compat object
+     * @return The instance itself
      */
     @SuppressWarnings("ConstantConditions")
     public SettingsInitializer explodeInfoSettings(final PreferenceFragmentCompat fragment) {
