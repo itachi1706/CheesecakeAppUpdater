@@ -9,8 +9,6 @@ CheesecakeAppUpdater
 [![Test Coverage](https://codeclimate.com/github/itachi1706/CheesecakeAppUpdater/badges/coverage.svg)](https://codeclimate.com/github/itachi1706/CheesecakeAppUpdater/coverage) 
 [![Issue Count](https://codeclimate.com/github/itachi1706/CheesecakeAppUpdater/badges/issue_count.svg)](https://codeclimate.com/github/itachi1706/CheesecakeAppUpdater)
 
-**NOTE: We are in the midst of allowing an easier way to access through JCenter, use the Bintray method in the meantime**
-
 This is an updater library that was primarly designed to suit my needs and allows updating of my Android apps outside of the GPS.  
 For more information see the sample applicatiion on how to use this library
 
@@ -25,9 +23,20 @@ repositories {
 }
 ...
 dependencies {
-  implementation 'com.itachi1706:appupdater:1.0.0'
+  implementation 'com.itachi1706:appupdater:<latest-version>' // See Bintray badge for latest version number
 }
 ```
+
+## Usage - JCenter
+To use this library in an Android Project, add the following lines into your app-level build.gradle file
+
+```gradle
+dependencies {
+  implementation 'com.itachi1706:appupdater:<latest-version>' // See Bintray badge for latest version number
+}
+```
+
+## Notes on usage for Base URL
 
 Your base server URL for the updater call MUST end with a query accepting the application packagename. The library will autofill the android packagename for you. An example url is:
 ```
