@@ -34,7 +34,7 @@ jobs:
           BINTRAY_USER: ${{ secrets.BINTRAYUSER }}
           BINTRAY_API_KEY: ${{ secrets.BINTRAYKEY }}
       - name: Move Library AAR file to main folder
-        run: mv ./\appupdater/build/outputs/aar/debug/appupdater-release.aar ./appupdater-release.aar
+        run: mv ./\appupdater/build/outputs/aar/appupdater-release.aar ./appupdater-release.aar
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.0
