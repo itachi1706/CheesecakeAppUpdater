@@ -7,6 +7,7 @@ import android.text.Spanned;
 /**
  * Created by Kenneth on 12/5/2017.
  * for com.itachi1706.appupdater.Util in CheesecakeUtilities
+ * @migrated
  */
 @SuppressWarnings("deprecation")
 public class DeprecationHelper {

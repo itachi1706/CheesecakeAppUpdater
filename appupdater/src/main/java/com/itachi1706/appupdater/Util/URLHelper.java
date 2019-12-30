@@ -22,6 +22,7 @@ import static com.itachi1706.appupdater.Util.UpdaterHelper.HTTP_QUERY_TIMEOUT;
  * for com.itachi1706.appupdater.Util in CheesecakeUtilities
  *
  * Standard class for helping out with HttpURLConnection or HttpsURLConnections
+ * @migrated
  */
 public class URLHelper {
 

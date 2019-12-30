@@ -25,6 +25,9 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
+/**
+ * @migrated
+ */
 @TargetApi(Build.VERSION_CODES.M)
 class MarshmallowUtils {
 

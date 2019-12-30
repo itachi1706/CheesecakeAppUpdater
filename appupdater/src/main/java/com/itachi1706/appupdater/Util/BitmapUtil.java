@@ -16,6 +16,7 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 /**
  * Created by Kenneth on 17/7/2019.
  * for com.itachi1706.appupdater.Util in CheesecakeUtilities
+ * @migrated
  */
 public class BitmapUtil {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

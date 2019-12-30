@@ -8,6 +8,9 @@ import android.os.Build;
 import android.os.CancellationSignal;
 import androidx.annotation.RequiresPermission;
 
+/**
+ * @migrated
+ */
 @TargetApi(Build.VERSION_CODES.M)
 class AuthenticationHandler extends FingerprintManager.AuthenticationCallback {
 

@@ -10,6 +10,8 @@ import com.itachi1706.appupdater.R;
 /**
  * Created by itachi1706 on 2/20/2016.
  * For com.itachi1706.appupdate.Util in AppUpdater.
+ *
+ * @migrated
  */
 @SuppressWarnings("unused")
 public final class NotifyUserUtil {

@@ -22,6 +22,7 @@ import java.util.List;
 /**
  * Created by Kenneth on 20/8/2016.
  * for com.itachi1706.appupdater.Util in AppUpdater
+ * @migrated
  */
 public final class ValidationHelper {
 

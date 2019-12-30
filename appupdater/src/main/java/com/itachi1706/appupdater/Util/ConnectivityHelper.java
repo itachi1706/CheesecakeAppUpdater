@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi;
  * Created by Kenneth on 3/3/2016.
  * For com.itachi1706.appupdate.Util in AppUpdater
  * NOTE: Requires android.permission.ACCESS_NETWORK_STATE permission
+ * @migrated
  */
 @SuppressWarnings("unused")
 public final class ConnectivityHelper {

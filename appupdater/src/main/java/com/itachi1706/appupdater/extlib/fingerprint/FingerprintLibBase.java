@@ -20,6 +20,9 @@ import java.security.cert.CertificateException;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 
+/**
+ * @migrated
+ */
 class FingerprintLibBase {
 
     protected FingerprintLibBase(@NonNull Activity context, @NonNull String keyName, @NonNull FingerprintLibCallback callback) {

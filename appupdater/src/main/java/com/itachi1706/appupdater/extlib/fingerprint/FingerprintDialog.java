@@ -28,6 +28,8 @@ import com.itachi1706.appupdater.R;
 /**
  * A dialog which uses fingerprint APIs to authenticate the user, and falls back to password
  * authentication if fingerprint is not available.
+ *
+ * @migrated
  */
 @SuppressWarnings("ResourceType")
 @Deprecated

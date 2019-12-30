@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 /**
  * Created by Kenneth on 19/12/2018.
  * for com.itachi1706.appupdater.Util in CheesecakeUtilities
+ * @migrated
  */
 public class PrefHelper {
 

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import androidx.annotation.AttrRes;
 
+/**
+ * @migrated
+ */
 class Utils {
 
     public static int resolveColor(Context context, @AttrRes int attr) {

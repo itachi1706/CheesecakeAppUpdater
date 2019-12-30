@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+/**
+ * @migrated
+ */
 public class FingerprintLib extends FingerprintLibBase {
 
     private static FingerprintLib mInstance;

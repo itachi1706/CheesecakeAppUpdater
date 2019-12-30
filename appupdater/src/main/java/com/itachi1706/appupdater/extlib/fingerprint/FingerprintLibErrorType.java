@@ -1,5 +1,8 @@
 package com.itachi1706.appupdater.extlib.fingerprint;
 
+/**
+ * @migrated
+ */
 public enum FingerprintLibErrorType {
 
     REGISTRATION_NEEDED,
