@@ -34,12 +34,9 @@ public class ViewLogsActivity extends AppCompatActivity {
         setContentView(v);
 
         v.addView(logText);
-        logText.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) return longClickBtn(v);
-                return true;
-            }
+        logText.setOnLongClickListener(v1 -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) return longClickBtn(v1);
+            return true;
         });
 
         StringBuilder log = new StringBuilder();

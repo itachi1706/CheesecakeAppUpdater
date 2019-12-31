@@ -202,19 +202,13 @@ public final class SettingsInitializer {
         verPref.setSummary(version + "-b" + versionCode);
         fragment.findPreference("view_app_name").setSummary(packName);
         fragment.findPreference("view_sdk_version").setSummary(android.os.Build.VERSION.RELEASE);
-        fragment.findPreference("vDevInfo").setOnPreferenceClickListener(new android.preference.Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(android.preference.Preference preference) {
-                fragment.startActivity(new Intent(fragment.getActivity(), DebugInfoActivity.class));
-                return true;
-            }
+        fragment.findPreference("vDevInfo").setOnPreferenceClickListener(preference -> {
+            fragment.startActivity(new Intent(fragment.getActivity(), DebugInfoActivity.class));
+            return true;
         });
-        fragment.findPreference("vAppLog").setOnPreferenceClickListener(new android.preference.Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(android.preference.Preference preference) {
-                fragment.startActivity(new Intent(fragment.getActivity(), ViewLogsActivity.class));
-                return true;
-            }
+        fragment.findPreference("vAppLog").setOnPreferenceClickListener(preference -> {
+            fragment.startActivity(new Intent(fragment.getActivity(), ViewLogsActivity.class));
+            return true;
         });
         // Check to enable Open Source License View or not
         fragment.findPreference("view_oss").setOnPreferenceClickListener(ossListenerDeprecated);
@@ -281,12 +275,9 @@ public final class SettingsInitializer {
 
         final SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(context);
         fragment.addPreferencesFromResource(R.xml.pref_updater);
-        fragment.findPreference("launch_updater").setOnPreferenceClickListener(new android.preference.Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(android.preference.Preference preference) {
-                new AppUpdateChecker(context, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                return false;
-            }
+        fragment.findPreference("launch_updater").setOnPreferenceClickListener(preference -> {
+            new AppUpdateChecker(context, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            return false;
         });
 
         TypedValue colorTmp = new TypedValue();
@@ -297,28 +288,19 @@ public final class SettingsInitializer {
                 .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
                 .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build();
 
-        fragment.findPreference("get_old_app").setOnPreferenceClickListener(new android.preference.Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(android.preference.Preference preference) {
-                customTabsIntent.launchUrl(context, Uri.parse(legacyLink));
-                return false;
-            }
+        fragment.findPreference("get_old_app").setOnPreferenceClickListener(preference -> {
+            customTabsIntent.launchUrl(context, Uri.parse(legacyLink));
+            return false;
         });
 
-        fragment.findPreference("get_latest_app").setOnPreferenceClickListener(new android.preference.Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(android.preference.Preference preference) {
-                customTabsIntent.launchUrl(context, Uri.parse(updateLink));
-                return false;
-            }
+        fragment.findPreference("get_latest_app").setOnPreferenceClickListener(preference -> {
+            customTabsIntent.launchUrl(context, Uri.parse(updateLink));
+            return false;
         });
 
-        fragment.findPreference("android_changelog").setOnPreferenceClickListener(new android.preference.Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(android.preference.Preference preference) {
-                UpdaterHelper.settingGenerateChangelog(sp, context);
-                return true;
-            }
+        fragment.findPreference("android_changelog").setOnPreferenceClickListener(preference -> {
+            UpdaterHelper.settingGenerateChangelog(sp, context);
+            return true;
         });
 
         String installLocation;
@@ -376,19 +358,13 @@ public final class SettingsInitializer {
         verPref.setSummary(version + "-b" + versionCode);
         fragment.findPreference("view_app_name").setSummary(packName);
         fragment.findPreference("view_sdk_version").setSummary(android.os.Build.VERSION.RELEASE);
-        fragment.findPreference("vDevInfo").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                fragment.startActivity(new Intent(fragment.getActivity(), DebugInfoActivity.class));
-                return true;
-            }
+        fragment.findPreference("vDevInfo").setOnPreferenceClickListener(preference -> {
+            fragment.startActivity(new Intent(fragment.getActivity(), DebugInfoActivity.class));
+            return true;
         });
-        fragment.findPreference("vAppLog").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                fragment.startActivity(new Intent(fragment.getActivity(), ViewLogsActivity.class));
-                return true;
-            }
+        fragment.findPreference("vAppLog").setOnPreferenceClickListener(preference -> {
+            fragment.startActivity(new Intent(fragment.getActivity(), ViewLogsActivity.class));
+            return true;
         });
         // Check to enable Open Source License View or not
         fragment.findPreference("view_oss").setOnPreferenceClickListener(ossListener);
@@ -434,12 +410,9 @@ public final class SettingsInitializer {
 
         final SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(context);
         fragment.addPreferencesFromResource(R.xml.pref_updater);
-        fragment.findPreference("launch_updater").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                new AppUpdateChecker(context, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                return false;
-            }
+        fragment.findPreference("launch_updater").setOnPreferenceClickListener(preference -> {
+            new AppUpdateChecker(context, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            return false;
         });
 
         TypedValue colorTmp = new TypedValue();
@@ -450,28 +423,19 @@ public final class SettingsInitializer {
                 .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
                 .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build();
 
-        fragment.findPreference("get_old_app").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                customTabsIntent.launchUrl(context, Uri.parse(legacyLink));
-                return false;
-            }
+        fragment.findPreference("get_old_app").setOnPreferenceClickListener(preference -> {
+            customTabsIntent.launchUrl(context, Uri.parse(legacyLink));
+            return false;
         });
 
-        fragment.findPreference("get_latest_app").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                customTabsIntent.launchUrl(context, Uri.parse(updateLink));
-                return false;
-            }
+        fragment.findPreference("get_latest_app").setOnPreferenceClickListener(preference -> {
+            customTabsIntent.launchUrl(context, Uri.parse(updateLink));
+            return false;
         });
 
-        fragment.findPreference("android_changelog").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                UpdaterHelper.settingGenerateChangelog(sp, context);
-                return true;
-            }
+        fragment.findPreference("android_changelog").setOnPreferenceClickListener(preference -> {
+            UpdaterHelper.settingGenerateChangelog(sp, context);
+            return true;
         });
 
         String installLocation;

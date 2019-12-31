@@ -151,58 +151,44 @@ public class NewUpdateActivity extends AppCompatActivity {
         }
 
         // Setup Screen
-        enableUnknown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                    startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES));
-                else
-                    startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS));
-            }
+        enableUnknown.setOnClickListener(v -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES));
+            else
+                startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS));
         });
         
-        download.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteDownload();
+        download.setOnClickListener(v -> {
+            deleteDownload();
 
-                download.setVisibility(View.GONE);
-                install.setEnabled(false);
-                progressLayout.setVisibility(View.VISIBLE);
-                progressBar.setProgress(0);
-                progressBar.setIndeterminate(true);
-                progressText.setText(getString(R.string.progress, 0f));
-                processing = true;
-                if (getSupportActionBar() != null && getSupportActionBar().isShowing()) {
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                }
+            download.setVisibility(View.GONE);
+            install.setEnabled(false);
+            progressLayout.setVisibility(View.VISIBLE);
+            progressBar.setProgress(0);
+            progressBar.setIndeterminate(true);
+            progressText.setText(getString(R.string.progress, 0f));
+            processing = true;
+            if (getSupportActionBar() != null && getSupportActionBar().isShowing()) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
 
-                notification = new NotificationCompat.Builder(getApplicationContext(), UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL);
-                notification.setContentTitle(getApplicationContext().getString(R.string.notification_title_starting_download))
-                        .setContentText(getApplicationContext().getString(R.string.notification_content_starting_download))
-                        .setProgress(0, 0, true).setSmallIcon(notificationIcon).setAutoCancel(false)
-                        .setOngoing(true).setTicker(getApplicationContext().getString(R.string.notification_ticker_starting_download));
-                manager.notify(notificationId, notification.build());
-                new DownloadLatestUpdateFullScreen((internalCache) ? getApplicationContext().getCacheDir() : getApplicationContext().getExternalCacheDir(),
-                        update.getLatestVersion(), mHandler).executeOnExecutor(THREAD_POOL_EXECUTOR, updateLink);
-            }
+            notification = new NotificationCompat.Builder(getApplicationContext(), UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL);
+            notification.setContentTitle(getApplicationContext().getString(R.string.notification_title_starting_download))
+                    .setContentText(getApplicationContext().getString(R.string.notification_content_starting_download))
+                    .setProgress(0, 0, true).setSmallIcon(notificationIcon).setAutoCancel(false)
+                    .setOngoing(true).setTicker(getApplicationContext().getString(R.string.notification_ticker_starting_download));
+            manager.notify(notificationId, notification.build());
+            new DownloadLatestUpdateFullScreen((internalCache) ? getApplicationContext().getCacheDir() : getApplicationContext().getExternalCacheDir(),
+                    update.getLatestVersion(), mHandler).executeOnExecutor(THREAD_POOL_EXECUTOR, updateLink);
         });
-        install.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Invoking Package Manager");
-                //Invoke the Package Manager
-                getApplicationContext().startActivity(installIntent);
-            }
+        install.setOnClickListener(v -> {
+            Log.d(TAG, "Invoking Package Manager");
+            //Invoke the Package Manager
+            getApplicationContext().startActivity(installIntent);
         });
-        showMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(NewUpdateActivity.this).setTitle("Changelog")
-                        .setMessage(Html.fromHtml(fullUpdateMessage))
-                        .setPositiveButton(R.string.dialog_action_positive_close, null).show();
-            }
-        });
+        showMore.setOnClickListener(v -> new AlertDialog.Builder(NewUpdateActivity.this).setTitle("Changelog")
+                .setMessage(Html.fromHtml(fullUpdateMessage))
+                .setPositiveButton(R.string.dialog_action_positive_close, null).show());
 
         updateMessages.setText(Html.fromHtml(updateMessage));
 

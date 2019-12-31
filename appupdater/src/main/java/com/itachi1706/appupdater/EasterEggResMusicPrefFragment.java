@@ -64,42 +64,28 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCo
         verPref.setSummary(version + "-b" + versionCode);
         findPreference("view_app_name").setSummary(packName);
         findPreference("view_sdk_version").setSummary(android.os.Build.VERSION.RELEASE);
-        findPreference("vDevInfo").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(getActivity(), DebugInfoActivity.class));
-                return true;
-            }
+        findPreference("vDevInfo").setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(getActivity(), DebugInfoActivity.class));
+            return true;
         });
-        findPreference("vAppLog").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(getActivity(), ViewLogsActivity.class));
-                return true;
-            }
+        findPreference("vAppLog").setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(getActivity(), ViewLogsActivity.class));
+            return true;
         });
 
-        verPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if (!isActive) {
-                    if (count == 10) {
-                        count = 0;
-                        startEgg();
-                        Snackbar.make(getActivity().findViewById(android.R.id.content), getStartEggMessage(), Snackbar.LENGTH_LONG)
-                                .setAction(getStopEggButtonText(), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        killEgg();
-                                    }
-                                }).show();
-                        return false;
-                    } else if (count > 5)
-                        prompt(10 - count);
-                    count++;
-                }
-                return false;
+        verPref.setOnPreferenceClickListener(preference -> {
+            if (!isActive) {
+                if (count == 10) {
+                    count = 0;
+                    startEgg();
+                    Snackbar.make(getActivity().findViewById(android.R.id.content), getStartEggMessage(), Snackbar.LENGTH_LONG)
+                            .setAction(getStopEggButtonText(), v -> killEgg()).show();
+                    return false;
+                } else if (count > 5)
+                    prompt(10 - count);
+                count++;
             }
+            return false;
         });
     }
 

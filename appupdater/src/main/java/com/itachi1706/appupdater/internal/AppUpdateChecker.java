@@ -240,27 +240,24 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
                 new AlertDialog.Builder(mActivity).setTitle("A New Update is Available!")
                         .setMessage(Html.fromHtml(message))
                         .setNegativeButton("Don't Update", null)
-                        .setPositiveButton("Update", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                NotificationManager manager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-                                // Create the Notification Channel
-                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                    NotificationChannel mChannel = new NotificationChannel(UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL, "App Updates", NotificationManager.IMPORTANCE_LOW);
-                                    mChannel.setDescription("Notifications when updating the application");
-                                    mChannel.enableLights(true);
-                                    mChannel.setLightColor(Color.GREEN);
-                                    manager.createNotificationChannel(mChannel);
-                                }
-                                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mActivity, UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL);
-                                mBuilder.setContentTitle(mActivity.getString(R.string.notification_title_starting_download)).setContentText(mActivity.getString(R.string.notification_content_starting_download))
-                                        .setProgress(0, 0, true).setSmallIcon(notificationIcon).setAutoCancel(false)
-                                        .setOngoing(true).setTicker(mActivity.getString(R.string.notification_ticker_starting_download));
-                                Random random = new Random();
-                                int notificationId = random.nextInt();
-                                manager.notify(notificationId, mBuilder.build());
-                                new DownloadLatestUpdate(mActivity, mBuilder, manager, notificationId, notificationIcon, internalCache).executeOnExecutor(THREAD_POOL_EXECUTOR, updateLink);
+                        .setPositiveButton("Update", (dialog, which) -> {
+                            NotificationManager manager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
+                            // Create the Notification Channel
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                NotificationChannel mChannel = new NotificationChannel(UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL, "App Updates", NotificationManager.IMPORTANCE_LOW);
+                                mChannel.setDescription("Notifications when updating the application");
+                                mChannel.enableLights(true);
+                                mChannel.setLightColor(Color.GREEN);
+                                manager.createNotificationChannel(mChannel);
                             }
+                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mActivity, UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL);
+                            mBuilder.setContentTitle(mActivity.getString(R.string.notification_title_starting_download)).setContentText(mActivity.getString(R.string.notification_content_starting_download))
+                                    .setProgress(0, 0, true).setSmallIcon(notificationIcon).setAutoCancel(false)
+                                    .setOngoing(true).setTicker(mActivity.getString(R.string.notification_ticker_starting_download));
+                            Random random = new Random();
+                            int notificationId = random.nextInt();
+                            manager.notify(notificationId, mBuilder.build());
+                            new DownloadLatestUpdate(mActivity, mBuilder, manager, notificationId, notificationIcon, internalCache).executeOnExecutor(THREAD_POOL_EXECUTOR, updateLink);
                         }).show();
             }
         }
