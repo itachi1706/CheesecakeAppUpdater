@@ -8,6 +8,7 @@ import android.os.Build;
 
 import com.itachi1706.appupdater.BuildConfig;
 import com.itachi1706.appupdater.Objects.CAAnalytics;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;

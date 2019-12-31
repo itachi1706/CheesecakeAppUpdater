@@ -23,10 +23,10 @@ import com.itachi1706.appupdater.NewUpdateActivity;
 import com.itachi1706.appupdater.Objects.AppUpdateObject;
 import com.itachi1706.appupdater.Objects.UpdateShell;
 import com.itachi1706.appupdater.R;
-import com.itachi1706.appupdater.Util.DeprecationHelper;
-import com.itachi1706.appupdater.Util.NotifyUserUtil;
-import com.itachi1706.appupdater.Util.URLHelper;
 import com.itachi1706.appupdater.Util.UpdaterHelper;
+import com.itachi1706.helperlib.deprecation.Html;
+import com.itachi1706.helperlib.helpers.URLHelper;
+import com.itachi1706.helperlib.utils.NotifyUserUtil;
 
 import java.io.IOException;
 import java.util.Random;
@@ -238,7 +238,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
                 mActivity.startActivity(intent);
             } else {
                 new AlertDialog.Builder(mActivity).setTitle("A New Update is Available!")
-                        .setMessage(DeprecationHelper.Html.fromHtml(message))
+                        .setMessage(Html.fromHtml(message))
                         .setNegativeButton("Don't Update", null)
                         .setPositiveButton("Update", new DialogInterface.OnClickListener() {
                             @Override

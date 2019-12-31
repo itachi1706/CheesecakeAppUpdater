@@ -29,9 +29,9 @@ import androidx.core.content.FileProvider;
 import com.google.gson.Gson;
 import com.itachi1706.appupdater.Objects.AppUpdateMessageObject;
 import com.itachi1706.appupdater.Objects.AppUpdateObject;
-import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.appupdater.Util.UpdaterHelper;
 import com.itachi1706.appupdater.internal.DownloadLatestUpdateFullScreen;
+import com.itachi1706.helperlib.deprecation.Html;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -199,12 +199,12 @@ public class NewUpdateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(NewUpdateActivity.this).setTitle("Changelog")
-                        .setMessage(DeprecationHelper.Html.fromHtml(fullUpdateMessage))
+                        .setMessage(Html.fromHtml(fullUpdateMessage))
                         .setPositiveButton(R.string.dialog_action_positive_close, null).show();
             }
         });
 
-        updateMessages.setText(DeprecationHelper.Html.fromHtml(updateMessage));
+        updateMessages.setText(Html.fromHtml(updateMessage));
 
         // Create the Notification Channel needed for the app
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {

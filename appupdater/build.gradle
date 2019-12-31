@@ -34,8 +34,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
     implementation 'androidx.core:core-ktx:1.0.2'
     implementation 'androidx.preference:preference:1.1.0-rc01'
@@ -43,6 +43,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.browser:browser:1.0.0'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.itachi1706.helpers:helperlib:1.0.1'
 }
 
 apply from: 'publish.gradle'
