@@ -23,7 +23,7 @@ repositories {
 }
 ...
 dependencies {
-  implementation 'com.itachi1706:appupdater:<latest-version>' // See Bintray badge for latest version number
+  implementation 'com.itachi1706.appupdater:appupdater:<latest-version>' // See Bintray badge for latest version number
 }
 ```
 
@@ -32,7 +32,7 @@ To use this library in an Android Project, add the following lines into your app
 
 ```gradle
 dependencies {
-  implementation 'com.itachi1706:appupdater:<latest-version>' // See Bintray badge for latest version number
+  implementation 'com.itachi1706.appupdater:appupdater:<latest-version>' // See Bintray badge for latest version number
 }
 ```
 
