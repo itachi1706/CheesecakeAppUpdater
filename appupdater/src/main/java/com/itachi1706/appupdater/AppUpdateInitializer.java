@@ -6,8 +6,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.itachi1706.appupdater.Util.UpdaterHelper;
-import com.itachi1706.appupdater.Util.ValidationHelper;
 import com.itachi1706.appupdater.internal.AppUpdateChecker;
+import com.itachi1706.helperlib.helpers.ValidationHelper;
 
 /**
  * Created by Kenneth on 3/9/2016.

@@ -9,6 +9,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.itachi1706.appupdater.Objects.AppUpdateMessageObject;
 import com.itachi1706.appupdater.Objects.AppUpdateObject;
+import com.itachi1706.helperlib.deprecation.Html;
+import com.itachi1706.helperlib.helpers.ConnectivityHelper;
 
 /**
  * Created by Kenneth on 3/3/2016.
@@ -97,7 +99,7 @@ public final class UpdaterHelper {
                 message += UpdaterHelper.getChangelogStringFromArray(updater.getUpdateMessage());
 
                 new AlertDialog.Builder(activity).setTitle("Changelog")
-                        .setMessage(DeprecationHelper.Html.fromHtml(message)).setPositiveButton("Close", null).show();
+                        .setMessage(Html.fromHtml(message)).setPositiveButton("Close", null).show();
             }
         }
     }

@@ -18,10 +18,10 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.appupdater.Util.UpdaterHelper;
-import com.itachi1706.appupdater.Util.ValidationHelper;
 import com.itachi1706.appupdater.internal.AppUpdateChecker;
+import com.itachi1706.helperlib.helpers.PrefHelper;
+import com.itachi1706.helperlib.helpers.ValidationHelper;
 
 import java.security.InvalidParameterException;
 
