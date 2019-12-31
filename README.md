@@ -10,7 +10,19 @@ CheesecakeAppUpdater
 [![Issue Count](https://codeclimate.com/github/itachi1706/CheesecakeAppUpdater/badges/issue_count.svg)](https://codeclimate.com/github/itachi1706/CheesecakeAppUpdater)
 
 This is an updater library that was primarly designed to suit my needs and allows updating of my Android apps outside of the GPS.  
-For more information see the sample applicatiion on how to use this library
+For more information see the sample applicatiion on how to use this library  
+Please note that this library requires your minSDK to be set to at least 16 (Jelly Bean). Android ICS and before are not supported unfortunately  
+This library also requires you to have Java 8 support compatibilty. You can do so by adding the following lines into your app-level build.gradle file
+```gradle
+android {
+…
+  compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+…
+}
+```
 
 ## Usage - Bintray
 To use this library in an Android Project, add the following lines into your app-level build.gradle file
@@ -21,7 +33,7 @@ repositories {
 		url  "https://dl.bintray.com/itachi1706/ccn-android-lib"
 	}
 }
-...
+…
 dependencies {
   implementation 'com.itachi1706.appupdater:appupdater:<latest-version>' // See Bintray badge for latest version number
 }

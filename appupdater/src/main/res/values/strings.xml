@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">AppUpdater</string>
-    <string name="title_activity_general_settings">Settings</string>
     <string name="title_activity_debug_settings">Device Information</string>
     <!-- App Update Strings -->
     <string name="notification_title_exception_download">Exception Occurred (Download)</string>
@@ -19,9 +18,7 @@
     <string name="dialog_message_latest_update">You are on the latest release! No update is required.</string>
     <string name="dialog_action_positive_close">Close</string>
     <string name="toast_message_latest_update">No update is required</string>
-    <string name="snackbar_action_dismiss">DISMISS</string>
     <string name="toast_cannot_contact_update_server">Unable to contact update server to check for updates</string>
-    <string name="toast_cannot_check_update">Unable to do app update check</string>
     <string name="redownload">Redownload</string>
     <string name="download">Download</string>
     <string name="progress">%1$.0f%%</string>
@@ -35,18 +32,4 @@
     <string name="what_new">What\'s New in this version</string>
     <string name="enable">Enable</string>
     <string name="menu_share_logs">Share Logs</string>
-    <!-- Fingerprint -->
-    <string name="fingerprint_description">Confirm fingerprint to continue.</string>
-    <string name="fingerprint_hint">Touch sensor</string>
-    <string name="password">Password</string>
-    <string name="password_description">Enter your password to continue.</string>
-    <string name="use_fingerprint_in_future">Use fingerprint in the future</string>
-    <string name="new_fingerprint_enrolled_description">A new fingerprint was added to this device, so your password is required.</string>
-    <string name="sign_in">Sign In</string>
-    <string name="fingerprint_not_recognized">Fingerprint not recognized. Try again.</string>
-    <string name="password_not_recognized">Password not recognized. Try again.</string>
-    <string name="no_fingerprints_registered">No fingerprints has been registered</string>
-    <string name="fingerprint_success">Fingerprint recognized</string>
-    <string name="initializing">Initializing Fingerprint Scanning…</string>
-    <string name="use_password">Use password</string>
 </resources>
