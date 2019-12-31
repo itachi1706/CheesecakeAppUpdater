@@ -11,8 +11,10 @@ CheesecakeAppUpdater
 
 This is an updater library that was primarly designed to suit my needs and allows updating of my Android apps outside of the GPS.  
 For more information see the sample applicatiion on how to use this library  
-Please note that this library requires your minSDK to be set to at least 16 (Jelly Bean). Android ICS and before are not supported unfortunately  
-This library also requires you to have Java 8 support compatibilty. You can do so by adding the following lines into your app-level build.gradle file
+
+## Important Notice
+* This library requires your minSDK to be set to at least 16 (Jelly Bean). Android ICS and before are not supported unfortunately  
+* This library requires you to have Java 8 support compatibilty. You can do so by adding the following lines into your app-level build.gradle file
 ```gradle
 android {
 …
