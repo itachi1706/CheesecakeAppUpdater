@@ -1,15 +1,10 @@
 package com.itachi1706.appupdater;
 
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -18,61 +13,17 @@ import com.google.android.material.snackbar.Snackbar;
  * Created by Kenneth on 5/11/2016.
  * for com.itachi1706.appupdater in CheesecakeAppUpdater
  *
- * Easter Egg Fragment. Call {@link #addEggMethods()} in your onCreate() method (e.g super.addEggMethods()) to add the easter egg and relevant stuff
+ * Easter Egg Fragment. Setup initialization methods and call {@link #init()} ()} in your onCreate() or onCreatePreference() method (e.g super.build()) to add the easter egg and relevant stuff
+ * Initialization methods are done by using {@link SettingsInitializer#explodeInfoSettings(PreferenceFragmentCompat)} after setting the relevant options found in {@link SettingsInitializer}
  */
 @SuppressWarnings("ConstantConditions")
 public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCompat implements MediaPlayer.OnCompletionListener {
 
-    public void addEggMethods() {
-        addEggMethods(false, null);
-    }
-
-    public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener) {
-        addEggMethods(openSource, openSourceListener, false, null);
-    }
-
     /**
-     * Should be called when implementing the easter egg
-     * @param openSource true if to enable OSS license view
-     * @param openSourceListener OSS license view listener
-     * @param aboutApp true if to enable about app view
-     * @param aboutAppListener About App View Listener
+     * Call this when implementing the easter egg after ensuring all initalization you wish to execute has been completed from {@link SettingsInitializer}
      */
-    public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener, boolean aboutApp, Preference.OnPreferenceClickListener aboutAppListener) {
-        addPreferencesFromResource(R.xml.pref_appinfo);
-
-        // Check to enable Open Source License View or not
-        findPreference("view_oss").setOnPreferenceClickListener(openSourceListener);
-        if (!openSource) ((PreferenceCategory) findPreference("info_category")).removePreference(findPreference("view_oss"));
-
-        // Check to enable About App View or not
-        findPreference("aboutapp").setOnPreferenceClickListener(aboutAppListener);
-        if (!aboutApp) ((PreferenceCategory) findPreference("info_category")).removePreference(findPreference("aboutapp"));
-
-        //Debug Info Get
-        String version = "NULL", packName = "NULL";
-        int versionCode = 0;
-        try {
-            PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
-            version = pInfo.versionName;
-            packName = pInfo.packageName;
-            versionCode = pInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void init() {
         Preference verPref = findPreference("view_app_version");
-        verPref.setSummary(version + "-b" + versionCode);
-        findPreference("view_app_name").setSummary(packName);
-        findPreference("view_sdk_version").setSummary(android.os.Build.VERSION.RELEASE);
-        findPreference("vDevInfo").setOnPreferenceClickListener(preference -> {
-            startActivity(new Intent(getActivity(), DebugInfoActivity.class));
-            return true;
-        });
-        findPreference("vAppLog").setOnPreferenceClickListener(preference -> {
-            startActivity(new Intent(getActivity(), ViewLogsActivity.class));
-            return true;
-        });
-
         verPref.setOnPreferenceClickListener(preference -> {
             if (!isActive) {
                 if (count == 10) {
@@ -87,6 +38,35 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCo
             }
             return false;
         });
+    }
+
+    /**
+     * @deprecated Use {@link #init()} instead after setting the relevant preference in {@link SettingsInitializer}
+     */
+    @Deprecated
+    public void addEggMethods() {
+        addEggMethods(false, null);
+    }
+
+    /**
+     * @deprecated Use {@link #init()} instead after setting the relevant preference in {@link SettingsInitializer}
+     */
+    @Deprecated
+    public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener) {
+        addEggMethods(openSource, openSourceListener, false, null);
+    }
+
+    /**
+     * Should be called when implementing the easter egg
+     * @param openSource true if to enable OSS license view
+     * @param openSourceListener OSS license view listener
+     * @param aboutApp true if to enable about app view
+     * @param aboutAppListener About App View Listener
+     * @deprecated Use {@link #init()} instead after setting the relevant preference in {@link SettingsInitializer}
+     */
+    @Deprecated
+    public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener, boolean aboutApp, Preference.OnPreferenceClickListener aboutAppListener) {
+        new SettingsInitializer().setAboutApp(aboutApp, aboutAppListener).setOpenSourceLicenseInfo(openSource, openSourceListener).explodeInfoSettings(this);
     }
 
     /**

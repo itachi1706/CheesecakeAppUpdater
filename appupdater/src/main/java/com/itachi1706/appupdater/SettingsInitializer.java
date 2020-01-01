@@ -1,6 +1,7 @@
 package com.itachi1706.appupdater;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -34,12 +35,15 @@ public final class SettingsInitializer {
 
     @Deprecated private Activity context;
     @Deprecated private int notificationIcon;
-    private boolean fullscreen = false, oss = false, aboutapp = false;
+    private boolean fullscreen = false, oss = false, aboutapp = false, issuetracking = false, bugreport = false, fdroid = false;
     @Deprecated private android.preference.Preference.OnPreferenceClickListener ossListenerDeprecated = null;
     private Preference.OnPreferenceClickListener ossListener = null, aboutAppListener = null;
+    private String issueTrackingURL = null, bugReportURL = null, fdroidURL = null;
     @Deprecated private String serverUrl, legacyLink, updateLink;
     private boolean internalCache = false;
     private boolean showOnlyForSideload = true, showInstallLocation = true;
+
+    private static final String FDROID_REPO = "fdroid", ISSUE_TRACKING = "issuetracker", ABOUT_APP = "aboutapp", VIEW_OSS = "view_oss", BUG_REPORT = "bugreport", CATEGORY_INFO = "info_category";
 
     /**
      * Initializes new Settings Initializer
@@ -132,7 +136,6 @@ public final class SettingsInitializer {
 
     /**
      * To enable the Open Source License Preference where on user click, you could use to show the licenses in your app
-     * NOTE: If you use a EasterEgg fragment, set openSource to true and provide the listener there instead
      * @param enabled Whether to show the preference or not
      * @param listener Action to do when user clicks on the app (null for no action)
      * @return The instance itself
@@ -147,7 +150,6 @@ public final class SettingsInitializer {
 
     /**
      * To enable the Open Source License Preference where on user click, you could use to show the licenses in your app
-     * NOTE: If you use a EasterEgg fragment, set openSource to true and provide the listener there instead
      * @param enabled Whether to show the preference or not
      * @param listener Action to do when user clicks on the app (null for no action)
      * @return The instance itself
@@ -160,7 +162,6 @@ public final class SettingsInitializer {
 
     /**
      * To enable the About App Preference where on user click, you could use to display information about the application
-     * NOTE: If you use a EasterEgg fragment, set aboutApp to true and provide the listener there instead
      * @param enabled Whether to show the preference or not
      * @param listener Action to do when user clicks on the app (null for no action)
      * @return The instance itself
@@ -171,6 +172,42 @@ public final class SettingsInitializer {
         return this;
     }
 
+    /**
+     * To enable the Issue Tracker Preference where on user click, you could link to your issue tracker instead
+     * @param enabled Whether to show the preference or not
+     * @param url Link to the issue tracker
+     * @return The instance itself
+     */
+    public SettingsInitializer setIssueTracking(boolean enabled, @Nullable String url) {
+        this.issuetracking = enabled;
+        this.issueTrackingURL = url;
+        return this;
+    }
+
+    /**
+     * To enable the Bug Report Preference where on user click, you could link to your bug report/feature request/support page
+     * @param enabled Whether to show the preference or not
+     * @param url Link to the bug report page (support page)
+     * @return The instance itself
+     */
+    public SettingsInitializer setBugReporting(boolean enabled, @Nullable String url) {
+        this.bugreport = enabled;
+        this.bugReportURL = url;
+        return this;
+    }
+
+    /**
+     * To enable the F-Droid Preference where on user click, you could go to F-Droid repo
+     * @param enabled Whether to show the preference or not
+     * @param repoURL Link to the F-Droid Repository
+     * @return The instance itself
+     */
+    public SettingsInitializer setFDroidRepo(boolean enabled, @Nullable String repoURL) {
+        this.fdroid = enabled;
+        this.fdroidURL = repoURL;
+        return this;
+    }
+
     @Deprecated
     private boolean hasAllNeededForUpdate() {
         return !(this.updateLink == null || this.legacyLink == null || this.serverUrl == null);
@@ -178,7 +215,6 @@ public final class SettingsInitializer {
 
     /**
      * Explodes general info settings in your preference fragment
-     * NOTE: This is automatically exploded if you use a EasterEgg fragment
      * @param fragment The preference fragment object
      * @return The instance itself
      * @deprecated Use {@link #explodeInfoSettings(PreferenceFragmentCompat)} instead
@@ -211,9 +247,12 @@ public final class SettingsInitializer {
             return true;
         });
         // Check to enable Open Source License View or not
-        fragment.findPreference("view_oss").setOnPreferenceClickListener(ossListenerDeprecated);
-        if (!this.oss) ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("view_oss"));
-        ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("aboutapp")); // Permenantly remove for this
+        fragment.findPreference(VIEW_OSS).setOnPreferenceClickListener(ossListenerDeprecated);
+        if (!this.oss) ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(VIEW_OSS));
+        ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(ABOUT_APP)); // Permenantly remove for this
+        ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(ISSUE_TRACKING)); // Permenantly remove for this
+        ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(BUG_REPORT)); // Permenantly remove for this
+        ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(FDROID_REPO)); // Permenantly remove for this
         return this;
     }
 
@@ -280,23 +319,8 @@ public final class SettingsInitializer {
             return false;
         });
 
-        TypedValue colorTmp = new TypedValue();
-        context.getTheme().resolveAttribute(R.attr.colorPrimary, colorTmp, true);
-        final int colorPrimary = colorTmp.data;
-        final CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setToolbarColor(colorPrimary)
-                .enableUrlBarHiding().setShowTitle(true)
-                .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
-                .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build();
-
-        fragment.findPreference("get_old_app").setOnPreferenceClickListener(preference -> {
-            customTabsIntent.launchUrl(context, Uri.parse(legacyLink));
-            return false;
-        });
-
-        fragment.findPreference("get_latest_app").setOnPreferenceClickListener(preference -> {
-            customTabsIntent.launchUrl(context, Uri.parse(updateLink));
-            return false;
-        });
+        fragment.findPreference("get_old_app").setOnPreferenceClickListener(preference -> launchCustomTabs(context, legacyLink));
+        fragment.findPreference("get_latest_app").setOnPreferenceClickListener(preference -> launchCustomTabs(context, updateLink));
 
         fragment.findPreference("android_changelog").setOnPreferenceClickListener(preference -> {
             UpdaterHelper.settingGenerateChangelog(sp, context);
@@ -366,13 +390,44 @@ public final class SettingsInitializer {
             fragment.startActivity(new Intent(fragment.getActivity(), ViewLogsActivity.class));
             return true;
         });
-        // Check to enable Open Source License View or not
-        fragment.findPreference("view_oss").setOnPreferenceClickListener(ossListener);
-        if (!this.oss) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("view_oss"));
-        // Check to enable About App View or not
-        fragment.findPreference("aboutapp").setOnPreferenceClickListener(aboutAppListener);
-        if (!this.aboutapp) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("aboutapp"));
+        prefCheckToggle(this.oss, VIEW_OSS, fragment, ossListener); // Check to enable Open Source License View or not
+        prefCheckToggle(this.aboutapp, ABOUT_APP, fragment, aboutAppListener); // Check to enable About App View or not
+        prefCheckToggle(this.issuetracking, ISSUE_TRACKING, fragment, issueTrackingURL); // Check to enable Issue Tracking View or not
+        prefCheckToggle(this.bugreport, BUG_REPORT, fragment, bugReportURL); // Check to enable Bug Report View or not
+        prefCheckToggle(this.fdroid, FDROID_REPO, fragment, fdroidURL); // Check to enable F-Droid View or not
         return this;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void prefCheckToggle(boolean check, String pref, PreferenceFragmentCompat fragment, Preference.OnPreferenceClickListener listener) {
+        if (!check) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(pref));
+        else fragment.findPreference(pref).setOnPreferenceClickListener(listener);
+    }
+
+    private void prefCheckToggle(boolean check, String pref, PreferenceFragmentCompat fragment, String url) {
+        prefCheckToggle(check, pref, fragment, preference -> launchCustomTabs(fragment.getContext(), url));
+    }
+
+    private boolean launchCustomTabs(Context context, String url) {
+        if (url != null) {
+            final CustomTabsIntent cti = getCustomTabs(context);
+            cti.launchUrl(context, Uri.parse(url));
+        }
+        return true;
+    }
+
+    private CustomTabsIntent customTabsIntent = null;
+    private CustomTabsIntent getCustomTabs(Context context) {
+        if (customTabsIntent == null) {
+            TypedValue colorTmp = new TypedValue();
+            context.getTheme().resolveAttribute(R.attr.colorPrimary, colorTmp, true);
+            final int colorPrimary = colorTmp.data;
+            customTabsIntent = new CustomTabsIntent.Builder().setToolbarColor(colorPrimary)
+                    .enableUrlBarHiding().setShowTitle(true)
+                    .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
+                    .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build();
+        }
+        return customTabsIntent;
     }
 
     /**
@@ -389,16 +444,14 @@ public final class SettingsInitializer {
     public SettingsInitializer explodeUpdaterSettings(Activity activity, @DrawableRes final int notificationIcon,
                                                       final String serverUrl, final String legacyLink, final String updateLink,
                                                       PreferenceFragmentCompat fragment) {
-        final Activity context = activity;
-        if (showOnlyForSideload && !ValidationHelper.checkSideloaded(context) && !showInstallLocation)
-            return this; // Sideloaded
-
-        if (showOnlyForSideload && showInstallLocation && !ValidationHelper.checkSideloaded(context)) {
+        final Activity mActivity = activity;
+        if (showOnlyForSideload && !ValidationHelper.checkSideloaded(mActivity) && !showInstallLocation) return this; // Sideloaded
+        if (showOnlyForSideload && showInstallLocation && !ValidationHelper.checkSideloaded(mActivity)) {
             // Expand minimal
             fragment.addPreferencesFromResource(R.xml.pref_updater_min);
             String installLocation;
-            String location = ValidationHelper.getInstallLocation(context);
-            switch (ValidationHelper.checkInstallLocation(context)) {
+            String location = ValidationHelper.getInstallLocation(mActivity);
+            switch (ValidationHelper.checkInstallLocation(mActivity)) {
                 case ValidationHelper.GOOGLE_PLAY: installLocation = "Google Play (" + location + ")"; break;
                 case ValidationHelper.AMAZON: installLocation = "Amazon App Store (" + location + ")"; break;
                 case ValidationHelper.SIDELOAD:
@@ -408,39 +461,23 @@ public final class SettingsInitializer {
             return this;
         }
 
-        final SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(context);
+        final SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(mActivity);
         fragment.addPreferencesFromResource(R.xml.pref_updater);
         fragment.findPreference("launch_updater").setOnPreferenceClickListener(preference -> {
-            new AppUpdateChecker(context, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            new AppUpdateChecker(mActivity, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             return false;
         });
 
-        TypedValue colorTmp = new TypedValue();
-        context.getTheme().resolveAttribute(R.attr.colorPrimary, colorTmp, true);
-        final int colorPrimary = colorTmp.data;
-        final CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setToolbarColor(colorPrimary)
-                .enableUrlBarHiding().setShowTitle(true)
-                .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
-                .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build();
-
-        fragment.findPreference("get_old_app").setOnPreferenceClickListener(preference -> {
-            customTabsIntent.launchUrl(context, Uri.parse(legacyLink));
-            return false;
-        });
-
-        fragment.findPreference("get_latest_app").setOnPreferenceClickListener(preference -> {
-            customTabsIntent.launchUrl(context, Uri.parse(updateLink));
-            return false;
-        });
-
+        fragment.findPreference("get_old_app").setOnPreferenceClickListener(preference -> launchCustomTabs(mActivity, legacyLink));
+        fragment.findPreference("get_latest_app").setOnPreferenceClickListener(preference -> launchCustomTabs(mActivity, updateLink));
         fragment.findPreference("android_changelog").setOnPreferenceClickListener(preference -> {
-            UpdaterHelper.settingGenerateChangelog(sp, context);
+            UpdaterHelper.settingGenerateChangelog(sp, mActivity);
             return true;
         });
 
         String installLocation;
-        String location = ValidationHelper.getInstallLocation(context);
-        switch (ValidationHelper.checkInstallLocation(context)) {
+        String location = ValidationHelper.getInstallLocation(mActivity);
+        switch (ValidationHelper.checkInstallLocation(mActivity)) {
             case ValidationHelper.GOOGLE_PLAY: installLocation = "Google Play (" + location + ")"; break;
             case ValidationHelper.AMAZON: installLocation = "Amazon App Store (" + location + ")"; break;
             case ValidationHelper.SIDELOAD:
