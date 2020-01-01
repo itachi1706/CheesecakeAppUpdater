@@ -43,6 +43,8 @@ public final class SettingsInitializer {
     private boolean internalCache = false;
     private boolean showOnlyForSideload = true, showInstallLocation = true;
 
+    private static final String FDROID = "fdroid", ISSUE_TRACKING = "issuetracker", ABOUT_APP = "aboutapp", VIEW_OSS = "view_oss", BUG_REPORT = "bugreport", CATEGORY_INFO = "info_category";
+
     /**
      * Initializes new Settings Initializer
      */
@@ -246,11 +248,11 @@ public final class SettingsInitializer {
         });
         // Check to enable Open Source License View or not
         fragment.findPreference("view_oss").setOnPreferenceClickListener(ossListenerDeprecated);
-        if (!this.oss) ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("view_oss"));
-        ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("aboutapp")); // Permenantly remove for this
-        ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("issuetracker")); // Permenantly remove for this
-        ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("bugreport")); // Permenantly remove for this
-        ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("fdroid")); // Permenantly remove for this
+        if (!this.oss) ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(VIEW_OSS));
+        ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(ABOUT_APP)); // Permenantly remove for this
+        ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(ISSUE_TRACKING)); // Permenantly remove for this
+        ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(BUG_REPORT)); // Permenantly remove for this
+        ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(FDROID)); // Permenantly remove for this
         return this;
     }
 
@@ -405,10 +407,10 @@ public final class SettingsInitializer {
         });
         // Check to enable Open Source License View or not
         fragment.findPreference("view_oss").setOnPreferenceClickListener(ossListener);
-        if (!this.oss) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("view_oss"));
+        if (!this.oss) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(VIEW_OSS));
         // Check to enable About App View or not
         fragment.findPreference("aboutapp").setOnPreferenceClickListener(aboutAppListener);
-        if (!this.aboutapp) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("aboutapp"));
+        if (!this.aboutapp) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(ABOUT_APP));
         // Check to enable Issue Tracking View or not
         fragment.findPreference("issuetracker").setOnPreferenceClickListener(preference -> {
             if (issueTrackingURL == null) return true;
@@ -416,23 +418,23 @@ public final class SettingsInitializer {
             customTabsIntent.launchUrl(fragment.getContext(), Uri.parse(issueTrackingURL));
             return true;
         });
-        if (!this.issuetracking) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("issuetracker"));
+        if (!this.issuetracking) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(ISSUE_TRACKING));
         // Check to enable Bug Report View or not
-        fragment.findPreference("bugreport").setOnPreferenceClickListener(preference -> {
+        fragment.findPreference(BUG_REPORT).setOnPreferenceClickListener(preference -> {
             if (bugReportURL == null) return true;
             final CustomTabsIntent customTabsIntent = getCustomTabs(fragment.getContext());
             customTabsIntent.launchUrl(fragment.getContext(), Uri.parse(bugReportURL));
             return true;
         });
-        if (!this.bugreport) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("bugreport"));
+        if (!this.bugreport) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(BUG_REPORT));
         // Check to enable F-Droid View or not
-        fragment.findPreference("fdroid").setOnPreferenceClickListener(preference -> {
+        fragment.findPreference(FDROID).setOnPreferenceClickListener(preference -> {
             if (fdroidURL == null) return true;
             final CustomTabsIntent customTabsIntent = getCustomTabs(fragment.getContext());
             customTabsIntent.launchUrl(fragment.getContext(), Uri.parse(fdroidURL));
             return true;
         });
-        if (!this.fdroid) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("fdroid"));
+        if (!this.fdroid) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(FDROID));
         return this;
     }
 
