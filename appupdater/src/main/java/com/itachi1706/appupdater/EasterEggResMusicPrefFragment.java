@@ -28,6 +28,9 @@ import com.google.android.material.snackbar.Snackbar;
 @SuppressWarnings("ConstantConditions")
 public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCompat implements MediaPlayer.OnCompletionListener {
 
+    /**
+     * Call this when implementing the easter egg after ensuring all initalization you wish to execute has been completed from {@link SettingsInitializer}
+     */
     public void init() {
         Preference verPref = findPreference("view_app_version");
         verPref.setOnPreferenceClickListener(preference -> {
