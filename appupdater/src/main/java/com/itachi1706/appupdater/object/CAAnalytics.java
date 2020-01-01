@@ -1,4 +1,4 @@
-package com.itachi1706.appupdater.Objects;
+package com.itachi1706.appupdater.object;
 
 /**
  * Created by Kenneth on 17/3/2018.
@@ -11,7 +11,9 @@ public class CAAnalytics {
     private String sdkString, dName, dManufacturer, dCPU, appVer, dFingerprint, dCodename, dTags, sdkPatch;
     private boolean debug;
 
-    public CAAnalytics() {}
+    public CAAnalytics() {
+        // JSON Constructor
+    }
 
     public int getSdkver() {
         return sdkver;

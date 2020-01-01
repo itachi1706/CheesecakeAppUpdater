@@ -35,7 +35,7 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
     private NotificationManager manager;
     private int notificationID;
     private int notificationicon;
-    private boolean ready = false, internalCache = false;
+    private boolean ready = false, internalCache;
 
     /**
      * Called from AppUpdateChecker if the user decides to invoke anything

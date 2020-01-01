@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Updater" android:key="info_updater">
-        <SwitchPreference android:title="Wifi Only Update Checking" android:key="updateOnWifi"
-            android:summary="Do update checking only on Wifi" android:defaultValue="false" />
-        <Preference android:title="Check for Update" android:key="launch_updater" android:summary="Checks for new version of the application"/>
-        <Preference android:title="Get Latest App Version" android:key="get_latest_app" android:summary="Launch a webpage to get the latest release of the application!"/>
-        <Preference android:title="Get Legacy Versions of App" android:key="get_old_app" android:summary="Launch a webpage to get older releases of the application!"/>
-        <Preference android:title="View Changelog" android:key="android_changelog" android:summary="View Changelog Information" />
-        <Preference android:title="Installed From" android:key="installer_from" android:selectable="false" />
+    <PreferenceCategory android:title="@string/pref_cat_updater" android:key="info_updater">
+        <SwitchPreference android:title="@string/pref_wifi_only_update_check" android:key="updateOnWifi"
+            android:summary="@string/pref_summary_wifi_only_update_check" android:defaultValue="false" />
+        <Preference android:title="@string/pref_check_updates" android:key="launch_updater" android:summary="@string/pref_summary_check_updates"/>
+        <Preference android:title="@string/pref_latest_app_version" android:key="get_latest_app" android:summary="@string/pref_summary_latest_app_version"/>
+        <Preference android:title="@string/pref_legacy_app_version" android:key="get_old_app" android:summary="@string/pref_summary_legacy_app_version"/>
+        <Preference android:title="@string/pref_view_changelog" android:key="android_changelog" android:summary="@string/pref_summary_view_changelog" />
+        <Preference android:title="@string/pref_installed_from" android:key="installer_from" android:selectable="false" />
     </PreferenceCategory>
 
 </PreferenceScreen>

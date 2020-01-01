@@ -1,4 +1,4 @@
-package com.itachi1706.appupdater.Objects;
+package com.itachi1706.appupdater.object;
 
 import androidx.annotation.Keep;
 
@@ -14,6 +14,7 @@ public final class AppUpdateObject {
     private AppUpdateMessageObject[] updateMessage;
 
     public AppUpdateObject() {
+        // JSON Constructor
     }
 
     public int getIndex() {

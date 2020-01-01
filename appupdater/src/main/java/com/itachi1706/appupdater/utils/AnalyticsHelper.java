@@ -1,4 +1,4 @@
-package com.itachi1706.appupdater.Util;
+package com.itachi1706.appupdater.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,7 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 
 import com.itachi1706.appupdater.BuildConfig;
-import com.itachi1706.appupdater.Objects.CAAnalytics;
+import com.itachi1706.appupdater.object.CAAnalytics;
 import com.itachi1706.helperlib.helpers.PrefHelper;
 
 import androidx.annotation.Nullable;

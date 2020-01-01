@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.itachi1706.appupdater.Util.UpdaterHelper;
+import com.itachi1706.appupdater.utils.UpdaterHelper;
 import com.itachi1706.appupdater.internal.AppUpdateChecker;
 import com.itachi1706.helperlib.helpers.ValidationHelper;
 

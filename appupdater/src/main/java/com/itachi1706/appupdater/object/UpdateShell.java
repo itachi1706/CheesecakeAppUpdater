@@ -1,4 +1,4 @@
-package com.itachi1706.appupdater.Objects;
+package com.itachi1706.appupdater.object;
 
 /**
  * Created by itachi1706 on 2/20/2016.
@@ -10,6 +10,7 @@ public final class UpdateShell {
     private int error;
 
     public UpdateShell() {
+        // JSON Constructor
     }
 
     public AppUpdateObject getMsg() {
