@@ -52,7 +52,7 @@ public final class UpdaterHelper {
      * @return True if app can check for updates, false otherwise
      */
     public static boolean canCheckUpdate(SharedPreferences sp, Context context) {
-        private final String TAG = "Updater";
+        final String TAG = "Updater";
         if (sp.getBoolean("updateOnWifi", false) && !ConnectivityHelper.isWifiConnection(context)) {
             Log.i(TAG, "Not on WIFI, Ignore Update Checking");
             return false;
