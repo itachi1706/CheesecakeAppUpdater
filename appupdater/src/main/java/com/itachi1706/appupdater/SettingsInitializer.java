@@ -35,10 +35,10 @@ public final class SettingsInitializer {
 
     @Deprecated private Activity context;
     @Deprecated private int notificationIcon;
-    private boolean fullscreen = false, oss = false, aboutapp = false, issuetracking = false;
+    private boolean fullscreen = false, oss = false, aboutapp = false, issuetracking = false, bugreport = false;
     @Deprecated private android.preference.Preference.OnPreferenceClickListener ossListenerDeprecated = null;
     private Preference.OnPreferenceClickListener ossListener = null, aboutAppListener = null;
-    private String issueTrackingURL = null;
+    private String issueTrackingURL = null, bugReportURL = null;
     @Deprecated private String serverUrl, legacyLink, updateLink;
     private boolean internalCache = false;
     private boolean showOnlyForSideload = true, showInstallLocation = true;
@@ -134,7 +134,6 @@ public final class SettingsInitializer {
 
     /**
      * To enable the Open Source License Preference where on user click, you could use to show the licenses in your app
-     * NOTE: If you use a EasterEgg fragment, set openSource to true and provide the listener there instead
      * @param enabled Whether to show the preference or not
      * @param listener Action to do when user clicks on the app (null for no action)
      * @return The instance itself
@@ -149,7 +148,6 @@ public final class SettingsInitializer {
 
     /**
      * To enable the Open Source License Preference where on user click, you could use to show the licenses in your app
-     * NOTE: If you use a EasterEgg fragment, set openSource to true and provide the listener there instead
      * @param enabled Whether to show the preference or not
      * @param listener Action to do when user clicks on the app (null for no action)
      * @return The instance itself
@@ -162,7 +160,6 @@ public final class SettingsInitializer {
 
     /**
      * To enable the About App Preference where on user click, you could use to display information about the application
-     * NOTE: If you use a EasterEgg fragment, set aboutApp to true and provide the listener there instead
      * @param enabled Whether to show the preference or not
      * @param listener Action to do when user clicks on the app (null for no action)
      * @return The instance itself
@@ -175,7 +172,6 @@ public final class SettingsInitializer {
 
     /**
      * To enable the Issue Tracker Preference where on user click, you could link to your issue tracker instead
-     * NOTE: If you use a EasterEgg fragment, set aboutApp to true and provide the listener there instead
      * @param enabled Whether to show the preference or not
      * @param url Link to the issue tracker
      * @return The instance itself
@@ -186,6 +182,18 @@ public final class SettingsInitializer {
         return this;
     }
 
+    /**
+     * To enable the Bug Report Preference where on user click, you could link to your issue tracker instead
+     * @param enabled Whether to show the preference or not
+     * @param url Link to the bug report page (support page)
+     * @return The instance itself
+     */
+    public SettingsInitializer setBugReporting(boolean enabled, @Nullable String url) {
+        this.bugreport = enabled;
+        this.bugReportURL = url;
+        return this;
+    }
+
     @Deprecated
     private boolean hasAllNeededForUpdate() {
         return !(this.updateLink == null || this.legacyLink == null || this.serverUrl == null);
@@ -193,7 +201,6 @@ public final class SettingsInitializer {
 
     /**
      * Explodes general info settings in your preference fragment
-     * NOTE: This is automatically exploded if you use a EasterEgg fragment
      * @param fragment The preference fragment object
      * @return The instance itself
      * @deprecated Use {@link #explodeInfoSettings(PreferenceFragmentCompat)} instead
@@ -229,6 +236,8 @@ public final class SettingsInitializer {
         fragment.findPreference("view_oss").setOnPreferenceClickListener(ossListenerDeprecated);
         if (!this.oss) ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("view_oss"));
         ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("aboutapp")); // Permenantly remove for this
+        ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("issuetracker")); // Permenantly remove for this
+        ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("bugreport")); // Permenantly remove for this
         return this;
     }
 
@@ -395,6 +404,14 @@ public final class SettingsInitializer {
             return true;
         });
         if (!this.issuetracking) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("issuetracker"));
+        // Check to enable Bug Report View or not
+        fragment.findPreference("bugreport").setOnPreferenceClickListener(preference -> {
+            if (bugReportURL == null) return true;
+            final CustomTabsIntent customTabsIntent = getCustomTabs(fragment.getContext());
+            customTabsIntent.launchUrl(fragment.getContext(), Uri.parse(bugReportURL));
+            return true;
+        });
+        if (!this.bugreport) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("bugreport"));
         return this;
     }
 

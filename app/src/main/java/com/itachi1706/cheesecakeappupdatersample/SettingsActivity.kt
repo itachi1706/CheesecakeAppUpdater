@@ -28,6 +28,7 @@ class SettingsActivity : AppCompatActivity() {
                 .setAboutApp(true) { Toast.makeText(context, "This will launch about app", Toast.LENGTH_SHORT).show(); true }
                 .setOpenSourceLicenseInfo(true, Preference.OnPreferenceClickListener{ Toast.makeText(context, "This will launch OSS prompt", Toast.LENGTH_SHORT).show(); true })
                 .setIssueTracking(true, "https://itachi1706.atlassian.net/browse/CAUANDLIB")
+                .setBugReporting(true, "https://itachi1706.atlassian.net/servicedesk/customer/portal/3")
                 .explodeInfoSettings(this)
             super.init()
         }

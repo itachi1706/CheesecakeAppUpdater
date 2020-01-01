@@ -8,6 +8,7 @@
         <Preference android:title="Open Source License Information" android:key="view_oss" android:summary="View Open Source License Information" />
         <Preference android:title="About this app" android:key="aboutapp" android:summary="View information about this application" />
         <Preference android:title="Issue Tracker" android:key="issuetracker" android:summary="View the issue tracker for this application" />
+        <Preference android:title="Report Bug/Feature Request" android:key="bugreport" android:summary="View the app feature request and bug report page" />
         <Preference android:title="View Device Info" android:key="vDevInfo" android:summary="View information of your device"/>
         <Preference android:title="View App Logs" android:key="vAppLog" android:summary="View the application log data"/>
         <SwitchPreference android:title="Analytics" android:summary="Uncheck to disable sending of analytics data"
