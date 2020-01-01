@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -14,6 +13,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -47,6 +47,8 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
     private String baseurl;
     private boolean fullScreen;
     private boolean internalCache;
+    
+    private static String TAG = "Updater";
 
     /**
      * Initialize App Update Checker
@@ -172,13 +174,13 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         try {
             shell = gson.fromJson(changelog, UpdateShell.class);
         } catch (JsonSyntaxException e) {
-            Log.e("Updater", "Invalid JSON, might not have internet");
+            Log.e(TAG, "Invalid JSON, might not have internet");
             return;
         }
         if (shell == null)
             return;
         if (shell.getError() == 20) {
-            Log.e("Updater", "Application Not Found!");
+            Log.e(TAG, "Application Not Found!");
             return;
         }
         AppUpdateObject updater = shell.getMsg();
@@ -198,12 +200,12 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
             e.printStackTrace();
         }
 
-        Log.i("Updater", "Server: " + serverVersion + " | Local: " + localVersion);
+        Log.i(TAG, "Server: " + serverVersion + " | Local: " + localVersion);
 
         sp.edit().putString(this.changelogLocation, gson.toJson(updater)).apply();
 
         if (localVersion >= serverVersion) {
-            Log.i("Updater", "App is on the latest version");
+            Log.i(TAG, "App is on the latest version");
             if (!main) {
                 if (!mActivity.isFinishing()) {
                     new AlertDialog.Builder(mActivity).setTitle(R.string.dialog_title_latest_update)
@@ -218,13 +220,13 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         }
 
         if (updater.getUpdateMessage().length == 0) {
-            Log.e("Updater", "No Update Messages");
+            Log.e(TAG, "No Update Messages");
             return;
         }
 
         // Parse Message
         final String updateLink = updater.getUpdateMessage()[0].getUrl();
-        Log.i("Updater", "Update Found! Generating Update Message! Latest Version: " +
+        Log.i(TAG, "Update Found! Generating Update Message! Latest Version: " +
                 updater.getLatestVersion() + " (" + updater.getLatestVersionCode() + ")");
         String message = "Latest Version: " + updater.getLatestVersion() + "<br /><br />";
         message += UpdaterHelper.getChangelogStringFromArray(updater.getUpdateMessage());
@@ -242,6 +244,10 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
                         .setNegativeButton("Don't Update", null)
                         .setPositiveButton("Update", (dialog, which) -> {
                             NotificationManager manager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
+                            if (manager == null) {
+                                Log.e(TAG, "Cannot invoke NotificationManager, not found");
+                                return;
+                            }
                             // Create the Notification Channel
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 NotificationChannel mChannel = new NotificationChannel(UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL, "App Updates", NotificationManager.IMPORTANCE_LOW);
