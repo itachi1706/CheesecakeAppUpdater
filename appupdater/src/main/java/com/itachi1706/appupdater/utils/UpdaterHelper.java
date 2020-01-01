@@ -1,4 +1,4 @@
-package com.itachi1706.appupdater.Util;
+package com.itachi1706.appupdater.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,8 +7,8 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.itachi1706.appupdater.Objects.AppUpdateMessageObject;
-import com.itachi1706.appupdater.Objects.AppUpdateObject;
+import com.itachi1706.appupdater.object.AppUpdateMessageObject;
+import com.itachi1706.appupdater.object.AppUpdateObject;
 import com.itachi1706.helperlib.deprecation.Html;
 import com.itachi1706.helperlib.helpers.ConnectivityHelper;
 

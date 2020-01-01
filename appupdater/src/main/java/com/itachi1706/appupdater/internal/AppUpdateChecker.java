@@ -13,17 +13,16 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.itachi1706.appupdater.NewUpdateActivity;
-import com.itachi1706.appupdater.Objects.AppUpdateObject;
-import com.itachi1706.appupdater.Objects.UpdateShell;
+import com.itachi1706.appupdater.object.AppUpdateObject;
+import com.itachi1706.appupdater.object.UpdateShell;
 import com.itachi1706.appupdater.R;
-import com.itachi1706.appupdater.Util.UpdaterHelper;
+import com.itachi1706.appupdater.utils.UpdaterHelper;
 import com.itachi1706.helperlib.deprecation.Html;
 import com.itachi1706.helperlib.helpers.URLHelper;
 import com.itachi1706.helperlib.utils.NotifyUserUtil;

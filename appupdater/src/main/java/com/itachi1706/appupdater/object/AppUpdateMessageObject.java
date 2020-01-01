@@ -1,4 +1,4 @@
-package com.itachi1706.appupdater.Objects;
+package com.itachi1706.appupdater.object;
 
 import androidx.annotation.Keep;
 

@@ -27,9 +27,9 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
 
 import com.google.gson.Gson;
-import com.itachi1706.appupdater.Objects.AppUpdateMessageObject;
-import com.itachi1706.appupdater.Objects.AppUpdateObject;
-import com.itachi1706.appupdater.Util.UpdaterHelper;
+import com.itachi1706.appupdater.object.AppUpdateMessageObject;
+import com.itachi1706.appupdater.object.AppUpdateObject;
+import com.itachi1706.appupdater.utils.UpdaterHelper;
 import com.itachi1706.appupdater.internal.DownloadLatestUpdateFullScreen;
 import com.itachi1706.helperlib.deprecation.Html;
 
