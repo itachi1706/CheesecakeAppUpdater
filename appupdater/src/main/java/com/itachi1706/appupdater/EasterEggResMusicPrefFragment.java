@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
@@ -18,27 +19,39 @@ import com.google.android.material.snackbar.Snackbar;
  * Created by Kenneth on 5/11/2016.
  * for com.itachi1706.appupdater in CheesecakeAppUpdater
  *
- * Easter Egg Fragment. Call {@link #addEggMethods()} in your onCreate() method (e.g super.addEggMethods()) to add the easter egg and relevant stuff
+ * Easter Egg Fragment. Setup initialization methods and call {@link #build()} in your onCreate() or onCreatePreference() method (e.g super.build()) to add the easter egg and relevant stuff
  */
 @SuppressWarnings("ConstantConditions")
 public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCompat implements MediaPlayer.OnCompletionListener {
 
-    public void addEggMethods() {
-        addEggMethods(false, null);
-    }
+    // Easter Egg Initialization (Run these in onCreate)
+    private boolean openSource = false, aboutApp = false;
+    private Preference.OnPreferenceClickListener openSourceListener = null, aboutAppListener = null;
 
-    public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener) {
-        addEggMethods(openSource, openSourceListener, false, null);
+    /**
+     * Whether we should display OSS License Info Option
+     * @param enabled true if we should show the option
+     * @param listener What to run when the option is selected
+     */
+    public void setShouldShowOpenSource(boolean enabled, @Nullable Preference.OnPreferenceClickListener listener) {
+        this.openSource = enabled;
+        this.openSourceListener = listener;
     }
 
     /**
-     * Should be called when implementing the easter egg
-     * @param openSource true if to enable OSS license view
-     * @param openSourceListener OSS license view listener
-     * @param aboutApp true if to enable about app view
-     * @param aboutAppListener About App View Listener
+     * Whether we should display About App Option
+     * @param enabled true if we should show option
+     * @param listener What to run when option is selected
      */
-    public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener, boolean aboutApp, Preference.OnPreferenceClickListener aboutAppListener) {
+    public void setShouldShowAboutApp(boolean enabled, @Nullable Preference.OnPreferenceClickListener listener) {
+        this.aboutApp = enabled;
+        this.aboutAppListener = listener;
+    }
+
+    /**
+     * Builds the fragment
+     */
+    public void build() {
         addPreferencesFromResource(R.xml.pref_appinfo);
 
         // Check to enable Open Source License View or not
@@ -87,6 +100,37 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCo
             }
             return false;
         });
+    }
+
+    /**
+     * @deprecated Use {{@link #build()}} instead after setting the relevant preference
+     */
+    @Deprecated
+    public void addEggMethods() {
+        addEggMethods(false, null);
+    }
+
+    /**
+     * @deprecated Use {{@link #build()}} instead after setting the relevant preference
+     */
+    @Deprecated
+    public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener) {
+        addEggMethods(openSource, openSourceListener, false, null);
+    }
+
+    /**
+     * Should be called when implementing the easter egg
+     * @param openSource true if to enable OSS license view
+     * @param openSourceListener OSS license view listener
+     * @param aboutApp true if to enable about app view
+     * @param aboutAppListener About App View Listener
+     * @deprecated Use {{@link #build()}} instead after setting the relevant preference
+     */
+    @Deprecated
+    public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener, boolean aboutApp, Preference.OnPreferenceClickListener aboutAppListener) {
+        setShouldShowOpenSource(openSource, openSourceListener);
+        setShouldShowAboutApp(aboutApp, aboutAppListener);
+        build();
     }
 
     /**
