@@ -14,7 +14,6 @@ import android.util.TypedValue;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.pm.PackageInfoCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
@@ -320,16 +319,8 @@ public final class SettingsInitializer {
             return false;
         });
 
-        final CustomTabsIntent customTabs = getCustomTabs(context);
-        fragment.findPreference("get_old_app").setOnPreferenceClickListener(preference -> {
-            customTabs.launchUrl(context, Uri.parse(legacyLink));
-            return false;
-        });
-
-        fragment.findPreference("get_latest_app").setOnPreferenceClickListener(preference -> {
-            customTabs.launchUrl(context, Uri.parse(updateLink));
-            return false;
-        });
+        fragment.findPreference("get_old_app").setOnPreferenceClickListener(preference -> launchCustomTabs(context, legacyLink));
+        fragment.findPreference("get_latest_app").setOnPreferenceClickListener(preference -> launchCustomTabs(context, updateLink));
 
         fragment.findPreference("android_changelog").setOnPreferenceClickListener(preference -> {
             UpdaterHelper.settingGenerateChangelog(sp, context);
@@ -400,20 +391,20 @@ public final class SettingsInitializer {
             return true;
         });
         // Check to enable Open Source License View or not
-        fragment.findPreference(VIEW_OSS).setOnPreferenceClickListener(ossListener);
         if (!this.oss) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(VIEW_OSS));
+        else fragment.findPreference(VIEW_OSS).setOnPreferenceClickListener(ossListener);
         // Check to enable About App View or not
-        fragment.findPreference(ABOUT_APP).setOnPreferenceClickListener(aboutAppListener);
         if (!this.aboutapp) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(ABOUT_APP));
+        else fragment.findPreference(ABOUT_APP).setOnPreferenceClickListener(aboutAppListener);
         // Check to enable Issue Tracking View or not
-        fragment.findPreference(ISSUE_TRACKING).setOnPreferenceClickListener(preference -> launchCustomTabs(fragment.getContext(), issueTrackingURL));
         if (!this.issuetracking) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(ISSUE_TRACKING));
+        else fragment.findPreference(ISSUE_TRACKING).setOnPreferenceClickListener(preference -> launchCustomTabs(fragment.getContext(), issueTrackingURL));
         // Check to enable Bug Report View or not
-        fragment.findPreference(BUG_REPORT).setOnPreferenceClickListener(preference -> launchCustomTabs(fragment.getContext(), bugReportURL));
         if (!this.bugreport) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(BUG_REPORT));
+        else fragment.findPreference(BUG_REPORT).setOnPreferenceClickListener(preference -> launchCustomTabs(fragment.getContext(), bugReportURL));
         // Check to enable F-Droid View or not
-        fragment.findPreference(FDROID_REPO).setOnPreferenceClickListener(preference -> launchCustomTabs(fragment.getContext(), fdroidURL));
         if (!this.fdroid) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(FDROID_REPO));
+        else fragment.findPreference(FDROID_REPO).setOnPreferenceClickListener(preference -> launchCustomTabs(fragment.getContext(), fdroidURL));
         return this;
     }
 
@@ -453,16 +444,14 @@ public final class SettingsInitializer {
     public SettingsInitializer explodeUpdaterSettings(Activity activity, @DrawableRes final int notificationIcon,
                                                       final String serverUrl, final String legacyLink, final String updateLink,
                                                       PreferenceFragmentCompat fragment) {
-        final Activity context = activity;
-        if (showOnlyForSideload && !ValidationHelper.checkSideloaded(context) && !showInstallLocation)
-            return this; // Sideloaded
-
-        if (showOnlyForSideload && showInstallLocation && !ValidationHelper.checkSideloaded(context)) {
+        final Activity mActivity = activity;
+        if (showOnlyForSideload && !ValidationHelper.checkSideloaded(mActivity) && !showInstallLocation) return this; // Sideloaded
+        if (showOnlyForSideload && showInstallLocation && !ValidationHelper.checkSideloaded(mActivity)) {
             // Expand minimal
             fragment.addPreferencesFromResource(R.xml.pref_updater_min);
             String installLocation;
-            String location = ValidationHelper.getInstallLocation(context);
-            switch (ValidationHelper.checkInstallLocation(context)) {
+            String location = ValidationHelper.getInstallLocation(mActivity);
+            switch (ValidationHelper.checkInstallLocation(mActivity)) {
                 case ValidationHelper.GOOGLE_PLAY: installLocation = "Google Play (" + location + ")"; break;
                 case ValidationHelper.AMAZON: installLocation = "Amazon App Store (" + location + ")"; break;
                 case ValidationHelper.SIDELOAD:
@@ -472,33 +461,23 @@ public final class SettingsInitializer {
             return this;
         }
 
-        final SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(context);
+        final SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(mActivity);
         fragment.addPreferencesFromResource(R.xml.pref_updater);
         fragment.findPreference("launch_updater").setOnPreferenceClickListener(preference -> {
-            new AppUpdateChecker(context, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            new AppUpdateChecker(mActivity, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             return false;
         });
 
-        final CustomTabsIntent customTabs = getCustomTabs(context);
-
-        fragment.findPreference("get_old_app").setOnPreferenceClickListener(preference -> {
-            customTabs.launchUrl(context, Uri.parse(legacyLink));
-            return false;
-        });
-
-        fragment.findPreference("get_latest_app").setOnPreferenceClickListener(preference -> {
-            customTabs.launchUrl(context, Uri.parse(updateLink));
-            return false;
-        });
-
+        fragment.findPreference("get_old_app").setOnPreferenceClickListener(preference -> launchCustomTabs(mActivity, legacyLink));
+        fragment.findPreference("get_latest_app").setOnPreferenceClickListener(preference -> launchCustomTabs(mActivity, updateLink));
         fragment.findPreference("android_changelog").setOnPreferenceClickListener(preference -> {
-            UpdaterHelper.settingGenerateChangelog(sp, context);
+            UpdaterHelper.settingGenerateChangelog(sp, mActivity);
             return true;
         });
 
         String installLocation;
-        String location = ValidationHelper.getInstallLocation(context);
-        switch (ValidationHelper.checkInstallLocation(context)) {
+        String location = ValidationHelper.getInstallLocation(mActivity);
+        switch (ValidationHelper.checkInstallLocation(mActivity)) {
             case ValidationHelper.GOOGLE_PLAY: installLocation = "Google Play (" + location + ")"; break;
             case ValidationHelper.AMAZON: installLocation = "Amazon App Store (" + location + ")"; break;
             case ValidationHelper.SIDELOAD:
