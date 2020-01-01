@@ -390,22 +390,22 @@ public final class SettingsInitializer {
             fragment.startActivity(new Intent(fragment.getActivity(), ViewLogsActivity.class));
             return true;
         });
-        // Check to enable Open Source License View or not
-        if (!this.oss) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(VIEW_OSS));
-        else fragment.findPreference(VIEW_OSS).setOnPreferenceClickListener(ossListener);
-        // Check to enable About App View or not
-        if (!this.aboutapp) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(ABOUT_APP));
-        else fragment.findPreference(ABOUT_APP).setOnPreferenceClickListener(aboutAppListener);
-        // Check to enable Issue Tracking View or not
-        if (!this.issuetracking) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(ISSUE_TRACKING));
-        else fragment.findPreference(ISSUE_TRACKING).setOnPreferenceClickListener(preference -> launchCustomTabs(fragment.getContext(), issueTrackingURL));
-        // Check to enable Bug Report View or not
-        if (!this.bugreport) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(BUG_REPORT));
-        else fragment.findPreference(BUG_REPORT).setOnPreferenceClickListener(preference -> launchCustomTabs(fragment.getContext(), bugReportURL));
-        // Check to enable F-Droid View or not
-        if (!this.fdroid) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(FDROID_REPO));
-        else fragment.findPreference(FDROID_REPO).setOnPreferenceClickListener(preference -> launchCustomTabs(fragment.getContext(), fdroidURL));
+        prefCheckToggle(this.oss, VIEW_OSS, fragment, ossListener); // Check to enable Open Source License View or not
+        prefCheckToggle(this.aboutapp, ABOUT_APP, fragment, aboutAppListener); // Check to enable About App View or not
+        prefCheckToggle(this.issuetracking, ISSUE_TRACKING, fragment, issueTrackingURL); // Check to enable Issue Tracking View or not
+        prefCheckToggle(this.bugreport, BUG_REPORT, fragment, bugReportURL); // Check to enable Bug Report View or not
+        prefCheckToggle(this.fdroid, FDROID_REPO, fragment, fdroidURL); // Check to enable F-Droid View or not
         return this;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void prefCheckToggle(boolean check, String pref, PreferenceFragmentCompat fragment, Preference.OnPreferenceClickListener listener) {
+        if (!check) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(pref));
+        else fragment.findPreference(pref).setOnPreferenceClickListener(listener);
+    }
+
+    private void prefCheckToggle(boolean check, String pref, PreferenceFragmentCompat fragment, String url) {
+        prefCheckToggle(check, pref, fragment, preference -> launchCustomTabs(fragment.getContext(), url));
     }
 
     private boolean launchCustomTabs(Context context, String url) {
