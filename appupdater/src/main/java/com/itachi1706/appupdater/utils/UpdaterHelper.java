@@ -21,6 +21,10 @@ public final class UpdaterHelper {
     public static int HTTP_QUERY_TIMEOUT = 15000; //15 seconds timeout
     public static String UPDATER_NOTIFICATION_CHANNEL = "app_update_channel";
 
+    private UpdaterHelper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Retrieves the changelog of the device
      * @param changelog List of Changelog parsed
@@ -48,18 +52,19 @@ public final class UpdaterHelper {
      * @return True if app can check for updates, false otherwise
      */
     public static boolean canCheckUpdate(SharedPreferences sp, Context context) {
+        private final String TAG = "Updater";
         if (sp.getBoolean("updateOnWifi", false) && !ConnectivityHelper.isWifiConnection(context)) {
-            Log.i("Updater", "Not on WIFI, Ignore Update Checking");
+            Log.i(TAG, "Not on WIFI, Ignore Update Checking");
             return false;
         }
 
         if (!ConnectivityHelper.hasInternetConnection(context)) {
-            Log.w("Updater", "No internet connection, skipping WiFi checking");
+            Log.w(TAG, "No internet connection, skipping WiFi checking");
             return false;
         }
 
         if (ConnectivityHelper.shouldThrottle(context)) {
-            Log.w("Updater", "Currently on metered connection with Data Saver enabled, skipping check");
+            Log.w(TAG, "Currently on metered connection with Data Saver enabled, skipping check");
             return false;
         }
         return true;

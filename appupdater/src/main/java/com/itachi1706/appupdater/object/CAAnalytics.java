@@ -11,7 +11,9 @@ public class CAAnalytics {
     private String sdkString, dName, dManufacturer, dCPU, appVer, dFingerprint, dCodename, dTags, sdkPatch;
     private boolean debug;
 
-    public CAAnalytics() {}
+    public CAAnalytics() {
+        // JSON Constructor
+    }
 
     public int getSdkver() {
         return sdkver;

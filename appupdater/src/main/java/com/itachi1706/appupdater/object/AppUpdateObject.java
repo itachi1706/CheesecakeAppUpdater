@@ -14,6 +14,7 @@ public final class AppUpdateObject {
     private AppUpdateMessageObject[] updateMessage;
 
     public AppUpdateObject() {
+        // JSON Constructor
     }
 
     public int getIndex() {

@@ -10,6 +10,7 @@ public final class UpdateShell {
     private int error;
 
     public UpdateShell() {
+        // JSON Constructor
     }
 
     public AppUpdateObject getMsg() {
