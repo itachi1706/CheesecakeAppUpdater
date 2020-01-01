@@ -35,10 +35,10 @@ public final class SettingsInitializer {
 
     @Deprecated private Activity context;
     @Deprecated private int notificationIcon;
-    private boolean fullscreen = false, oss = false, aboutapp = false, issuetracking = false, bugreport = false;
+    private boolean fullscreen = false, oss = false, aboutapp = false, issuetracking = false, bugreport = false, fdroid = false;
     @Deprecated private android.preference.Preference.OnPreferenceClickListener ossListenerDeprecated = null;
     private Preference.OnPreferenceClickListener ossListener = null, aboutAppListener = null;
-    private String issueTrackingURL = null, bugReportURL = null;
+    private String issueTrackingURL = null, bugReportURL = null, fdroidURL = null;
     @Deprecated private String serverUrl, legacyLink, updateLink;
     private boolean internalCache = false;
     private boolean showOnlyForSideload = true, showInstallLocation = true;
@@ -183,7 +183,7 @@ public final class SettingsInitializer {
     }
 
     /**
-     * To enable the Bug Report Preference where on user click, you could link to your issue tracker instead
+     * To enable the Bug Report Preference where on user click, you could link to your bug report/feature request/support page
      * @param enabled Whether to show the preference or not
      * @param url Link to the bug report page (support page)
      * @return The instance itself
@@ -191,6 +191,18 @@ public final class SettingsInitializer {
     public SettingsInitializer setBugReporting(boolean enabled, @Nullable String url) {
         this.bugreport = enabled;
         this.bugReportURL = url;
+        return this;
+    }
+
+    /**
+     * To enable the F-Droid Preference where on user click, you could go to F-Droid repo
+     * @param enabled Whether to show the preference or not
+     * @param repoURL Link to the F-Droid Repository
+     * @return The instance itself
+     */
+    public SettingsInitializer setFDroidRepo(boolean enabled, @Nullable String repoURL) {
+        this.fdroid = enabled;
+        this.fdroidURL = repoURL;
         return this;
     }
 
@@ -238,6 +250,7 @@ public final class SettingsInitializer {
         ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("aboutapp")); // Permenantly remove for this
         ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("issuetracker")); // Permenantly remove for this
         ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("bugreport")); // Permenantly remove for this
+        ((android.preference.PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("fdroid")); // Permenantly remove for this
         return this;
     }
 
@@ -412,6 +425,14 @@ public final class SettingsInitializer {
             return true;
         });
         if (!this.bugreport) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("bugreport"));
+        // Check to enable F-Droid View or not
+        fragment.findPreference("fdroid").setOnPreferenceClickListener(preference -> {
+            if (fdroidURL == null) return true;
+            final CustomTabsIntent customTabsIntent = getCustomTabs(fragment.getContext());
+            customTabsIntent.launchUrl(fragment.getContext(), Uri.parse(fdroidURL));
+            return true;
+        });
+        if (!this.fdroid) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("fdroid"));
         return this;
     }
 
