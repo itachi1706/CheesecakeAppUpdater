@@ -27,6 +27,7 @@ class SettingsActivity : AppCompatActivity() {
                 resources.getString(R.string.link_legacy), resources.getString(R.string.link_updates), this)
                 .setAboutApp(true) { Toast.makeText(context, "This will launch about app", Toast.LENGTH_SHORT).show(); true }
                 .setOpenSourceLicenseInfo(true, Preference.OnPreferenceClickListener{ Toast.makeText(context, "This will launch OSS prompt", Toast.LENGTH_SHORT).show(); true })
+                .setIssueTracking(true, "https://itachi1706.atlassian.net/browse/CAUANDLIB")
                 .explodeInfoSettings(this)
             super.init()
         }

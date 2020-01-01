@@ -1,6 +1,7 @@
 package com.itachi1706.appupdater;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -34,9 +35,10 @@ public final class SettingsInitializer {
 
     @Deprecated private Activity context;
     @Deprecated private int notificationIcon;
-    private boolean fullscreen = false, oss = false, aboutapp = false;
+    private boolean fullscreen = false, oss = false, aboutapp = false, issuetracking = false;
     @Deprecated private android.preference.Preference.OnPreferenceClickListener ossListenerDeprecated = null;
     private Preference.OnPreferenceClickListener ossListener = null, aboutAppListener = null;
+    private String issueTrackingURL = null;
     @Deprecated private String serverUrl, legacyLink, updateLink;
     private boolean internalCache = false;
     private boolean showOnlyForSideload = true, showInstallLocation = true;
@@ -168,6 +170,19 @@ public final class SettingsInitializer {
     public SettingsInitializer setAboutApp(boolean enabled, @Nullable Preference.OnPreferenceClickListener listener) {
         this.aboutapp = enabled;
         this.aboutAppListener = listener;
+        return this;
+    }
+
+    /**
+     * To enable the Issue Tracker Preference where on user click, you could link to your issue tracker instead
+     * NOTE: If you use a EasterEgg fragment, set aboutApp to true and provide the listener there instead
+     * @param enabled Whether to show the preference or not
+     * @param url Link to the issue tracker
+     * @return The instance itself
+     */
+    public SettingsInitializer setIssueTracking(boolean enabled, @Nullable String url) {
+        this.issuetracking = enabled;
+        this.issueTrackingURL = url;
         return this;
     }
 
@@ -372,7 +387,29 @@ public final class SettingsInitializer {
         // Check to enable About App View or not
         fragment.findPreference("aboutapp").setOnPreferenceClickListener(aboutAppListener);
         if (!this.aboutapp) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("aboutapp"));
+        // Check to enable Issue Tracking View or not
+        fragment.findPreference("issuetracker").setOnPreferenceClickListener(preference -> {
+            if (issueTrackingURL == null) return true;
+            final CustomTabsIntent customTabsIntent = getCustomTabs(fragment.getContext());
+            customTabsIntent.launchUrl(fragment.getContext(), Uri.parse(issueTrackingURL));
+            return true;
+        });
+        if (!this.issuetracking) ((PreferenceCategory) fragment.findPreference("info_category")).removePreference(fragment.findPreference("issuetracker"));
         return this;
+    }
+
+    private CustomTabsIntent customTabsIntent = null;
+    private CustomTabsIntent getCustomTabs(Context context) {
+        if (customTabsIntent == null) {
+            TypedValue colorTmp = new TypedValue();
+            context.getTheme().resolveAttribute(R.attr.colorPrimary, colorTmp, true);
+            final int colorPrimary = colorTmp.data;
+            customTabsIntent = new CustomTabsIntent.Builder().setToolbarColor(colorPrimary)
+                    .enableUrlBarHiding().setShowTitle(true)
+                    .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
+                    .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build();
+        }
+        return customTabsIntent;
     }
 
     /**
@@ -415,13 +452,7 @@ public final class SettingsInitializer {
             return false;
         });
 
-        TypedValue colorTmp = new TypedValue();
-        context.getTheme().resolveAttribute(R.attr.colorPrimary, colorTmp, true);
-        final int colorPrimary = colorTmp.data;
-        final CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setToolbarColor(colorPrimary)
-                .enableUrlBarHiding().setShowTitle(true)
-                .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
-                .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build();
+        final CustomTabsIntent customTabsIntent = getCustomTabs(context);
 
         fragment.findPreference("get_old_app").setOnPreferenceClickListener(preference -> {
             customTabsIntent.launchUrl(context, Uri.parse(legacyLink));
