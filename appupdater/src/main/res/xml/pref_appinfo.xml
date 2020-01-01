@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="App Info" android:key="info_category">
-        <Preference android:title="App Version" android:key="view_app_version" android:summary="NULL" />
-        <Preference android:title="Package Name" android:key="view_app_name" android:selectable="false" />
-        <Preference android:summary="None" android:title="Android Version" android:key="view_sdk_version" android:selectable="false"/>
-        <Preference android:title="Open Source License Information" android:key="view_oss" android:summary="View Open Source License Information" />
-        <Preference android:title="About this app" android:key="aboutapp" android:summary="View information about this application" />
-        <Preference android:title="Issue Tracker" android:key="issuetracker" android:summary="View the issue tracker for this application" />
-        <Preference android:title="Report Bug/Feature Request" android:key="bugreport" android:summary="View the app feature request and bug report page" />
-        <Preference android:title="Add F-Droid Repo" android:key="fdroid" android:summary="Add F-Droid repository for this app" />
-        <Preference android:title="View Device Info" android:key="vDevInfo" android:summary="View information of your device"/>
-        <Preference android:title="View App Logs" android:key="vAppLog" android:summary="View the application log data"/>
-        <SwitchPreference android:title="Analytics" android:summary="Uncheck to disable sending of analytics data"
-            android:key="ca_analytics" android:defaultValue="true" />
+    <PreferenceCategory android:title="@string/pref_cat_appinfo" android:key="info_category">
+        <Preference android:title="@string/pref_app_version" android:key="view_app_version" android:summary="@string/placeholder_null" />
+        <Preference android:title="@string/pref_package_name" android:key="view_app_name" android:selectable="false" />
+        <Preference android:summary="None" android:title="@string/pref_android_version" android:key="view_sdk_version" android:selectable="false"/>
+        <Preference android:title="@string/pref_oss_license_info" android:key="view_oss" android:summary="@string/pref_summary_oss_license_info" />
+        <Preference android:title="@string/pref_about_app" android:key="aboutapp" android:summary="@string/pref_summary_about_app" />
+        <Preference android:title="@string/pref_issue_tracker" android:key="issuetracker" android:summary="@string/pref_summary_issue_tracker" />
+        <Preference android:title="@string/pref_bug_report" android:key="bugreport" android:summary="@string/pref_summary_bug_report" />
+        <Preference android:title="@string/pref_fdroid_repo" android:key="fdroid" android:summary="@string/pref_summary_fdroid_repo" />
+        <Preference android:title="@string/pref_view_device_info" android:key="vDevInfo" android:summary="@string/pref_summary_view_device_info"/>
+        <Preference android:title="@string/pref_view_app_logs" android:key="vAppLog" android:summary="@string/pref_summary_view_app_logs"/>
+        <SwitchPreference android:title="@string/pref_analytics" android:summary="@string/pref_summary_analytics" android:key="ca_analytics" android:defaultValue="true" />
     </PreferenceCategory>
 
 </PreferenceScreen>

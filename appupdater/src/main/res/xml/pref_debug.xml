@@ -1,24 +1,24 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Device Info" android:key="dev_info">
-        <Preference android:title="Model" android:key="view_model_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Manufacturer" android:key="view_manufacturer_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Board" android:key="view_board_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Bootloader" android:key="view_bootloader_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Brand" android:key="view_brand_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="CPU Type" android:key="view_cpu1_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="CPU Type 2" android:key="view_cpu2_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Device" android:key="view_device_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Build ID" android:key="view_display_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Fingerprint" android:key="view_fingerprint_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Hardware" android:key="view_hardware_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Host" android:key="view_host_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Product ID" android:key="view_id_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Product" android:key="view_product_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Radio" android:key="view_radio_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Tags" android:key="view_tags_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="Type" android:key="view_type_ver" android:summary="Unavailable" android:selectable="false"/>
-        <Preference android:title="User" android:key="view_user_ver" android:summary="Unavailable" android:selectable="false"/>
+    <PreferenceCategory android:title="@string/pref_cat_device_info" android:key="dev_info">
+        <Preference android:title="@string/pref_debug_model" android:key="view_model_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_manufacturer" android:key="view_manufacturer_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_board" android:key="view_board_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_bootloader" android:key="view_bootloader_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_brand" android:key="view_brand_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_cpu_type_1" android:key="view_cpu1_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_cpu_type_2" android:key="view_cpu2_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_device" android:key="view_device_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_build_id" android:key="view_display_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_fingerprint" android:key="view_fingerprint_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_hardware" android:key="view_hardware_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_host" android:key="view_host_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_product_id" android:key="view_id_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_product" android:key="view_product_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_radio" android:key="view_radio_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_tags" android:key="view_tags_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_type" android:key="view_type_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
+        <Preference android:title="@string/pref_debug_user" android:key="view_user_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
