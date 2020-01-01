@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
@@ -19,73 +22,14 @@ import com.google.android.material.snackbar.Snackbar;
  * Created by Kenneth on 5/11/2016.
  * for com.itachi1706.appupdater in CheesecakeAppUpdater
  *
- * Easter Egg Fragment. Setup initialization methods and call {@link #build()} in your onCreate() or onCreatePreference() method (e.g super.build()) to add the easter egg and relevant stuff
+ * Easter Egg Fragment. Setup initialization methods and call {@link #init()} ()} in your onCreate() or onCreatePreference() method (e.g super.build()) to add the easter egg and relevant stuff
+ * Initialization methods are done by using {@link SettingsInitializer#explodeInfoSettings(PreferenceFragmentCompat)} after setting the relevant options found in {@link SettingsInitializer}
  */
 @SuppressWarnings("ConstantConditions")
 public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCompat implements MediaPlayer.OnCompletionListener {
 
-    // Easter Egg Initialization (Run these in onCreate)
-    private boolean openSource = false, aboutApp = false;
-    private Preference.OnPreferenceClickListener openSourceListener = null, aboutAppListener = null;
-
-    /**
-     * Whether we should display OSS License Info Option
-     * @param enabled true if we should show the option
-     * @param listener What to run when the option is selected
-     */
-    public void setShouldShowOpenSource(boolean enabled, @Nullable Preference.OnPreferenceClickListener listener) {
-        this.openSource = enabled;
-        this.openSourceListener = listener;
-    }
-
-    /**
-     * Whether we should display About App Option
-     * @param enabled true if we should show option
-     * @param listener What to run when option is selected
-     */
-    public void setShouldShowAboutApp(boolean enabled, @Nullable Preference.OnPreferenceClickListener listener) {
-        this.aboutApp = enabled;
-        this.aboutAppListener = listener;
-    }
-
-    /**
-     * Builds the fragment
-     */
-    public void build() {
-        addPreferencesFromResource(R.xml.pref_appinfo);
-
-        // Check to enable Open Source License View or not
-        findPreference("view_oss").setOnPreferenceClickListener(openSourceListener);
-        if (!openSource) ((PreferenceCategory) findPreference("info_category")).removePreference(findPreference("view_oss"));
-
-        // Check to enable About App View or not
-        findPreference("aboutapp").setOnPreferenceClickListener(aboutAppListener);
-        if (!aboutApp) ((PreferenceCategory) findPreference("info_category")).removePreference(findPreference("aboutapp"));
-
-        //Debug Info Get
-        String version = "NULL", packName = "NULL";
-        int versionCode = 0;
-        try {
-            PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
-            version = pInfo.versionName;
-            packName = pInfo.packageName;
-            versionCode = pInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void init() {
         Preference verPref = findPreference("view_app_version");
-        verPref.setSummary(version + "-b" + versionCode);
-        findPreference("view_app_name").setSummary(packName);
-        findPreference("view_sdk_version").setSummary(android.os.Build.VERSION.RELEASE);
-        findPreference("vDevInfo").setOnPreferenceClickListener(preference -> {
-            startActivity(new Intent(getActivity(), DebugInfoActivity.class));
-            return true;
-        });
-        findPreference("vAppLog").setOnPreferenceClickListener(preference -> {
-            startActivity(new Intent(getActivity(), ViewLogsActivity.class));
-            return true;
-        });
-
         verPref.setOnPreferenceClickListener(preference -> {
             if (!isActive) {
                 if (count == 10) {
@@ -103,7 +47,7 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCo
     }
 
     /**
-     * @deprecated Use {{@link #build()}} instead after setting the relevant preference
+     * @deprecated Use {@link #init()} instead after setting the relevant preference in {@link SettingsInitializer}
      */
     @Deprecated
     public void addEggMethods() {
@@ -111,7 +55,7 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCo
     }
 
     /**
-     * @deprecated Use {{@link #build()}} instead after setting the relevant preference
+     * @deprecated Use {@link #init()} instead after setting the relevant preference in {@link SettingsInitializer}
      */
     @Deprecated
     public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener) {
@@ -124,13 +68,11 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCo
      * @param openSourceListener OSS license view listener
      * @param aboutApp true if to enable about app view
      * @param aboutAppListener About App View Listener
-     * @deprecated Use {{@link #build()}} instead after setting the relevant preference
+     * @deprecated Use {@link #init()} instead after setting the relevant preference in {@link SettingsInitializer}
      */
     @Deprecated
     public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener, boolean aboutApp, Preference.OnPreferenceClickListener aboutAppListener) {
-        setShouldShowOpenSource(openSource, openSourceListener);
-        setShouldShowAboutApp(aboutApp, aboutAppListener);
-        build();
+        new SettingsInitializer().setAboutApp(aboutApp, aboutAppListener).setOpenSourceLicenseInfo(openSource, openSourceListener).explodeInfoSettings(this);
     }
 
     /**

@@ -25,9 +25,10 @@ class SettingsActivity : AppCompatActivity() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             SettingsInitializer().setFullscreen(true).explodeUpdaterSettings(activity, R.mipmap.ic_launcher, "https://api.itachi1706.com/api/appupdatechecker.php?action=androidretrievedata&packagename=",
                 resources.getString(R.string.link_legacy), resources.getString(R.string.link_updates), this)
-            super.setShouldShowAboutApp(true) { Toast.makeText(context, "This will launch about app", Toast.LENGTH_SHORT).show(); true }
-            super.setShouldShowOpenSource(true) { Toast.makeText(context, "This will launch OSS prompt", Toast.LENGTH_SHORT).show(); true }
-            super.build()
+                .setAboutApp(true) { Toast.makeText(context, "This will launch about app", Toast.LENGTH_SHORT).show(); true }
+                .setOpenSourceLicenseInfo(true, Preference.OnPreferenceClickListener{ Toast.makeText(context, "This will launch OSS prompt", Toast.LENGTH_SHORT).show(); true })
+                .explodeInfoSettings(this)
+            super.init()
         }
 
         override fun getMusicResource(): Int {
