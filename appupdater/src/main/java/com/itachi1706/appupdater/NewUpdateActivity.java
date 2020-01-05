@@ -27,11 +27,11 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
 
 import com.google.gson.Gson;
+import com.itachi1706.appupdater.internal.DownloadLatestUpdateFullScreen;
 import com.itachi1706.appupdater.object.AppUpdateMessageObject;
 import com.itachi1706.appupdater.object.AppUpdateObject;
 import com.itachi1706.appupdater.utils.UpdaterHelper;
-import com.itachi1706.appupdater.internal.DownloadLatestUpdateFullScreen;
-import com.itachi1706.helperlib.deprecation.Html;
+import com.itachi1706.helperlib.deprecation.HtmlDep;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -187,10 +187,10 @@ public class NewUpdateActivity extends AppCompatActivity {
             getApplicationContext().startActivity(installIntent);
         });
         showMore.setOnClickListener(v -> new AlertDialog.Builder(NewUpdateActivity.this).setTitle("Changelog")
-                .setMessage(Html.fromHtml(fullUpdateMessage))
+                .setMessage(HtmlDep.fromHtml(fullUpdateMessage))
                 .setPositiveButton(R.string.dialog_action_positive_close, null).show());
 
-        updateMessages.setText(Html.fromHtml(updateMessage));
+        updateMessages.setText(HtmlDep.fromHtml(updateMessage));
 
         // Create the Notification Channel needed for the app
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {

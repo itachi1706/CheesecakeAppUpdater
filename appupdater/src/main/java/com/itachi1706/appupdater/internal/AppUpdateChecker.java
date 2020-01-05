@@ -19,11 +19,11 @@ import androidx.core.app.NotificationCompat;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.itachi1706.appupdater.NewUpdateActivity;
+import com.itachi1706.appupdater.R;
 import com.itachi1706.appupdater.object.AppUpdateObject;
 import com.itachi1706.appupdater.object.UpdateShell;
-import com.itachi1706.appupdater.R;
 import com.itachi1706.appupdater.utils.UpdaterHelper;
-import com.itachi1706.helperlib.deprecation.Html;
+import com.itachi1706.helperlib.deprecation.HtmlDep;
 import com.itachi1706.helperlib.helpers.URLHelper;
 import com.itachi1706.helperlib.utils.NotifyUserUtil;
 
@@ -239,7 +239,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
                 mActivity.startActivity(intent);
             } else {
                 new AlertDialog.Builder(mActivity).setTitle("A New Update is Available!")
-                        .setMessage(Html.fromHtml(message))
+                        .setMessage(HtmlDep.fromHtml(message))
                         .setNegativeButton("Don't Update", null)
                         .setPositiveButton("Update", (dialog, which) -> {
                             NotificationManager manager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);

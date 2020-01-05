@@ -13,8 +13,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 158
-        versionName "2.2.0"
+        versionCode 159
+        versionName "2.2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
     }
@@ -44,7 +44,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.browser:browser:1.2.0'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'com.itachi1706.helpers:helperlib:1.0.1'
+    implementation 'com.itachi1706.helpers:helperlib:1.0.2'
 }
 
 apply from: 'publish.gradle'
