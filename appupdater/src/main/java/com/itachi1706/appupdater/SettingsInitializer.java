@@ -1,6 +1,7 @@
 package com.itachi1706.appupdater;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceFragment;
+import android.util.Log;
 import android.util.TypedValue;
 
 import androidx.annotation.DrawableRes;
@@ -19,10 +21,11 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.itachi1706.appupdater.utils.UpdaterHelper;
 import com.itachi1706.appupdater.internal.AppUpdateChecker;
+import com.itachi1706.appupdater.utils.UpdaterHelper;
 import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.helperlib.helpers.ValidationHelper;
+import com.itachi1706.helperlib.utils.NotifyUserUtil;
 
 import java.security.InvalidParameterException;
 
@@ -405,13 +408,22 @@ public final class SettingsInitializer {
     }
 
     private void prefCheckToggle(boolean check, String pref, PreferenceFragmentCompat fragment, String url) {
-        prefCheckToggle(check, pref, fragment, preference -> launchCustomTabs(fragment.getContext(), url));
+        prefCheckToggle(check, pref, fragment, preference -> {
+            boolean result = launchCustomTabs(fragment.getContext(), url);
+            if (!result) NotifyUserUtil.createShortToast(fragment.getContext(), "F-Droid is not installed on this device!");
+            return result;
+        });
     }
 
     private boolean launchCustomTabs(Context context, String url) {
         if (url != null) {
             final CustomTabsIntent cti = getCustomTabs(context);
-            cti.launchUrl(context, Uri.parse(url));
+            try {
+                cti.launchUrl(context, Uri.parse(url));
+            } catch (ActivityNotFoundException e) {
+                Log.e("CustomTabs", "No apps found installed on device supporting this URL launch");
+                return false;
+            }
         }
         return true;
     }
