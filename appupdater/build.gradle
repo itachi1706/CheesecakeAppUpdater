@@ -44,7 +44,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.browser:browser:1.2.0'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'com.itachi1706.helpers:helperlib:1.0.2'
+    api 'com.itachi1706.helpers:helperlib:1.1.1'
 }
 
 apply from: 'publish.gradle'
