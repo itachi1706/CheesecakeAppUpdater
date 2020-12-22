@@ -15,3 +15,8 @@ updates:
     directory: "/app"
     schedule:
       interval: "daily"
+  # Maintain dependencies for Gradle Android Library
+  - package-ecosystem: "gradle"
+    directory: "/appupdater"
+    schedule:
+      interval: "daily"
