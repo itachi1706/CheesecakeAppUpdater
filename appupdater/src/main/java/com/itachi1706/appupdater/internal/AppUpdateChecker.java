@@ -37,15 +37,15 @@ import java.util.Random;
  */
 public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
 
-    private Activity mActivity;
-    private Exception except = null;
-    private SharedPreferences sp;
+    private final Activity mActivity;
+    private final Exception except = null;
+    private final SharedPreferences sp;
     private boolean main = false;
-    private int notificationIcon;
-    private String changelogLocation;
-    private String baseurl;
-    private boolean fullScreen;
-    private boolean internalCache;
+    private final int notificationIcon;
+    private final String changelogLocation;
+    private final String baseurl;
+    private final boolean fullScreen;
+    private final boolean internalCache;
     
     private static String TAG = "Updater";
 
@@ -230,7 +230,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         String message = "Latest Version: " + updater.getLatestVersion() + "<br /><br />";
         message += UpdaterHelper.getChangelogStringFromArray(updater.getUpdateMessage());
         if (!mActivity.isFinishing()) {
-            if (fullScreen && Build.VERSION.SDK_INT <= 29) { // Q
+            if (fullScreen && Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) { // R
                 // Launch Full Screen Updater
                 Intent intent = new Intent(mActivity, NewUpdateActivity.class);
                 intent.putExtra("update", gson.toJson(updater));

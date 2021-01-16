@@ -83,7 +83,6 @@ public class NewUpdateActivity extends AppCompatActivity {
         }
         
         if (getIntent().hasExtra("nicon")) {
-            //noinspection ConstantConditions
             notificationIcon = getIntent().getExtras().getInt("nicon");
         }
         else {
@@ -220,8 +219,7 @@ public class NewUpdateActivity extends AppCompatActivity {
             }
         }
 
-        if (isNonPlayAppAllowed) enableUnknown.setEnabled(false);
-        else enableUnknown.setEnabled(true);
+        enableUnknown.setEnabled(!isNonPlayAppAllowed);
         if (updateLink.isEmpty()) download.setVisibility(View.GONE);
         else download.setVisibility(View.VISIBLE);
 
@@ -325,11 +323,10 @@ public class NewUpdateActivity extends AppCompatActivity {
                 notification.setContentInfo(Math.round(progress[0]) + "%");
                 notification.setContentText("Downloading new update... (" + downloadMB + "/" + downloadSizeMB + "MB)");
             }
-            manager.notify(notificationId, notification.build());
         } else {
             notification.setProgress(0, 0, true);
-            manager.notify(notificationId, notification.build());
         }
+        manager.notify(notificationId, notification.build());
     }
 
     private void handleFailure(String except) {
@@ -354,7 +351,6 @@ public class NewUpdateActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateLink));
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
             notification.setContentIntent(pendingIntent);
-            manager.notify(notificationId, notification.build());
         } else {
             notification.setContentTitle(getString(R.string.notification_title_exception_download))
                     .setTicker(getString(R.string.notification_ticker_download_fail))
@@ -365,8 +361,8 @@ public class NewUpdateActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateLink));
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
             notification.setContentIntent(pendingIntent);
-            manager.notify(notificationId, notification.build());
         }
+        manager.notify(notificationId, notification.build());
     }
 
     private void handleSuccess() {

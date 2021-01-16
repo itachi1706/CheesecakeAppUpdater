@@ -20,8 +20,8 @@ import androidx.annotation.WorkerThread;
 
 public class AnalyticsHelper {
 
-    private SharedPreferences mSharedPreference;
-    private boolean mDefaultMode;
+    private final SharedPreferences mSharedPreference;
+    private final boolean mDefaultMode;
     @Nullable private PackageInfo pInfo;
     private static final String ANALYTICS_PREF = "ca_analytics";
 

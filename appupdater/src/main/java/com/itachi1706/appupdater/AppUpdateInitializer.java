@@ -16,9 +16,9 @@ import com.itachi1706.helperlib.helpers.ValidationHelper;
 public final class AppUpdateInitializer {
 
     private Activity mActivity;
-    private SharedPreferences sp;
-    private int mNotificationIcon;
-    private String baseURL;
+    private final SharedPreferences sp;
+    private final int mNotificationIcon;
+    private final String baseURL;
     private boolean fullscreen = false;
     private boolean internalCache = false;
     private boolean wifiCheck = false;

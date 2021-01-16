@@ -138,11 +138,10 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
                 notification.setContentInfo(Math.round(progress[0]) + "%");
                 notification.setContentText("Downloading new update... (" + downloadMB + "/" + downloadSizeMB + "MB)");
             }
-            manager.notify(notificationID, notification.build());
         } else {
             notification.setProgress(0, 0, true);
-            manager.notify(notificationID, notification.build());
         }
+        manager.notify(notificationID, notification.build());
     }
 
     @Override
@@ -169,7 +168,6 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
                 Intent intent = new Intent(Intent.ACTION_VIEW, link);
                 PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
                 notification.setContentIntent(pendingIntent);
-                manager.notify(notificationID, notification.build());
             } else {
                 notification.setContentTitle(activity.getString(R.string.notification_title_exception_download))
                         .setTicker(activity.getString(R.string.notification_ticker_download_fail))
@@ -180,8 +178,8 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
                 Intent intent = new Intent(Intent.ACTION_VIEW, link);
                 PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
                 notification.setContentIntent(pendingIntent);
-                manager.notify(notificationID, notification.build());
             }
+            manager.notify(notificationID, notification.build());
             return;
         }
 
