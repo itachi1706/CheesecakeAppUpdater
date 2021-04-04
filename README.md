@@ -26,7 +26,37 @@ android {
 }
 ```
 
-## Usage - Bintray
+**NOTE: We are in the midst of allowing an easier way to access through Maven Central, use the Artifactory method in the meantime**
+
+## Usage - Artifactory
+To use this library in an Android Project, add the following lines into your app-level build.gradle file
+
+```gradle
+repositories {
+	maven {
+		url "https://itachi1706.jfrog.io/artifactory/ccn-android-libs/"
+	}
+}
+…
+dependencies {
+  implementation 'com.itachi1706.appupdater:appupdater:<latest-version>' // See Bintray badge for latest version number
+}
+```
+
+## Usage - Maven Central (WIP)
+To use this library in an Android Project, add the following lines into your app-level build.gradle file
+
+```gradle
+repositories {
+	mavenCentral()
+}
+…
+dependencies {
+  implementation 'com.itachi1706.appupdater:appupdater:<latest-version>' // See Bintray badge for latest version number
+}
+```
+
+## Usage - Bintray (Deprecated)
 To use this library in an Android Project, add the following lines into your app-level build.gradle file
 
 ```gradle
@@ -41,10 +71,13 @@ dependencies {
 }
 ```
 
-## Usage - JCenter
+## Usage - JCenter (Deprecated)
 To use this library in an Android Project, add the following lines into your app-level build.gradle file
 
 ```gradle
+repositories {
+	jcenter()
+}
 dependencies {
   implementation 'com.itachi1706.appupdater:appupdater:<latest-version>' // See Bintray badge for latest version number
 }

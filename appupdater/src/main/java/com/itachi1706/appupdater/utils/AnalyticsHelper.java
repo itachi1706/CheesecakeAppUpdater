@@ -6,7 +6,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
-import com.itachi1706.appupdater.BuildConfig;
 import com.itachi1706.appupdater.object.CAAnalytics;
 import com.itachi1706.helperlib.helpers.PrefHelper;
 
@@ -48,6 +47,16 @@ public class AnalyticsHelper {
         return mSharedPreference.contains(ANALYTICS_PREF) && mSharedPreference.getBoolean(ANALYTICS_PREF, mDefaultMode); // Manual opt out
     }
 
+    /**
+     * @deprecated Use {@link #getData(boolean)} instead
+     * @return Analytics data or null if not enabled
+     */
+    @Nullable
+    @WorkerThread
+    public CAAnalytics getData() {
+        return getData(false);
+    }
+
 
     /**
      * Get relevant data if analytics is not disabled. You can choose which of the data to create as custom properties
@@ -58,7 +67,7 @@ public class AnalyticsHelper {
      */
     @Nullable
     @WorkerThread
-    public CAAnalytics getData() {
+    public CAAnalytics getData(boolean debugMode) {
         if (!isEnabled()) return null;
 
         //Debug Info Get
@@ -72,7 +81,7 @@ public class AnalyticsHelper {
 
         // Generate data
         CAAnalytics analytics = new CAAnalytics();
-        analytics.setDebug(BuildConfig.DEBUG);
+        analytics.setDebug(debugMode);
         analytics.setdManufacturer(Build.MANUFACTURER);
         analytics.setdName(Build.MODEL);
         analytics.setAppVerCode(versionCode);
