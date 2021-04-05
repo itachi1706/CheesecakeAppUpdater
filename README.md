@@ -1,7 +1,7 @@
 CheesecakeAppUpdater
 ========
+[![Maven Central](https://img.shields.io/maven-central/v/com.itachi1706.appupdater/appupdater)](https://search.maven.org/artifact/com.itachi1706.appupdater/appupdater)
 [![JIRA Issues](https://img.shields.io/badge/JIRA-Issues-blue)](https://itachi1706.atlassian.net/browse/CAUANDLIB)
-[![Bintray](https://img.shields.io/bintray/v/itachi1706/ccn-android-lib/appupdater)](https://bintray.com/itachi1706/ccn-android-lib/appupdater/_latestVersion)
 [![GitHub Actions](https://github.com/itachi1706/CheesecakeAppUpdater/workflows/Android%20CI/badge.svg)](https://github.com/itachi1706/CheesecakeAppUpdater/actions)
 [![GitHub release](https://img.shields.io/github/release/itachi1706/CheesecakeAppUpdater.svg)](https://github.com/itachi1706/CheesecakeAppUpdater/releases) 
 [![GitHub license](https://img.shields.io/github/license/itachi1706/CheesecakeAppUpdater.svg)](https://github.com/itachi1706/CheesecakeAppUpdater/blob/master/LICENSE) 
@@ -26,7 +26,18 @@ android {
 }
 ```
 
-**NOTE: We are in the midst of allowing an easier way to access through Maven Central, use the Artifactory method in the meantime**
+## Usage - Maven Central
+To use this library in an Android Project, add the following lines into your app-level build.gradle file
+
+```gradle
+repositories {
+	mavenCentral()
+}
+…
+dependencies {
+  implementation 'com.itachi1706.appupdater:appupdater:<latest-version>' // See Bintray badge for latest version number
+}
+```
 
 ## Usage - Artifactory
 To use this library in an Android Project, add the following lines into your app-level build.gradle file
@@ -36,19 +47,6 @@ repositories {
 	maven {
 		url "https://itachi1706.jfrog.io/artifactory/ccn-android-libs/"
 	}
-}
-…
-dependencies {
-  implementation 'com.itachi1706.appupdater:appupdater:<latest-version>' // See Bintray badge for latest version number
-}
-```
-
-## Usage - Maven Central (WIP)
-To use this library in an Android Project, add the following lines into your app-level build.gradle file
-
-```gradle
-repositories {
-	mavenCentral()
 }
 …
 dependencies {

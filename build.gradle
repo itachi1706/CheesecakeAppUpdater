@@ -6,7 +6,6 @@ buildscript {
         google()
         mavenCentral()
         maven {url "https://plugins.gradle.org/m2/"}
-        jcenter() // Deprecated
 
     }
     dependencies {
@@ -25,7 +24,6 @@ allprojects {
         google()
         mavenCentral()
         maven {url "https://plugins.gradle.org/m2/"}
-        jcenter() // Deprecated
     }
 }
 
