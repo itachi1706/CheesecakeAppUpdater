@@ -109,9 +109,9 @@ afterEvaluate {
     publishing {
         repositories {
             maven {
-                def releaseRepo = "https://s01.sonatype.org/service/local/staging/deploy/maven2/"
-                def snapshotRepo = "https://s01.sonatype.org/content/repositories/snapshots/"
-                url = version.endsWith('SNAPSHOT') ? releaseRepo : snapshotRepo
+                def releaseRepo = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotRepo = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                url = version.endsWith('SNAPSHOT') ? snapshotRepo : releaseRepo
                 credentials {
                     username = ossrhUsername
                     password = ossrhPassword
@@ -155,7 +155,6 @@ afterEvaluate {
                 // Tell maven to prepare the generated "*.aar" file for publishing
                 artifact(sourcesJar)
                 artifact(javadocJar)
-                artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
             }
         }
     }
