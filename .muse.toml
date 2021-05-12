@@ -1,0 +1,4 @@
+build          = "gradlew"
+arguments      = [ "clean", "build", "install" ]
+jdk11          = false
+androidVersion = 28
