@@ -21,12 +21,12 @@ import java.net.URL;
  * NOT FOR NON LIBRARY USE
  */
 public final class DownloadLatestUpdateFullScreen extends AsyncTask<String, Float, Boolean> {
-    private File cacheDir;
+    private final File cacheDir;
     private Exception except = null;
     private String filePath;
-    private String version;
+    private final String version;
     private boolean ready = false;
-    private Handler handler;
+    private final Handler handler;
 
     /**
      * Called from AppUpdateChecker if the user decides to invoke anything
@@ -115,8 +115,6 @@ public final class DownloadLatestUpdateFullScreen extends AsyncTask<String, Floa
         }
         msg.setData(bundle);
         handler.sendMessage(msg);
-
-
     }
 
     @Override

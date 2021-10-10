@@ -1,5 +1,6 @@
 package com.itachi1706.appupdater;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
@@ -111,7 +113,7 @@ public class NewUpdateActivity extends AppCompatActivity {
         // Processing
         filePath = ((internalCache) ? getApplicationContext().getCacheDir() : getApplicationContext().getExternalCacheDir()) + File.separator + "download" + File.separator;
         fileName = "app-update_" + update.getLatestVersion() + ".apk";
-        mHandler = new UpdateHandler(this);
+        mHandler = new UpdateHandler(Looper.getMainLooper(), this);
         Random random = new Random();
         notificationId = random.nextInt();
         
@@ -211,6 +213,7 @@ public class NewUpdateActivity extends AppCompatActivity {
             isNonPlayAppAllowed = getPackageManager().canRequestPackageInstalls();
         } else {
             try {
+                //noinspection deprecation
                 isNonPlayAppAllowed = Settings.Secure.getInt(getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS) == 1;
             } catch (Settings.SettingNotFoundException e) {
                 e.printStackTrace();
@@ -257,7 +260,8 @@ public class NewUpdateActivity extends AppCompatActivity {
     private static class UpdateHandler extends Handler {
         WeakReference<NewUpdateActivity> mActivity;
 
-        UpdateHandler(NewUpdateActivity activity) {
+        UpdateHandler(Looper mainLooper, NewUpdateActivity activity) {
+            super(mainLooper);
             mActivity = new WeakReference<>(activity);
         }
 
@@ -329,6 +333,7 @@ public class NewUpdateActivity extends AppCompatActivity {
         manager.notify(notificationId, notification.build());
     }
 
+    @SuppressLint("UnspecifiedImmutableFlag")
     private void handleFailure(String except) {
         // Reenable download button, reset progressText bar, delete failed download
         download.setVisibility(View.VISIBLE);
@@ -349,7 +354,12 @@ public class NewUpdateActivity extends AppCompatActivity {
                                     except)))
                     .setSmallIcon(notificationIcon).setProgress(0, 0, false);
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateLink));
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+            PendingIntent pendingIntent;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+            } else {
+                pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+            }
             notification.setContentIntent(pendingIntent);
         } else {
             notification.setContentTitle(getString(R.string.notification_title_exception_download))
@@ -359,12 +369,18 @@ public class NewUpdateActivity extends AppCompatActivity {
                             .bigText(getString(R.string.notification_content_download_fail_expanded)))
                     .setSmallIcon(notificationIcon).setProgress(0, 0, false);
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateLink));
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+            PendingIntent pendingIntent;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+            } else {
+                pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+            }
             notification.setContentIntent(pendingIntent);
         }
         manager.notify(notificationId, notification.build());
     }
 
+    @SuppressLint("UnspecifiedImmutableFlag")
     private void handleSuccess() {
         // Download button becomes redownload button, 100% progressText bar, enable install button
         progressText.setText(getString(R.string.progress, 100f));
@@ -377,7 +393,13 @@ public class NewUpdateActivity extends AppCompatActivity {
 
         //Notify User and add intent to invoke update
         if (notification == null) return;
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, installIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            pendingIntent = PendingIntent.getActivity(this, 0, installIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            pendingIntent = PendingIntent.getActivity(this, 0, installIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+
         notification.setContentTitle(getString(R.string.notification_title_download_success))
                 .setTicker(getString(R.string.notification_ticker_download_success))
                 .setContentText(getString(R.string.notification_content_download_success))

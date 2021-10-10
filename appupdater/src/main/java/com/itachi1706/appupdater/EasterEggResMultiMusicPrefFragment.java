@@ -9,6 +9,7 @@ import java.util.Random;
  * Created by Kenneth on 19/4/2018.
  * for com.itachi1706.appupdater in SingBuses
  */
+@SuppressWarnings("unused")
 public abstract class EasterEggResMultiMusicPrefFragment extends EasterEggResMusicPrefFragment {
 
     public int randomNum = -1;
