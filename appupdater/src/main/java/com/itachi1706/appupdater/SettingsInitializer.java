@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.util.TypedValue;

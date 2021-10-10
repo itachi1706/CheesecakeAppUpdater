@@ -39,8 +39,6 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.Random;
 
-import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
-
 public class NewUpdateActivity extends AppCompatActivity {
 
     Button showMore, enableUnknown, download, install;
