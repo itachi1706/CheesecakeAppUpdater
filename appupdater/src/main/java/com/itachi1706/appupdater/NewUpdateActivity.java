@@ -180,7 +180,7 @@ public class NewUpdateActivity extends AppCompatActivity {
                     .setOngoing(true).setTicker(getApplicationContext().getString(R.string.notification_ticker_starting_download));
             manager.notify(notificationId, notification.build());
             new DownloadLatestUpdateFullScreen((internalCache) ? getApplicationContext().getCacheDir() : getApplicationContext().getExternalCacheDir(),
-                    update.getLatestVersion(), mHandler).executeOnExecutor(THREAD_POOL_EXECUTOR, updateLink);
+                    update.getLatestVersion(), mHandler).executeOnExecutor(updateLink);
         });
         install.setOnClickListener(v -> {
             Log.d(TAG, "Invoking Package Manager");

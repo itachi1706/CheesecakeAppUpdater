@@ -1,18 +1,20 @@
 package com.itachi1706.appupdater.internal;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
 
 import com.itachi1706.appupdater.R;
+import com.itachi1706.helperlib.concurrent.CoroutineAsyncTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,16 +28,18 @@ import java.net.URL;
  * For com.itachi1706.appupdate.internal in AppUpdater.
  * NOT FOR NON LIBRARY USE
  */
-public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean> {
-    private Activity activity;
+public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float, Boolean> {
+    private final Activity activity;
     private Exception except = null;
     private Uri link;
     private String filePath;
-    private NotificationCompat.Builder notification;
-    private NotificationManager manager;
-    private int notificationID;
-    private int notificationicon;
-    private boolean ready = false, internalCache;
+    private final NotificationCompat.Builder notification;
+    private final NotificationManager manager;
+    private final int notificationID;
+    private final int notificationicon;
+    private boolean ready = false;
+    private final boolean internalCache;
+    private static final String TASK_NAME = DownloadLatestUpdate.class.getSimpleName();
 
     /**
      * Called from AppUpdateChecker if the user decides to invoke anything
@@ -48,6 +52,7 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
      */
     protected DownloadLatestUpdate(Activity activity, NotificationCompat.Builder notificationBuilder,
                                 NotificationManager notifyManager, int notifcationID, int notificationicon, boolean internalCache) {
+        super(TASK_NAME);
         this.activity = activity;
         this.notification = notificationBuilder;
         this.manager = notifyManager;
@@ -64,7 +69,7 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
     }
 
     @Override
-    protected Boolean doInBackground(String... updateLink) {
+    public Boolean doInBackground(String... updateLink) {
         try {
             link = Uri.parse(updateLink[0]);
             URL url = new URL(updateLink[0]);
@@ -124,7 +129,7 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
         }
     }
 
-    protected void onProgressUpdate(Float... progress) {
+    public void onProgressUpdate(@NonNull Float... progress) {
         if (ready) {
             // Downloading new update... (Download Size / Total Size)
             double downloadMB = (double) Math.round((progress[1] / 1024.0 / 1024.0 * 100)) / 100;
@@ -144,8 +149,9 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
         manager.notify(notificationID, notification.build());
     }
 
+    @SuppressLint("UnspecifiedImmutableFlag")
     @Override
-    protected void onPostExecute(Boolean passed) {
+    public void onPostExecute(Boolean passed) {
         Log.d("Updater", "Processing download");
         notification.setAutoCancel(true).setOngoing(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -166,7 +172,12 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
                                         except.getLocalizedMessage())))
                         .setSmallIcon(notificationicon).setProgress(0, 0, false);
                 Intent intent = new Intent(Intent.ACTION_VIEW, link);
-                PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
+                PendingIntent pendingIntent;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    pendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+                } else {
+                    pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
+                }
                 notification.setContentIntent(pendingIntent);
             } else {
                 notification.setContentTitle(activity.getString(R.string.notification_title_exception_download))
@@ -176,7 +187,12 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
                                 .bigText(activity.getString(R.string.notification_content_download_fail_expanded)))
                         .setSmallIcon(notificationicon).setProgress(0, 0, false);
                 Intent intent = new Intent(Intent.ACTION_VIEW, link);
-                PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
+                PendingIntent pendingIntent;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    pendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+                } else {
+                    pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
+                }
                 notification.setContentIntent(pendingIntent);
             }
             manager.notify(notificationID, notification.build());
@@ -204,7 +220,12 @@ public final class DownloadLatestUpdate extends AsyncTask<String, Float, Boolean
         activity.startActivity(intent);
 
         //Notify User and add intent to invoke update
-        PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            pendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            pendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
         notification.setContentTitle(activity.getString(R.string.notification_title_download_success))
                 .setTicker(activity.getString(R.string.notification_ticker_download_success))
                 .setContentText(activity.getString(R.string.notification_content_download_success))

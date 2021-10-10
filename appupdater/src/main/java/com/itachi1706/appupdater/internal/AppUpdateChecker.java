@@ -10,10 +10,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.google.gson.Gson;
@@ -23,6 +23,7 @@ import com.itachi1706.appupdater.R;
 import com.itachi1706.appupdater.object.AppUpdateObject;
 import com.itachi1706.appupdater.object.UpdateShell;
 import com.itachi1706.appupdater.utils.UpdaterHelper;
+import com.itachi1706.helperlib.concurrent.CoroutineAsyncTask;
 import com.itachi1706.helperlib.deprecation.HtmlDep;
 import com.itachi1706.helperlib.helpers.URLHelper;
 import com.itachi1706.helperlib.utils.NotifyUserUtil;
@@ -35,10 +36,9 @@ import java.util.Random;
  * For com.itachi1706.appupdate.internal in AppUpdater.
  * NOT FOR NON LIBRARY USE
  */
-public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
+public final class AppUpdateChecker extends CoroutineAsyncTask<Void, Void, String> {
 
     private final Activity mActivity;
-    private final Exception except = null;
     private final SharedPreferences sp;
     private boolean main = false;
     private final int notificationIcon;
@@ -47,7 +47,8 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
     private final boolean fullScreen;
     private final boolean internalCache;
     
-    private static String TAG = "Updater";
+    private static final String TAG = "Updater";
+    private static final String TASK_NAME = AppUpdateChecker.class.getSimpleName();
 
     /**
      * Initialize App Update Checker
@@ -59,6 +60,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
      * @param internalCache Whether to save update APK file in internal or external cache
      */
     public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, int notificationIcon, String baseurl, boolean fullScreen, boolean internalCache){
+        super(TASK_NAME);
         this.mActivity = activity;
         this.sp = sharedPrefs;
         this.notificationIcon = notificationIcon;
@@ -80,6 +82,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
      */
     public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, boolean isMain, int notificationIcon,
                             String baseurl, boolean fullScreen, boolean internalCache){
+        super(TASK_NAME);
         this.mActivity = activity;
         this.sp = sharedPrefs;
         this.main = isMain;
@@ -102,6 +105,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
      */
     public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, int notificationIcon,
                             String changelogLocation, String baseurl, boolean fullScreen, boolean internalCache){
+        super(TASK_NAME);
         this.mActivity = activity;
         this.sp = sharedPrefs;
         this.notificationIcon = notificationIcon;
@@ -124,6 +128,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
      */
     public AppUpdateChecker(Activity activity, SharedPreferences sharedPrefs, boolean isMain, int notificationIcon,
                             String changelogLocation, String baseurl, boolean fullScreen, boolean internalCache){
+        super(TASK_NAME);
         this.mActivity = activity;
         this.sp = sharedPrefs;
         this.main = isMain;
@@ -136,7 +141,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
 
 
     @Override
-    protected String doInBackground(Void... params) {
+    public String doInBackground(@NonNull Void... params) {
         String url = this.baseurl;
         String packageName;
         PackageInfo pInfo;
@@ -160,12 +165,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         return tmp;
     }
 
-    protected void onPostExecute(String changelog){
-        if (except != null){
-            NotifyUserUtil.createShortToast(mActivity.getApplicationContext(),
-                    mActivity.getString(R.string.toast_cannot_contact_update_server));
-            return;
-        }
+    public void onPostExecute(String changelog){
         Log.d("Debug", changelog);
 
         Gson gson = new Gson();
@@ -230,7 +230,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         String message = "Latest Version: " + updater.getLatestVersion() + "<br /><br />";
         message += UpdaterHelper.getChangelogStringFromArray(updater.getUpdateMessage());
         if (!mActivity.isFinishing()) {
-            if (fullScreen && Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) { // R
+            if (fullScreen && Build.VERSION.SDK_INT <= Build.VERSION_CODES.S) { // S
                 // Launch Full Screen Updater
                 Intent intent = new Intent(mActivity, NewUpdateActivity.class);
                 intent.putExtra("update", gson.toJson(updater));
@@ -262,7 +262,7 @@ public final class AppUpdateChecker extends AsyncTask<Void, Void, String> {
                             Random random = new Random();
                             int notificationId = random.nextInt();
                             manager.notify(notificationId, mBuilder.build());
-                            new DownloadLatestUpdate(mActivity, mBuilder, manager, notificationId, notificationIcon, internalCache).executeOnExecutor(THREAD_POOL_EXECUTOR, updateLink);
+                            new DownloadLatestUpdate(mActivity, mBuilder, manager, notificationId, notificationIcon, internalCache).executeOnExecutor(updateLink);
                         }).show();
             }
         }

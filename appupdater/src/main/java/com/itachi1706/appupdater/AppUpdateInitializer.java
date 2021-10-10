@@ -123,6 +123,6 @@ public final class AppUpdateInitializer {
 
     private void update(Activity mActivity) {
         Log.i("Updater", "Checking for new updates...");
-        new AppUpdateChecker(mActivity, sp, true, mNotificationIcon, baseURL, fullscreen, internalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new AppUpdateChecker(mActivity, sp, true, mNotificationIcon, baseURL, fullscreen, internalCache).executeOnExecutor();
     }
 }
