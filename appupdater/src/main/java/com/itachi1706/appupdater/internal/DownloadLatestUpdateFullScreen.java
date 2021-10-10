@@ -1,12 +1,14 @@
 package com.itachi1706.appupdater.internal;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.itachi1706.appupdater.NewUpdateActivity;
+import com.itachi1706.helperlib.concurrent.CoroutineAsyncTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,13 +22,14 @@ import java.net.URL;
  * For com.itachi1706.appupdate.internal in AppUpdater.
  * NOT FOR NON LIBRARY USE
  */
-public final class DownloadLatestUpdateFullScreen extends AsyncTask<String, Float, Boolean> {
-    private File cacheDir;
+public final class DownloadLatestUpdateFullScreen extends CoroutineAsyncTask<String, Float, Boolean> {
+    private final File cacheDir;
     private Exception except = null;
     private String filePath;
-    private String version;
+    private final String version;
     private boolean ready = false;
-    private Handler handler;
+    private final Handler handler;
+    private static final String TASK_NAME = DownloadLatestUpdateFullScreen.class.getSimpleName();
 
     /**
      * Called from AppUpdateChecker if the user decides to invoke anything
@@ -35,13 +38,14 @@ public final class DownloadLatestUpdateFullScreen extends AsyncTask<String, Floa
      * @param handler Handler to talk back to the context
      */
     public DownloadLatestUpdateFullScreen(File cacheDir, String version, Handler handler) {
+        super(TASK_NAME);
         this.cacheDir = cacheDir;
         this.version = version;
         this.handler = handler;
     }
 
     @Override
-    protected Boolean doInBackground(String... updateLink) {
+    public Boolean doInBackground(String... updateLink) {
         ready = false;
         try {
             URL url = new URL(updateLink[0]);
@@ -101,7 +105,7 @@ public final class DownloadLatestUpdateFullScreen extends AsyncTask<String, Floa
         }
     }
 
-    protected void onProgressUpdate(Float... progress) {
+    public void onProgressUpdate(@NonNull Float... progress) {
         Message msg = Message.obtain();
         msg.what = NewUpdateActivity.UPDATE_NOTIFICATION;
         Bundle bundle = new Bundle();
@@ -115,12 +119,10 @@ public final class DownloadLatestUpdateFullScreen extends AsyncTask<String, Floa
         }
         msg.setData(bundle);
         handler.sendMessage(msg);
-
-
     }
 
     @Override
-    protected void onPostExecute(Boolean passed) {
+    public void onPostExecute(Boolean passed) {
         Message processmsg = Message.obtain();
         processmsg.what = NewUpdateActivity.PROCESSING_DOWNLOAD;
         handler.sendMessage(processmsg);

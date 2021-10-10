@@ -2,8 +2,6 @@ package com.itachi1706.appupdater;
 
 import android.content.ClipData;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
@@ -28,7 +26,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
 
 public class ViewLogsActivity extends AppCompatActivity {
 
@@ -105,9 +102,8 @@ public class ViewLogsActivity extends AppCompatActivity {
                     Log.d(SHARE_TAG, "Uri generated: " + logUri);
                     shareFileIntent.putExtra(Intent.EXTRA_SUBJECT, "Application Logcat for " + getPackageName());
                     shareFileIntent.putExtra(Intent.EXTRA_STREAM, logUri);
+                    shareFileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     Intent chooserIntent = Intent.createChooser(shareFileIntent, "Share Log file for " + getPackageName() + " with");
-                    List<ResolveInfo> resInfoList = this.getPackageManager().queryIntentActivities(chooserIntent, PackageManager.MATCH_DEFAULT_ONLY); // Grant permissions for intents
-                    for (ResolveInfo resolveInfo : resInfoList) this.grantUriPermission(resolveInfo.activityInfo.packageName, logUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     startActivity(chooserIntent);
                 } else NotifyUserUtil.createShortToast(getApplicationContext(), "Error sharing application logs: " + e.getCause());
             }
@@ -118,8 +114,10 @@ public class ViewLogsActivity extends AppCompatActivity {
     private boolean saveLogToFile(File file, String logs) {
         try {
             if (file.exists() && !file.delete()) return false;
-            //noinspection ResultOfMethodCallIgnored
-            file.getParentFile().mkdirs();
+            if (file.getParentFile() != null) {
+                //noinspection ResultOfMethodCallIgnored
+                file.getParentFile().mkdirs();
+            }
             FileWriter fw = new FileWriter(file);
             fw.append(logs);
             fw.flush();
@@ -150,7 +148,7 @@ public class ViewLogsActivity extends AppCompatActivity {
         public void onProvideShadowMetrics(Point outShadowSize, Point outShadowTouchPoint) {
             final View view = super.getView();
             if (view != null && view.getWidth() > 0 && view.getHeight() > 0) {
-                outShadowSize.set((view.getWidth() > width) ? width : view.getWidth(), (view.getHeight() > height) ? height : view.getHeight());
+                outShadowSize.set(Math.min(view.getWidth(), width), Math.min(view.getHeight(), height));
                 outShadowTouchPoint.set((outShadowSize.x > width) ? width / 2 : outShadowSize.x / 2, (outShadowSize.y > height) ? height / 2 : outShadowSize.y / 2);
             } else {
                 outShadowSize.set(1,1);

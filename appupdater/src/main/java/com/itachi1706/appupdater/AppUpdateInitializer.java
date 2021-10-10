@@ -2,20 +2,22 @@ package com.itachi1706.appupdater;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.util.Log;
 
-import com.itachi1706.appupdater.utils.UpdaterHelper;
 import com.itachi1706.appupdater.internal.AppUpdateChecker;
+import com.itachi1706.appupdater.utils.UpdaterHelper;
 import com.itachi1706.helperlib.helpers.ValidationHelper;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by Kenneth on 3/9/2016.
  * for com.itachi1706.appupdater in CheesecakeUtilities
  */
+@SuppressWarnings("unused")
 public final class AppUpdateInitializer {
 
-    private Activity mActivity;
+    private final WeakReference<Activity> mActivityRef;
     private final SharedPreferences sp;
     private final int mNotificationIcon;
     private final String baseURL;
@@ -25,14 +27,14 @@ public final class AppUpdateInitializer {
     private boolean checkSideload = true;
 
     public AppUpdateInitializer(Activity mActivity, SharedPreferences sp, int mNotificationIcon, String baseURL) {
-        this.mActivity = mActivity;
+        this.mActivityRef = new WeakReference<>(mActivity);
         this.sp = sp;
         this.mNotificationIcon = mNotificationIcon;
         this.baseURL = baseURL;
     }
 
     public AppUpdateInitializer(Activity mActivity, SharedPreferences sp, int mNotificationIcon, String baseURL, boolean fullscreen) {
-        this.mActivity = mActivity;
+        this.mActivityRef = new WeakReference<>(mActivity);
         this.sp = sp;
         this.mNotificationIcon = mNotificationIcon;
         this.baseURL = baseURL;
@@ -75,6 +77,10 @@ public final class AppUpdateInitializer {
     }
 
     public void checkForUpdate() {
+        Activity mActivity = mActivityRef.get();
+        if (mActivity == null) {
+            return; // NO-OP
+        }
         if (this.checkSideload) {
             if (!ValidationHelper.checkSideloaded(mActivity)) {
                 Log.i("Updater", "App is not sideloaded, disabling update check");
@@ -83,11 +89,11 @@ public final class AppUpdateInitializer {
         }
         if (this.wifiCheck) {
             if (UpdaterHelper.canCheckUpdate(sp, mActivity)) {
-                update();
+                update(mActivity);
             }
             return;
         }
-        update();
+        update(mActivity);
     }
 
     /**
@@ -114,8 +120,8 @@ public final class AppUpdateInitializer {
         checkForUpdate();
     }
 
-    private void update() {
+    private void update(Activity mActivity) {
         Log.i("Updater", "Checking for new updates...");
-        new AppUpdateChecker(mActivity, sp, true, mNotificationIcon, baseURL, fullscreen, internalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new AppUpdateChecker(mActivity, sp, true, mNotificationIcon, baseURL, fullscreen, internalCache).executeOnExecutor();
     }
 }

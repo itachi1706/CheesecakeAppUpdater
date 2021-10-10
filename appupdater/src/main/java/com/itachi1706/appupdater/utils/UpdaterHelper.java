@@ -16,6 +16,7 @@ import com.itachi1706.helperlib.helpers.ConnectivityHelper;
  * Created by Kenneth on 3/3/2016.
  * For com.itachi1706.appupdate.Util in AppUpdater
  */
+@SuppressWarnings("unused")
 public final class UpdaterHelper {
 
     public static int HTTP_QUERY_TIMEOUT = 15000; //15 seconds timeout

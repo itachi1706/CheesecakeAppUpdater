@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.util.TypedValue;
@@ -318,7 +317,7 @@ public final class SettingsInitializer {
         final SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(context);
         fragment.addPreferencesFromResource(R.xml.pref_updater);
         fragment.findPreference("launch_updater").setOnPreferenceClickListener(preference -> {
-            new AppUpdateChecker(context, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            new AppUpdateChecker(context, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor();
             return false;
         });
 
@@ -476,7 +475,7 @@ public final class SettingsInitializer {
         final SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(mActivity);
         fragment.addPreferencesFromResource(R.xml.pref_updater);
         fragment.findPreference("launch_updater").setOnPreferenceClickListener(preference -> {
-            new AppUpdateChecker(mActivity, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            new AppUpdateChecker(mActivity, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor();
             return false;
         });
 
