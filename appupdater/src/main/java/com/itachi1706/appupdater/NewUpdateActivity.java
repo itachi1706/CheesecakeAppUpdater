@@ -34,6 +34,7 @@ import com.itachi1706.appupdater.object.AppUpdateMessageObject;
 import com.itachi1706.appupdater.object.AppUpdateObject;
 import com.itachi1706.appupdater.utils.UpdaterHelper;
 import com.itachi1706.helperlib.deprecation.HtmlDep;
+import com.itachi1706.helperlib.deprecation.PendingIntentDep;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -352,12 +353,7 @@ public class NewUpdateActivity extends AppCompatActivity {
                                     except)))
                     .setSmallIcon(notificationIcon).setProgress(0, 0, false);
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateLink));
-            PendingIntent pendingIntent;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-            } else {
-                pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-            }
+            PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(this, 0, intent);
             notification.setContentIntent(pendingIntent);
         } else {
             notification.setContentTitle(getString(R.string.notification_title_exception_download))
@@ -367,12 +363,7 @@ public class NewUpdateActivity extends AppCompatActivity {
                             .bigText(getString(R.string.notification_content_download_fail_expanded)))
                     .setSmallIcon(notificationIcon).setProgress(0, 0, false);
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateLink));
-            PendingIntent pendingIntent;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-            } else {
-                pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-            }
+            PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(this, 0, intent);
             notification.setContentIntent(pendingIntent);
         }
         manager.notify(notificationId, notification.build());
@@ -391,12 +382,7 @@ public class NewUpdateActivity extends AppCompatActivity {
 
         //Notify User and add intent to invoke update
         if (notification == null) return;
-        PendingIntent pendingIntent;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            pendingIntent = PendingIntent.getActivity(this, 0, installIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        } else {
-            pendingIntent = PendingIntent.getActivity(this, 0, installIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        }
+        PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(this, 0, installIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         notification.setContentTitle(getString(R.string.notification_title_download_success))
                 .setTicker(getString(R.string.notification_ticker_download_success))
