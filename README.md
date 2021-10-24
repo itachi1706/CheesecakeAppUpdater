@@ -54,33 +54,6 @@ dependencies {
 }
 ```
 
-## Usage - Bintray (Deprecated)
-To use this library in an Android Project, add the following lines into your app-level build.gradle file
-
-```gradle
-repositories {
-	maven {
-		url  "https://dl.bintray.com/itachi1706/ccn-android-lib"
-	}
-}
-…
-dependencies {
-  implementation 'com.itachi1706.appupdater:appupdater:<latest-version>' // See badge for latest version number
-}
-```
-
-## Usage - JCenter (Deprecated)
-To use this library in an Android Project, add the following lines into your app-level build.gradle file
-
-```gradle
-repositories {
-	jcenter()
-}
-dependencies {
-  implementation 'com.itachi1706.appupdater:appupdater:<latest-version>' // See badge for latest version number
-}
-```
-
 ## Notes on usage for Base URL
 
 Your base server URL for the updater call MUST end with a query accepting the application packagename. The library will autofill the android packagename for you. An example url is:
