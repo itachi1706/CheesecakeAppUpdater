@@ -31,7 +31,7 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x gradlew
       - name: Generate Artifactory artifact and publish release and upload
-        run: ./gradlew clean build install signAarPublication artifactoryPublish
+        run: ./gradlew clean build signAarPublication artifactoryPublish
         env:
           ARTIFACTORY_CONTEXTURL: ${{ secrets.ARTIFACTORYCONTEXTURL }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORYPASSWORD }}
@@ -76,7 +76,7 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x gradlew
       - name: Generate Maven Central artifact and publish release and upload
-        run: ./gradlew clean build install signAarPublication publish
+        run: ./gradlew clean build signAarPublication publish
         env:
           OSSRH_PASSWORD: ${{ secrets.OSSRHPASSWORD }}
           OSSRH_USER: ${{ secrets.OSSRHUSER }}
