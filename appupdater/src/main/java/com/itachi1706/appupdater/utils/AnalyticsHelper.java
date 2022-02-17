@@ -51,6 +51,7 @@ public class AnalyticsHelper {
      * @deprecated Use {@link #getData(boolean)} instead
      * @return Analytics data or null if not enabled
      */
+    @Deprecated
     @Nullable
     @WorkerThread
     public CAAnalytics getData() {
