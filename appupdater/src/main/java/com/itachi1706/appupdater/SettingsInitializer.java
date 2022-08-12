@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.util.TypedValue;
@@ -441,6 +442,18 @@ public final class SettingsInitializer {
         return customTabsIntent;
     }
 
+    private String getInstallLocation(Activity mActivity) {
+        String installLocation;
+        String location = ValidationHelper.getInstallLocation(mActivity);
+        switch (ValidationHelper.checkInstallLocation(mActivity)) {
+            case ValidationHelper.GOOGLE_PLAY: installLocation = "Google Play (" + location + ")"; break;
+            case ValidationHelper.AMAZON: installLocation = "Amazon App Store (" + location + ")"; break;
+            case ValidationHelper.SIDELOAD:
+            default: installLocation = "Sideloaded"; if (location != null) installLocation += " (" + location + ")"; break;
+        }
+        return installLocation;
+    }
+
     /**
      * Explodes updater settings in your preference fragment
      * @param activity The activity object
@@ -456,18 +469,11 @@ public final class SettingsInitializer {
                                                       final String serverUrl, final String legacyLink, final String updateLink,
                                                       PreferenceFragmentCompat fragment) {
         final Activity mActivity = activity;
-        if (showOnlyForSideload && !ValidationHelper.checkSideloaded(mActivity) && !showInstallLocation) return this; // Sideloaded
-        if (showOnlyForSideload && showInstallLocation && !ValidationHelper.checkSideloaded(mActivity)) {
+        if (showOnlyForSideload && !ValidationHelper.checkSideloaded(mActivity)) {
+            if (!showInstallLocation) return this; // Sideloaded
             // Expand minimal
             fragment.addPreferencesFromResource(R.xml.pref_updater_min);
-            String installLocation;
-            String location = ValidationHelper.getInstallLocation(mActivity);
-            switch (ValidationHelper.checkInstallLocation(mActivity)) {
-                case ValidationHelper.GOOGLE_PLAY: installLocation = "Google Play (" + location + ")"; break;
-                case ValidationHelper.AMAZON: installLocation = "Amazon App Store (" + location + ")"; break;
-                case ValidationHelper.SIDELOAD:
-                default: installLocation = "Sideloaded"; if (location != null) installLocation += " (" + location + ")"; break;
-            }
+            String installLocation = getInstallLocation(mActivity);
             fragment.findPreference("installer_from").setSummary(installLocation);
             return this;
         }
@@ -486,15 +492,23 @@ public final class SettingsInitializer {
             return true;
         });
 
-        String installLocation;
-        String location = ValidationHelper.getInstallLocation(mActivity);
-        switch (ValidationHelper.checkInstallLocation(mActivity)) {
-            case ValidationHelper.GOOGLE_PLAY: installLocation = "Google Play (" + location + ")"; break;
-            case ValidationHelper.AMAZON: installLocation = "Amazon App Store (" + location + ")"; break;
-            case ValidationHelper.SIDELOAD:
-            default: installLocation = "Sideloaded";
-        }
+        String installLocation = getInstallLocation(mActivity);
         fragment.findPreference("installer_from").setSummary(installLocation);
+
+        // Check if REQUEST_INSTALL_PACKAGES permission is granted for >= SDK 25
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+                    mActivity.getPackageManager().canRequestPackageInstalls()) {
+                Log.i("PICheck", "Can install package and above Android O");
+            }
+        } catch (SecurityException e) {
+            Log.w("PICheck", "Cannot install packages and device is above Android O");
+            Preference disableUpdateLauncher = fragment.findPreference("launch_updater");
+            fragment.findPreference("updateOnWifi").setEnabled(false);
+            disableUpdateLauncher.setEnabled(false);
+            disableUpdateLauncher.setSummary("REQUEST_INSTALL_PACKAGES permission not granted. Grant this permission to check for updates.");
+        }
+
         return this;
     }
 }
