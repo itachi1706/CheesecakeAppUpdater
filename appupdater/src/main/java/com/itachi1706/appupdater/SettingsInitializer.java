@@ -466,7 +466,8 @@ public final class SettingsInitializer {
 
         final SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(mActivity);
         fragment.addPreferencesFromResource(R.xml.pref_updater);
-        fragment.findPreference("launch_updater").setOnPreferenceClickListener(preference -> {
+        Preference launchUpdaterPref = fragment.findPreference("launch_updater");
+        launchUpdaterPref.setOnPreferenceClickListener(preference -> {
             new AppUpdateChecker(mActivity, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor();
             return false;
         });
@@ -489,10 +490,9 @@ public final class SettingsInitializer {
             }
         } catch (SecurityException e) {
             Log.w("PICheck", "Cannot install packages and device is above Android O");
-            Preference disableUpdateLauncher = fragment.findPreference("launch_updater");
             fragment.findPreference("updateOnWifi").setEnabled(false);
-            disableUpdateLauncher.setEnabled(false);
-            disableUpdateLauncher.setSummary("REQUEST_INSTALL_PACKAGES permission not granted. Grant this permission to check for updates.");
+            launchUpdaterPref.setEnabled(false);
+            launchUpdaterPref.setSummary("REQUEST_INSTALL_PACKAGES permission not granted. Grant this permission to check for updates.");
         }
 
         return this;
