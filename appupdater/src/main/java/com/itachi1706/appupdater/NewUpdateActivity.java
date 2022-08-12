@@ -6,6 +6,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -209,7 +210,16 @@ public class NewUpdateActivity extends AppCompatActivity {
         // Check for all the buttons/hide
         boolean isNonPlayAppAllowed = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            isNonPlayAppAllowed = getPackageManager().canRequestPackageInstalls();
+            try {
+                isNonPlayAppAllowed = getPackageManager().canRequestPackageInstalls();
+            } catch (SecurityException e) {
+                Log.e(TAG, "REQUEST_INSTALL_PACKAGES permission not granted");
+                new AlertDialog.Builder(this).setTitle(R.string.no_perm_package_install_dialog_title)
+                        .setMessage(R.string.no_perm_package_install_dialog_message)
+                        .setOnDismissListener(dialogInterface -> finish())
+                        .setPositiveButton(R.string.dialog_action_positive_close, null).show();
+                return;
+            }
         } else {
             try {
                 //noinspection deprecation

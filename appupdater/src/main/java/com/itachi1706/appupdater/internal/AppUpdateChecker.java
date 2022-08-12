@@ -230,7 +230,7 @@ public final class AppUpdateChecker extends CoroutineAsyncTask<Void, Void, Strin
         String message = "Latest Version: " + updater.getLatestVersion() + "<br /><br />";
         message += UpdaterHelper.getChangelogStringFromArray(updater.getUpdateMessage());
         if (!mActivity.isFinishing()) {
-            if (fullScreen && Build.VERSION.SDK_INT <= Build.VERSION_CODES.S) { // S
+            if (fullScreen && Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) { // S
                 // Launch Full Screen Updater
                 Intent intent = new Intent(mActivity, NewUpdateActivity.class);
                 intent.putExtra("update", gson.toJson(updater));
@@ -238,6 +238,18 @@ public final class AppUpdateChecker extends CoroutineAsyncTask<Void, Void, Strin
                 intent.putExtra("internalCache", internalCache);
                 mActivity.startActivity(intent);
             } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    try {
+                        mActivity.getPackageManager().canRequestPackageInstalls();
+                        Log.i(TAG, "REQUEST_INSTALL_PACKAGES permission granted");
+                    } catch (SecurityException e) {
+                        Log.e(TAG, "REQUEST_INSTALL_PACKAGES permission not granted");
+                        new AlertDialog.Builder(mActivity).setTitle(R.string.no_perm_package_install_dialog_title)
+                                .setMessage(R.string.no_perm_package_install_dialog_message)
+                                .setPositiveButton(R.string.dialog_action_positive_close, null).show();
+                        return;
+                    }
+                }
                 new AlertDialog.Builder(mActivity).setTitle("A New Update is Available!")
                         .setMessage(HtmlDep.fromHtml(message))
                         .setNegativeButton("Don't Update", null)

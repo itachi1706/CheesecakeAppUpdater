@@ -85,4 +85,6 @@
     <string name="pref_summary_latest_app_version">Launch a webpage to get the latest release of the application!</string>
     <string name="pref_summary_check_updates">Checks for new version of the application</string>
     <string name="pref_summary_wifi_only_update_check">Do update checking only on Wifi</string>
+    <string name="no_perm_package_install_dialog_title">Unable to check for updates</string>
+    <string name="no_perm_package_install_dialog_message">Application does not have the REQUEST_INSTALL_PACKAGES permission. Please contact app developer or grant it manually via adb</string>
 </resources>
