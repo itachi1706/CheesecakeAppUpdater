@@ -303,14 +303,7 @@ public final class SettingsInitializer {
         if (showOnlyForSideload && showInstallLocation && !ValidationHelper.checkSideloaded(context)) {
             // Expand minimal
             fragment.addPreferencesFromResource(R.xml.pref_updater_min);
-            String installLocation;
-            String location = ValidationHelper.getInstallLocation(context);
-            switch (ValidationHelper.checkInstallLocation(context)) {
-                case ValidationHelper.GOOGLE_PLAY: installLocation = "Google Play (" + location + ")"; break;
-                case ValidationHelper.AMAZON: installLocation = "Amazon App Store (" + location + ")"; break;
-                case ValidationHelper.SIDELOAD:
-                default: installLocation = "Sideloaded"; if (location != null) installLocation += " (" + location + ")"; break;
-            }
+            String installLocation = getInstallLocation(context);
             fragment.findPreference("installer_from").setSummary(installLocation);
             return this;
         }
@@ -330,14 +323,7 @@ public final class SettingsInitializer {
             return true;
         });
 
-        String installLocation;
-        String location = ValidationHelper.getInstallLocation(context);
-        switch (ValidationHelper.checkInstallLocation(context)) {
-            case ValidationHelper.GOOGLE_PLAY: installLocation = "Google Play (" + location + ")"; break;
-            case ValidationHelper.AMAZON: installLocation = "Amazon App Store (" + location + ")"; break;
-            case ValidationHelper.SIDELOAD:
-            default: installLocation = "Sideloaded";
-        }
+        String installLocation = getInstallLocation(context);
         fragment.findPreference("installer_from").setSummary(installLocation);
         return this;
     }
