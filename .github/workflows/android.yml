@@ -42,26 +42,17 @@ jobs:
         run: mv ./\appupdater/build/outputs/aar/appupdater-release.aar ./appupdater-release.aar
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1.1.4
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Provided by GH Actions
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Release Notes Coming soon!
+          name: Release ${{ github.ref_name }}
+          body: Consolidated Release Notes Coming soon!
+          generate_release_notes: true
           draft: false
           prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./appupdater-release.aar
-          asset_name: appupdater-release.aar
-          asset_content_type: application/zip
+          files: appupdater-release.aar
   mavenCentral:
     name: Release to Maven Central
     if: startsWith(github.ref, 'refs/tags/')
