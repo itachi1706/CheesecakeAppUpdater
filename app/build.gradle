@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion 32
     buildToolsVersion "32.0.0"
+    namespace 'com.itachi1706.cheesecakeappupdatersample'
     defaultConfig {
         applicationId "com.itachi1706.cheesecakeappupdatersample"
         minSdkVersion 19
