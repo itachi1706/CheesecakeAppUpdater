@@ -14,6 +14,7 @@ import android.util.TypedValue;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
+import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.content.pm.PackageInfoCompat;
 import androidx.preference.Preference;
@@ -239,8 +240,9 @@ public final class SettingsInitializer {
             TypedValue colorTmp = new TypedValue();
             context.getTheme().resolveAttribute(R.attr.colorPrimary, colorTmp, true);
             final int colorPrimary = colorTmp.data;
-            customTabsIntent = new CustomTabsIntent.Builder().setToolbarColor(colorPrimary)
-                    .enableUrlBarHiding().setShowTitle(true)
+            customTabsIntent = new CustomTabsIntent.Builder()
+                    .setDefaultColorSchemeParams(new CustomTabColorSchemeParams.Builder().setToolbarColor(colorPrimary).build())
+                    .setUrlBarHidingEnabled(true).setShowTitle(true)
                     .setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left)
                     .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build();
         }

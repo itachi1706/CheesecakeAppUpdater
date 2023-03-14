@@ -7,8 +7,17 @@ package com.itachi1706.appupdater.object;
 @SuppressWarnings("unused")
 public class CAAnalytics {
 
-    private int sdkver, appVerCode;
-    private String sdkString, dName, dManufacturer, dCPU, appVer, dFingerprint, dCodename, dTags, sdkPatch;
+    private int sdkver;
+    private long appVerCode;
+    private String sdkString;
+    private String dName;
+    private String dManufacturer;
+    private String dCPU;
+    private String appVer;
+    private String dFingerprint;
+    private String dCodename;
+    private String dTags;
+    private String sdkPatch;
     private boolean debug;
 
     public CAAnalytics() {
@@ -23,11 +32,11 @@ public class CAAnalytics {
         this.sdkver = sdkver;
     }
 
-    public int getAppVerCode() {
+    public long getAppVerCode() {
         return appVerCode;
     }
 
-    public void setAppVerCode(int appVerCode) {
+    public void setAppVerCode(long appVerCode) {
         this.appVerCode = appVerCode;
     }
 

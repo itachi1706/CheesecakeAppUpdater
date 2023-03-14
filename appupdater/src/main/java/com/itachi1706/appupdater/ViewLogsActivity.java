@@ -19,6 +19,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.itachi1706.appupdater.utils.MigrationHelper;
 import com.itachi1706.helperlib.utils.NotifyUserUtil;
 
 import java.io.BufferedReader;
@@ -30,7 +31,8 @@ import java.io.InputStreamReader;
 public class ViewLogsActivity extends AppCompatActivity {
 
     private TextView logText;
-    private int height, width;
+    private int height;
+    private int width;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +63,7 @@ public class ViewLogsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        DisplayMetrics displayMetrics = MigrationHelper.getDisplayMetricsCompat(this, getWindowManager());
         height = displayMetrics.heightPixels - 100;
         width = displayMetrics.widthPixels - 100;
     }
@@ -118,10 +119,10 @@ public class ViewLogsActivity extends AppCompatActivity {
                 //noinspection ResultOfMethodCallIgnored
                 file.getParentFile().mkdirs();
             }
-            FileWriter fw = new FileWriter(file);
-            fw.append(logs);
-            fw.flush();
-            fw.close();
+            try (FileWriter fw = new FileWriter(file)) {
+                fw.append(logs);
+                fw.flush();
+            }
             return true;
         } catch (IOException e) {
             e.printStackTrace();

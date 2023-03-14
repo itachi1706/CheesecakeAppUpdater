@@ -6,7 +6,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -43,14 +42,21 @@ import java.util.Random;
 
 public class NewUpdateActivity extends AppCompatActivity {
 
-    Button showMore, enableUnknown, download, install;
+    Button showMore;
+    Button enableUnknown;
+    Button download;
+    Button install;
     ProgressBar progressBar;
-    TextView updateMessages, progressText;
+    TextView updateMessages;
+    TextView progressText;
     LinearLayout progressLayout;
 
     NotificationManager manager;
 
-    private String fullUpdateMessage, updateLink, filePath, fileName;
+    private String fullUpdateMessage;
+    private String updateLink;
+    private String filePath;
+    private String fileName;
     private AppUpdateObject update;
     private Intent installIntent;
     private boolean processing = false;
@@ -62,6 +68,7 @@ public class NewUpdateActivity extends AppCompatActivity {
     private boolean internalCache = false;
 
     private static final String TAG = "NewUpdateAct";
+    private final Random random = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +121,6 @@ public class NewUpdateActivity extends AppCompatActivity {
         filePath = ((internalCache) ? getApplicationContext().getCacheDir() : getApplicationContext().getExternalCacheDir()) + File.separator + "download" + File.separator;
         fileName = "app-update_" + update.getLatestVersion() + ".apk";
         mHandler = new UpdateHandler(Looper.getMainLooper(), this);
-        Random random = new Random();
         notificationId = random.nextInt();
         
         // Generate Intent
@@ -143,9 +149,10 @@ public class NewUpdateActivity extends AppCompatActivity {
                 // Done
                 String lbl = m.getLabels().replace("<font color=\"green\">LATEST</font>", "").trim();
                 Log.d(TAG, lbl);
-                updateMessage = "";
-                if (!lbl.isEmpty()) updateMessage += lbl + "<br/>";
-                updateMessage += m.getUpdateText().replace("\r\n", "<br/>");
+                StringBuilder sb = new StringBuilder();
+                if (!lbl.isEmpty()) sb.append(lbl).append("<br/>");
+                sb.append(m.getUpdateText().replace("\r\n", "<br/>"));
+                updateMessage = sb.toString();
                 updateLink = m.getUrl();
                 break;
             }
@@ -263,8 +270,10 @@ public class NewUpdateActivity extends AppCompatActivity {
         }
     }
 
-    public static final int UPDATE_NOTIFICATION = 111, DOWNLOAD_COMPLETE = 112,
-            DOWNLOAD_FAIL = 113, PROCESSING_DOWNLOAD = 114;
+    public static final int UPDATE_NOTIFICATION = 111;
+    public static final int DOWNLOAD_COMPLETE = 112;
+    public static final int DOWNLOAD_FAIL = 113;
+    public static final int PROCESSING_DOWNLOAD = 114;
 
     private static class UpdateHandler extends Handler {
         WeakReference<NewUpdateActivity> mActivity;
@@ -293,6 +302,7 @@ public class NewUpdateActivity extends AppCompatActivity {
                 case DOWNLOAD_FAIL:
                     String except = msg.getData().getString("except", "");
                     activity.handleFailure(except); break;
+                default: break;
             }
         }
     }

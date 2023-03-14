@@ -10,7 +10,14 @@ import androidx.annotation.Keep;
 @Keep
 public final class AppUpdateMessageObject {
     private int index;
-    private String id, appid, updateText, dateModified, versionCode, versionName, labels, url;
+    private String id;
+    private String appid;
+    private String updateText;
+    private String dateModified;
+    private String versionCode;
+    private String versionName;
+    private String labels;
+    private String url;
 
     public AppUpdateMessageObject() {
         // JSON Constructor

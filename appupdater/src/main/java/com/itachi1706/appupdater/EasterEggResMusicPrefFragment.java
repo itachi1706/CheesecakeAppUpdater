@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 /**
@@ -29,7 +30,7 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCo
                 if (count == 10) {
                     count = 0;
                     startEgg();
-                    Snackbar.make(getActivity().findViewById(android.R.id.content), getStartEggMessage(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(getActivity().findViewById(android.R.id.content), getStartEggMessage(), BaseTransientBottomBar.LENGTH_LONG)
                             .setAction(getStopEggButtonText(), v -> killEgg()).show();
                     return false;
                 } else if (count > 5)
@@ -101,7 +102,7 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCo
 
     private void killEgg() {
         Log.i("Egg", "Killing egg");
-        Snackbar.make(getActivity().findViewById(android.R.id.content), getEndEggMessage(), Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(getActivity().findViewById(android.R.id.content), getEndEggMessage(), BaseTransientBottomBar.LENGTH_SHORT).show();
         endEgg();
     }
 

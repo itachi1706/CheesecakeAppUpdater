@@ -12,10 +12,10 @@ import java.util.Random;
 @SuppressWarnings("unused")
 public abstract class EasterEggResMultiMusicPrefFragment extends EasterEggResMusicPrefFragment {
 
-    public int randomNum = -1;
+    private int randomNum = -1;
+    private final Random random = new Random();
 
     private void randomizeNumber() {
-        Random random = new Random();
         randomNum = random.nextInt();
         Log.d("MusicEgg", "Random Number: " + randomNum);
     }

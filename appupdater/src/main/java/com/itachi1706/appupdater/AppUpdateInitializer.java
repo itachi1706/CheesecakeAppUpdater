@@ -81,11 +81,9 @@ public final class AppUpdateInitializer {
         if (mActivity == null) {
             return; // NO-OP
         }
-        if (this.checkSideload) {
-            if (!ValidationHelper.checkSideloaded(mActivity)) {
-                Log.i("Updater", "App is not sideloaded, disabling update check");
-                return;
-            }
+        if (this.checkSideload && (!ValidationHelper.checkSideloaded(mActivity))) {
+            Log.i("Updater", "App is not sideloaded, disabling update check");
+            return;
         }
         if (this.wifiCheck) {
             if (UpdaterHelper.canCheckUpdate(sp, mActivity)) {

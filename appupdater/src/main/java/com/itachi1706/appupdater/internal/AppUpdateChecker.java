@@ -22,6 +22,7 @@ import com.itachi1706.appupdater.NewUpdateActivity;
 import com.itachi1706.appupdater.R;
 import com.itachi1706.appupdater.object.AppUpdateObject;
 import com.itachi1706.appupdater.object.UpdateShell;
+import com.itachi1706.appupdater.utils.MigrationHelper;
 import com.itachi1706.appupdater.utils.UpdaterHelper;
 import com.itachi1706.helperlib.concurrent.CoroutineAsyncTask;
 import com.itachi1706.helperlib.deprecation.HtmlDep;
@@ -36,6 +37,7 @@ import java.util.Random;
  * For com.itachi1706.appupdate.internal in AppUpdater.
  * NOT FOR NON LIBRARY USE
  */
+@SuppressWarnings("unused")
 public final class AppUpdateChecker extends CoroutineAsyncTask<Void, Void, String> {
 
     private final Activity mActivity;
@@ -49,6 +51,7 @@ public final class AppUpdateChecker extends CoroutineAsyncTask<Void, Void, Strin
     
     private static final String TAG = "Updater";
     private static final String TASK_NAME = AppUpdateChecker.class.getSimpleName();
+    private final Random random = new Random();
 
     /**
      * Initialize App Update Checker
@@ -165,6 +168,7 @@ public final class AppUpdateChecker extends CoroutineAsyncTask<Void, Void, Strin
         return tmp;
     }
 
+    @Override
     public void onPostExecute(String changelog){
         Log.d("Debug", changelog);
 
@@ -187,14 +191,14 @@ public final class AppUpdateChecker extends CoroutineAsyncTask<Void, Void, Strin
         if (updater == null)
             return;
 
-        int localVersion = 0;
-        int serverVersion = 0;
+        long localVersion = 0;
+        long serverVersion = 0;
         PackageInfo pInfo;
         try {
             pInfo = mActivity.getApplicationContext().getPackageManager()
                     .getPackageInfo(mActivity.getApplicationContext().getPackageName(), 0);
-            localVersion = pInfo.versionCode;
-            serverVersion = Integer.parseInt(updater.getLatestVersionCode());
+            localVersion = MigrationHelper.getVersionCodeCompat(pInfo);
+            serverVersion = Long.parseLong(updater.getLatestVersionCode());
         } catch (PackageManager.NameNotFoundException | NumberFormatException e) {
             e.printStackTrace();
         }
@@ -271,7 +275,6 @@ public final class AppUpdateChecker extends CoroutineAsyncTask<Void, Void, Strin
                             mBuilder.setContentTitle(mActivity.getString(R.string.notification_title_starting_download)).setContentText(mActivity.getString(R.string.notification_content_starting_download))
                                     .setProgress(0, 0, true).setSmallIcon(notificationIcon).setAutoCancel(false)
                                     .setOngoing(true).setTicker(mActivity.getString(R.string.notification_ticker_starting_download));
-                            Random random = new Random();
                             int notificationId = random.nextInt();
                             manager.notify(notificationId, mBuilder.build());
                             new DownloadLatestUpdate(mActivity, mBuilder, manager, notificationId, notificationIcon, internalCache).executeOnExecutor(updateLink);

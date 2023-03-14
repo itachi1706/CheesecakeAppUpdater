@@ -41,6 +41,9 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
     private boolean ready = false;
     private final boolean internalCache;
     private static final String TASK_NAME = DownloadLatestUpdate.class.getSimpleName();
+    private static final String TAG_NAME_DL = "Downloader";
+    private static final String TAG_NAME_UP = "Updater";
+    private static final String APK_NAME = "app-update.apk";
 
     /**
      * Called from AppUpdateChecker if the user decides to invoke anything
@@ -51,8 +54,8 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
      * @param notificationicon Icon for notification
      * @param internalCache Whether to save update APK file in internal or external cache
      */
-    protected DownloadLatestUpdate(Activity activity, NotificationCompat.Builder notificationBuilder,
-                                NotificationManager notifyManager, int notifcationID, int notificationicon, boolean internalCache) {
+    DownloadLatestUpdate(Activity activity, NotificationCompat.Builder notificationBuilder,
+                         NotificationManager notifyManager, int notifcationID, int notificationicon, boolean internalCache) {
         super(TASK_NAME);
         this.activity = activity;
         this.notification = notificationBuilder;
@@ -65,7 +68,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
     private boolean deleteLegacyDownloads() {
         File folder = new File(activity.getApplicationContext().getExternalFilesDir(null) + File.separator + "download" + File.separator);
         if (!folder.exists()) return true; // Dont have the folder so its deleted
-        File file = new File(folder, "app-update.apk"); // Try to find file to delete
+        File file = new File(folder, APK_NAME); // Try to find file to delete
         return !file.exists() || file.delete(); // Tries to delete file if it exists
     }
 
@@ -80,47 +83,45 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
             conn.setRequestMethod("GET");
             conn.connect();
             publishProgress();
-            Log.d("Updater", "Starting Download...");
+            Log.d(TAG_NAME_UP, "Starting Download...");
 
-            if (!deleteLegacyDownloads()) Log.e("Updater", "Unable to delete legacy file. Skipping file deletion"); // Delete old downloaded apk
+            if (!deleteLegacyDownloads()) Log.e(TAG_NAME_UP, "Unable to delete legacy file. Skipping file deletion"); // Delete old downloaded apk
             filePath = ((this.internalCache) ? activity.getApplicationContext().getCacheDir() : activity.getApplicationContext().getExternalCacheDir()) + File.separator + "download" + File.separator;
-            Log.i("Updater", "Downloading to " + filePath);
+            Log.i(TAG_NAME_UP, "Downloading to " + filePath);
             File folder = new File(filePath);
-            if (!folder.exists()) {
-                if (!tryAndCreateFolder(folder)) {
-                    Log.d("Updater", "Cannot Create Folder. Not Downloading");
-                    conn.disconnect();
-                    return false;
-                }
+            if (!folder.exists() && (!tryAndCreateFolder(folder))) {
+                Log.d(TAG_NAME_UP, "Cannot Create Folder. Not Downloading");
+                conn.disconnect();
+                return false;
             }
-            File file = new File(folder, "app-update.apk");
-            FileOutputStream fos = new FileOutputStream(file);
-            Log.d("Updater", "Connection done, File Obtained");
-            ready = true;
-            Log.d("Updater", "Writing to file");
-            float downloadSize = 0;
-            int totalSize = conn.getContentLength();
-            InputStream is = conn.getInputStream();
-            byte[] buffer = new byte[1024];
-            int len1;
-            int lastProgress = 0;
-            long lastNotification = 0;
-            final int NOTIFICATION_DURATION = 500; // twice a second (500ms)
-            while ((len1 = is.read(buffer)) != -1) {
-                fos.write(buffer, 0, len1);
-                downloadSize += len1;
-                float progress = (downloadSize / totalSize) * 100;
-                long notifyTime = System.currentTimeMillis();
-                if ((Math.round(progress) > lastProgress) && (notifyTime - lastNotification) > NOTIFICATION_DURATION) {
-                    Log.d("Updater", "Download Size: " + downloadSize + "/" + totalSize);
-                    lastProgress = Math.round(progress);
-                    lastNotification = notifyTime;
-                    publishProgress(progress, downloadSize, (float) totalSize);
+            File file = new File(folder, APK_NAME);
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                Log.d(TAG_NAME_UP, "Connection done, File Obtained");
+                ready = true;
+                Log.d(TAG_NAME_UP, "Writing to file");
+                float downloadSize = 0;
+                int totalSize = conn.getContentLength();
+                InputStream is = conn.getInputStream();
+                byte[] buffer = new byte[1024];
+                int len1;
+                int lastProgress = 0;
+                long lastNotification = 0;
+                final int NOTIFICATION_DURATION = 500; // twice a second (500ms)
+                while ((len1 = is.read(buffer)) != -1) {
+                    fos.write(buffer, 0, len1);
+                    downloadSize += len1;
+                    float progress = (downloadSize / totalSize) * 100;
+                    long notifyTime = System.currentTimeMillis();
+                    if ((Math.round(progress) > lastProgress) && (notifyTime - lastNotification) > NOTIFICATION_DURATION) {
+                        Log.d(TAG_NAME_UP, "Download Size: " + downloadSize + "/" + totalSize);
+                        lastProgress = Math.round(progress);
+                        lastNotification = notifyTime;
+                        publishProgress(progress, downloadSize, (float) totalSize);
+                    }
                 }
+                is.close();//till here, it works fine - .apk is download to my sdcard in download file
+                Log.d(TAG_NAME_UP, "Download Complete...");
             }
-            fos.close();
-            is.close();//till here, it works fine - .apk is download to my sdcard in download file
-            Log.d("Updater", "Download Complete...");
             return true;
 
         } catch (IOException e) {
@@ -130,6 +131,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
         }
     }
 
+    @Override
     public void onProgressUpdate(@NonNull Float... progress) {
         if (ready) {
             // Downloading new update... (Download Size / Total Size)
@@ -153,14 +155,15 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
     @SuppressLint("UnspecifiedImmutableFlag")
     @Override
     public void onPostExecute(Boolean passed) {
-        Log.d("Updater", "Processing download");
+        Log.d(TAG_NAME_UP, "Processing download");
         notification.setAutoCancel(true).setOngoing(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             notification.setSubText(null);
         } else {
             notification.setContentInfo(null);
         }
-        if (!passed) {
+        boolean passVal = passed;
+        if (!passVal) {
             //Update failed, update notification
             if (except != null) {
                 //Print Exception
@@ -190,22 +193,22 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
             return;
         }
 
-        Log.d("Updater", "Invoking Package Manager");
+        Log.d(TAG_NAME_UP, "Invoking Package Manager");
         //Invoke the Package Manager
         Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
         intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
-        File file = new File(filePath + "app-update.apk");
+        File file = new File(filePath + APK_NAME);
         Log.d("DEBUG", "Retrieving from " + file.getAbsolutePath());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.i("Downloader", "Post-Nougat: Using new Content URI method");
-            Log.i("Downloader", "Invoking Content Provider " + activity.getApplicationContext().getPackageName() + ".appupdater.provider");
+            Log.i(TAG_NAME_DL, "Post-Nougat: Using new Content URI method");
+            Log.i(TAG_NAME_DL, "Invoking Content Provider " + activity.getApplicationContext().getPackageName() + ".appupdater.provider");
             Uri contentUri = FileProvider.getUriForFile(activity.getBaseContext(), activity.getApplicationContext().getPackageName()
                     + ".appupdater.provider", file);
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
-            Log.i("Downloader", "Pre-Nougat: Fallbacking to old method as they dont support contenturis");
-            intent.setDataAndType(Uri.fromFile(new File(filePath + "app-update.apk")), "application/vnd.android.package-archive");
+            Log.i(TAG_NAME_DL, "Pre-Nougat: Fallbacking to old method as they dont support contenturis");
+            intent.setDataAndType(Uri.fromFile(new File(filePath + APK_NAME)), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         activity.startActivity(intent);

@@ -29,14 +29,28 @@ public class DebugInfoActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.pref_debug);
-            getPreferenceManager().setSharedPreferencesMode(MODE_MULTI_PROCESS);
 
-            //Preference prefs =  findPreference("view_board_ver");
             findPreference("view_board_ver").setSummary(Build.BOARD);
             findPreference("view_bootloader_ver").setSummary(Build.BOOTLOADER);
             findPreference("view_brand_ver").setSummary(Build.BRAND);
-            findPreference("view_cpu1_ver").setSummary(Build.CPU_ABI);
-            findPreference("view_cpu2_ver").setSummary(Build.CPU_ABI2);
+
+            String cpu1;
+            String cpu2 = "Unused";
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                String[] abisArr = Build.SUPPORTED_ABIS;
+                // Join abis to a single string seperated by a comma
+                StringBuilder abis = new StringBuilder();
+                for (String abi : abisArr) {
+                    abis.append(abi).append(", ");
+                }
+                cpu1 = abis.toString();
+            } else {
+                cpu1 = Build.CPU_ABI;
+                cpu2 = Build.CPU_ABI2;
+            }
+
+            findPreference("view_cpu1_ver").setSummary(cpu1);
+            findPreference("view_cpu2_ver").setSummary(cpu2);
             findPreference("view_device_ver").setSummary(Build.DEVICE);
             findPreference("view_display_ver").setSummary(Build.DISPLAY);
             findPreference("view_fingerprint_ver").setSummary(Build.FINGERPRINT);
