@@ -9,7 +9,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.util.TypedValue;
 
@@ -27,8 +26,6 @@ import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.helperlib.helpers.ValidationHelper;
 import com.itachi1706.helperlib.utils.NotifyUserUtil;
 
-import java.security.InvalidParameterException;
-
 /**
  * Created by Kenneth on 28/8/2016.
  * for com.itachi1706.appupdater in CheesecakeUtilities
@@ -36,62 +33,32 @@ import java.security.InvalidParameterException;
 @SuppressWarnings("unused")
 public final class SettingsInitializer {
 
-    @Deprecated private Activity context;
-    @Deprecated private int notificationIcon;
-    private boolean fullscreen = false, oss = false, aboutapp = false, issuetracking = false, bugreport = false, fdroid = false;
-    @Deprecated private android.preference.Preference.OnPreferenceClickListener ossListenerDeprecated = null;
-    private Preference.OnPreferenceClickListener ossListener = null, aboutAppListener = null;
-    private String issueTrackingURL = null, bugReportURL = null, fdroidURL = null;
-    @Deprecated private String serverUrl, legacyLink, updateLink;
+    private boolean fullscreen = false;
+    private boolean oss = false;
+    private boolean aboutapp = false;
+    private boolean issuetracking = false;
+    private boolean bugreport = false;
+    private boolean fdroid = false;
+    private Preference.OnPreferenceClickListener ossListener = null;
+    private Preference.OnPreferenceClickListener aboutAppListener = null;
+    private String issueTrackingURL = null;
+    private String bugReportURL = null;
+    private String fdroidURL = null;
     private boolean internalCache = false;
-    private boolean showOnlyForSideload = true, showInstallLocation = true;
+    private boolean showOnlyForSideload = true;
+    private boolean showInstallLocation = true;
 
-    private static final String FDROID_REPO = "fdroid", ISSUE_TRACKING = "issuetracker", ABOUT_APP = "aboutapp", VIEW_OSS = "view_oss", BUG_REPORT = "bugreport", CATEGORY_INFO = "info_category";
+    private static final String FDROID_REPO = "fdroid";
+    private static final String ISSUE_TRACKING = "issuetracker";
+    private static final String ABOUT_APP = "aboutapp";
+    private static final String VIEW_OSS = "view_oss";
+    private static final String BUG_REPORT = "bugreport";
+    private static final String CATEGORY_INFO = "info_category";
 
     /**
      * Initializes new Settings Initializer
      */
-    public SettingsInitializer() {}
-
-    /**
-     * Initializes new Settings Initializer
-     * @param activity Activity object that calls this
-     * @param launcher_icon Resource Id to an icon to show for any notifications
-     * @param serverUrl Base Server URL
-     * @param legacyLink URL To full list of app downloads
-     * @param updateLink URL to latest app download
-     * @deprecated Use the relevant flag setting methods and {@link SettingsInitializer#explodeUpdaterSettings(Activity, int, String, String, String, PreferenceFragment)}
-     * in {@link SettingsInitializer} and the new {@link SettingsInitializer#SettingsInitializer()} constructor instead
-     */
-    @Deprecated
-    public SettingsInitializer(Activity activity, int launcher_icon, String serverUrl, String legacyLink, String updateLink) {
-        this.context = activity;
-        this.notificationIcon = launcher_icon;
-        this.serverUrl = serverUrl;
-        this.legacyLink = legacyLink;
-        this.updateLink = updateLink;
-    }
-
-    /**
-     * Initializes new Settings Initializer
-     * @param activity Activity object that calls this
-     * @param launcher_icon Resource Id to an icon to show for any notifications
-     * @param serverUrl Base Server URL
-     * @param legacyLink URL To full list of app downloads
-     * @param updateLink URL to latest app download
-     * @param fullscreen Use Full Screen Update Activity
-     * @deprecated Use the relevant flag setting methods and {@link SettingsInitializer#explodeUpdaterSettings(Activity, int, String, String, String, PreferenceFragment)}
-     * in {@link SettingsInitializer} and the new {@link SettingsInitializer#SettingsInitializer()} constructor instead
-     */
-    @Deprecated
-    public SettingsInitializer(Activity activity, int launcher_icon, String serverUrl, String legacyLink, String updateLink, boolean fullscreen) {
-        this.context = activity;
-        this.notificationIcon = launcher_icon;
-        this.serverUrl = serverUrl;
-        this.legacyLink = legacyLink;
-        this.updateLink = updateLink;
-        this.fullscreen = fullscreen;
-    }
+    public SettingsInitializer() { /* Empty Constructor */ }
 
     /**
      * Sets if we should use the fullscreen version of the updater
@@ -120,7 +87,7 @@ public final class SettingsInitializer {
      * @return This object instance for chaining
      */
     public SettingsInitializer showInstallLocation(boolean showInstallLocation) {
-        this.fullscreen = showInstallLocation;
+        this.showInstallLocation = showInstallLocation;
         return this;
     }
 
@@ -134,20 +101,6 @@ public final class SettingsInitializer {
      */
     public SettingsInitializer setInternalCache(boolean internalCache) {
         this.internalCache = internalCache;
-        return this;
-    }
-
-    /**
-     * To enable the Open Source License Preference where on user click, you could use to show the licenses in your app
-     * @param enabled Whether to show the preference or not
-     * @param listener Action to do when user clicks on the app (null for no action)
-     * @return The instance itself
-     * @deprecated Use {{@link #setOpenSourceLicenseInfo(boolean, Preference.OnPreferenceClickListener)} instead
-     */
-    @Deprecated
-    public SettingsInitializer setOpenSourceLicenseInfo(boolean enabled, android.preference.Preference.OnPreferenceClickListener listener) {
-        this.oss = enabled;
-        this.ossListenerDeprecated = listener;
         return this;
     }
 
@@ -211,141 +164,6 @@ public final class SettingsInitializer {
         return this;
     }
 
-    @Deprecated
-    private boolean hasAllNeededForUpdate() {
-        return !(this.updateLink == null || this.legacyLink == null || this.serverUrl == null);
-    }
-
-    /**
-     * Explodes general info settings in your preference fragment
-     * @param fragment The preference fragment object
-     * @return The instance itself
-     * @deprecated Use {@link #explodeInfoSettings(PreferenceFragmentCompat)} instead
-     */
-    @Deprecated
-    public SettingsInitializer explodeInfoSettings(final PreferenceFragment fragment) {
-        fragment.addPreferencesFromResource(R.xml.pref_appinfo);
-
-        //Debug Info Get
-        String version = "NULL", packName = "NULL";
-        int versionCode = 0;
-        try {
-            PackageInfo pInfo = fragment.getActivity().getPackageManager().getPackageInfo(fragment.getActivity().getPackageName(), 0);
-            version = pInfo.versionName;
-            packName = pInfo.packageName;
-            versionCode = pInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        android.preference.Preference verPref = fragment.findPreference("view_app_version");
-        verPref.setSummary(version + "-b" + versionCode);
-        fragment.findPreference("view_app_name").setSummary(packName);
-        fragment.findPreference("view_sdk_version").setSummary(android.os.Build.VERSION.RELEASE);
-        fragment.findPreference("vDevInfo").setOnPreferenceClickListener(preference -> {
-            fragment.startActivity(new Intent(fragment.getActivity(), DebugInfoActivity.class));
-            return true;
-        });
-        fragment.findPreference("vAppLog").setOnPreferenceClickListener(preference -> {
-            fragment.startActivity(new Intent(fragment.getActivity(), ViewLogsActivity.class));
-            return true;
-        });
-        // Check to enable Open Source License View or not
-        fragment.findPreference(VIEW_OSS).setOnPreferenceClickListener(ossListenerDeprecated);
-        if (!this.oss) ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(VIEW_OSS));
-        ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(ABOUT_APP)); // Permenantly remove for this
-        ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(ISSUE_TRACKING)); // Permenantly remove for this
-        ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(BUG_REPORT)); // Permenantly remove for this
-        ((android.preference.PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(FDROID_REPO)); // Permenantly remove for this
-        return this;
-    }
-
-    /**
-     * Explodes updater settings in your preference fragment
-     * @param fragment The preference fragment object
-     * @return The instance itself
-     * @deprecated Use {@link #explodeUpdaterSettings(Activity, int, String, String, String, PreferenceFragment)} instead}
-     */
-    @Deprecated
-    public SettingsInitializer explodeSettings(PreferenceFragment fragment) {
-        return explodeUpdaterSettings(fragment, true, true);
-    }
-
-    /**
-     * Explodes updater settings in your preference fragment
-     * @param fragment The preference fragment object
-     * @return The instance itself
-     * @deprecated Use {@link #explodeUpdaterSettings(Activity, int, String, String, String, PreferenceFragment)} instead
-     */
-    @Deprecated
-    public SettingsInitializer explodeUpdaterSettings(PreferenceFragment fragment) {
-        return explodeUpdaterSettings(fragment, true, true);
-    }
-
-    /**
-     * Explodes updater settings in your preference fragment
-     * @param activity The activity object
-     * @param notificationIcon Notification Icon Resource ID
-     * @param serverUrl Base Server URL
-     * @param legacyLink URL To full list of app downloads
-     * @param updateLink URL to latest app download
-     * @param fragment The preference fragment object
-     * @return The instance of this object for chaining
-     * @deprecated Use {@link #explodeUpdaterSettings(Activity, int, String, String, String, PreferenceFragmentCompat)} instead
-     */
-    @Deprecated
-    public SettingsInitializer explodeUpdaterSettings(Activity activity, @DrawableRes final int notificationIcon,
-                                                      final String serverUrl, final String legacyLink, final String updateLink,
-                                                      PreferenceFragment fragment) {
-        final Activity context = activity;
-        if (showOnlyForSideload && !ValidationHelper.checkSideloaded(context) && !showInstallLocation)
-            return this; // Sideloaded
-
-        if (showOnlyForSideload && showInstallLocation && !ValidationHelper.checkSideloaded(context)) {
-            // Expand minimal
-            fragment.addPreferencesFromResource(R.xml.pref_updater_min);
-            String installLocation = getInstallLocation(context);
-            fragment.findPreference("installer_from").setSummary(installLocation);
-            return this;
-        }
-
-        final SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(context);
-        fragment.addPreferencesFromResource(R.xml.pref_updater);
-        fragment.findPreference("launch_updater").setOnPreferenceClickListener(preference -> {
-            new AppUpdateChecker(context, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor();
-            return false;
-        });
-
-        fragment.findPreference("get_old_app").setOnPreferenceClickListener(preference -> launchCustomTabs(context, legacyLink));
-        fragment.findPreference("get_latest_app").setOnPreferenceClickListener(preference -> launchCustomTabs(context, updateLink));
-
-        fragment.findPreference("android_changelog").setOnPreferenceClickListener(preference -> {
-            UpdaterHelper.settingGenerateChangelog(sp, context);
-            return true;
-        });
-
-        String installLocation = getInstallLocation(context);
-        fragment.findPreference("installer_from").setSummary(installLocation);
-        return this;
-    }
-
-    /**
-     * Explodes updater settings in your preference fragment
-     * @param fragment The preference fragment object
-     * @param showOnlyForSideload Do not show any field if app is not sideloaded
-     * @param showInstallLocation Only show install location field if app is sideloaded
-     * @return The instance itself
-     * @deprecated Use {@link SettingsInitializer#explodeUpdaterSettings(Activity, int, String, String, String, PreferenceFragment)} instead
-     * Note that {@link #showOnlyForSideload(boolean)} and {@link #showInstallLocation(boolean)} now exists as flag setters
-     */
-    @Deprecated
-    @SuppressWarnings("WeakerAccess")
-    public SettingsInitializer explodeUpdaterSettings(PreferenceFragment fragment, boolean showOnlyForSideload, boolean showInstallLocation) {
-        this.showOnlyForSideload = showOnlyForSideload;
-        this.showInstallLocation = showInstallLocation;
-        if (!hasAllNeededForUpdate()) throw new InvalidParameterException("You need to set the appropriate setters for this to work");
-        return explodeUpdaterSettings(this.context, this.notificationIcon, this.serverUrl, this.legacyLink, this.updateLink, fragment);
-    }
-
     /**
      * Explodes general info settings in your preference fragment
      * NOTE: This is automatically exploded if you use a EasterEgg fragment
@@ -357,7 +175,8 @@ public final class SettingsInitializer {
         fragment.addPreferencesFromResource(R.xml.pref_appinfo);
 
         //Debug Info Get
-        String version = "NULL", packName = "NULL";
+        String version = "NULL";
+        String packName = "NULL";
         long versionCode = 0;
         try {
             PackageInfo pInfo = fragment.getActivity().getPackageManager().getPackageInfo(fragment.getActivity().getPackageName(), 0);
