@@ -12,6 +12,13 @@ CheesecakeAppUpdater
 This is an updater library that was primarly designed to suit my needs and allows updating of my Android apps outside of the GPS.  
 For more information see the sample applicatiion on how to use this library  
 
+## Notification Permission
+Android 13 and after devices require the app to have the notification permission to be able to show the notification.
+Right now the library does not handle this permission and will presume the notification is granted and may hence crash.
+Hence, ensure that the application has the notification permission before using any functions in this library.
+
+In the future we will make it such that the application will fail gracefully without the notification permission instead.
+
 ## To Allow Package Installation
 Due to changes in Google Play policy, there are restrictions on what apps can use the "REQUEST_INSTALL_PACKAGES" permission. Hence to allow other use of this library we are removing it as required.  
 To add the ability to install packages, you will need to add the following to your AndroidManifest.xml file:
