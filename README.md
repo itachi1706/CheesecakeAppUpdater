@@ -19,6 +19,8 @@ Hence, ensure that the application has the notification permission before using 
 
 In the future we will make it such that the application will fail gracefully without the notification permission instead.
 
+Tracking: https://itachi1706.atlassian.net/browse/CAUANDLIB-59
+
 ## To Allow Package Installation
 Due to changes in Google Play policy, there are restrictions on what apps can use the "REQUEST_INSTALL_PACKAGES" permission. Hence to allow other use of this library we are removing it as required.  
 To add the ability to install packages, you will need to add the following to your AndroidManifest.xml file:
