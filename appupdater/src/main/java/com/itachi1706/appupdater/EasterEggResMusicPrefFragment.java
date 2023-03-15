@@ -7,12 +7,13 @@ import android.widget.Toast;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 /**
  * Created by Kenneth on 5/11/2016.
  * for com.itachi1706.appupdater in CheesecakeAppUpdater
- *
+ * <p>
  * Easter Egg Fragment. Setup initialization methods and call {@link #init()} ()} in your onCreate() or onCreatePreference() method (e.g super.build()) to add the easter egg and relevant stuff
  * Initialization methods are done by using {@link SettingsInitializer#explodeInfoSettings(PreferenceFragmentCompat)} after setting the relevant options found in {@link SettingsInitializer}
  */
@@ -29,7 +30,7 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCo
                 if (count == 10) {
                     count = 0;
                     startEgg();
-                    Snackbar.make(getActivity().findViewById(android.R.id.content), getStartEggMessage(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(getActivity().findViewById(android.R.id.content), getStartEggMessage(), BaseTransientBottomBar.LENGTH_LONG)
                             .setAction(getStopEggButtonText(), v -> killEgg()).show();
                     return false;
                 } else if (count > 5)
@@ -38,35 +39,6 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCo
             }
             return false;
         });
-    }
-
-    /**
-     * @deprecated Use {@link #init()} instead after setting the relevant preference in {@link SettingsInitializer}
-     */
-    @Deprecated
-    public void addEggMethods() {
-        addEggMethods(false, null);
-    }
-
-    /**
-     * @deprecated Use {@link #init()} instead after setting the relevant preference in {@link SettingsInitializer}
-     */
-    @Deprecated
-    public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener) {
-        addEggMethods(openSource, openSourceListener, false, null);
-    }
-
-    /**
-     * Should be called when implementing the easter egg
-     * @param openSource true if to enable OSS license view
-     * @param openSourceListener OSS license view listener
-     * @param aboutApp true if to enable about app view
-     * @param aboutAppListener About App View Listener
-     * @deprecated Use {@link #init()} instead after setting the relevant preference in {@link SettingsInitializer}
-     */
-    @Deprecated
-    public void addEggMethods(boolean openSource, Preference.OnPreferenceClickListener openSourceListener, boolean aboutApp, Preference.OnPreferenceClickListener aboutAppListener) {
-        new SettingsInitializer().setAboutApp(aboutApp, aboutAppListener).setOpenSourceLicenseInfo(openSource, openSourceListener).explodeInfoSettings(this);
     }
 
     /**
@@ -130,7 +102,7 @@ public abstract class EasterEggResMusicPrefFragment extends PreferenceFragmentCo
 
     private void killEgg() {
         Log.i("Egg", "Killing egg");
-        Snackbar.make(getActivity().findViewById(android.R.id.content), getEndEggMessage(), Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(getActivity().findViewById(android.R.id.content), getEndEggMessage(), BaseTransientBottomBar.LENGTH_SHORT).show();
         endEgg();
     }
 

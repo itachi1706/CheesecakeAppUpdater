@@ -30,6 +30,7 @@ public final class DownloadLatestUpdateFullScreen extends CoroutineAsyncTask<Str
     private boolean ready = false;
     private final Handler handler;
     private static final String TASK_NAME = DownloadLatestUpdateFullScreen.class.getSimpleName();
+    private static final String TAG_NAME_UP = "Updater";
 
     /**
      * Called from AppUpdateChecker if the user decides to invoke anything
@@ -55,47 +56,45 @@ public final class DownloadLatestUpdateFullScreen extends CoroutineAsyncTask<Str
             conn.setRequestMethod("GET");
             conn.connect();
             publishProgress();
-            Log.d("Updater", "Starting Download...");
+            Log.d(TAG_NAME_UP, "Starting Download...");
 
             filePath = cacheDir + File.separator + "download" + File.separator;
-            Log.i("Updater", "Downloading to " + filePath);
+            Log.i(TAG_NAME_UP, "Downloading to " + filePath);
             File folder = new File(filePath);
-            if (!folder.exists()) {
-                if (!tryAndCreateFolder(folder)) {
-                    Log.d("Updater", "Cannot Create Folder. Not Downloading");
-                    conn.disconnect();
-                    return false;
-                }
+            if (!folder.exists() && (!tryAndCreateFolder(folder))) {
+                Log.d(TAG_NAME_UP, "Cannot Create Folder. Not Downloading");
+                conn.disconnect();
+                return false;
             }
             String fileName = "app-update_" + version + ".apk";
             File file = new File(folder, fileName);
-            FileOutputStream fos = new FileOutputStream(file);
-            Log.d("Updater", "Connection done, File Obtained");
-            ready = true;
-            Log.d("Updater", "Writing to file");
-            float downloadSize = 0;
-            int totalSize = conn.getContentLength();
-            InputStream is = conn.getInputStream();
-            byte[] buffer = new byte[1024];
-            int len1;
-            int lastProgress = 0;
-            long lastNotification = 0;
-            final int NOTIFICATION_DURATION = 500; // twice a second (500ms)
-            while ((len1 = is.read(buffer)) != -1) {
-                fos.write(buffer, 0, len1);
-                downloadSize += len1;
-                float progress = (downloadSize / totalSize) * 100;
-                long notifyTime = System.currentTimeMillis();
-                if ((Math.round(progress) > lastProgress) && (notifyTime - lastNotification) > NOTIFICATION_DURATION) {
-                    Log.d("Updater", "Download Size: " + downloadSize + "/" + totalSize);
-                    lastProgress = Math.round(progress);
-                    lastNotification = notifyTime;
-                    publishProgress(progress, downloadSize, (float) totalSize);
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                Log.d(TAG_NAME_UP, "Connection done, File Obtained");
+                ready = true;
+                Log.d(TAG_NAME_UP, "Writing to file");
+                float downloadSize = 0;
+                int totalSize = conn.getContentLength();
+                InputStream is = conn.getInputStream();
+                byte[] buffer = new byte[1024];
+                int len1;
+                int lastProgress = 0;
+                long lastNotification = 0;
+                final int NOTIFICATION_DURATION = 500; // twice a second (500ms)
+                while ((len1 = is.read(buffer)) != -1) {
+                    fos.write(buffer, 0, len1);
+                    downloadSize += len1;
+                    float progress = (downloadSize / totalSize) * 100;
+                    long notifyTime = System.currentTimeMillis();
+                    if ((Math.round(progress) > lastProgress) && (notifyTime - lastNotification) > NOTIFICATION_DURATION) {
+                        Log.d(TAG_NAME_UP, "Download Size: " + downloadSize + "/" + totalSize);
+                        lastProgress = Math.round(progress);
+                        lastNotification = notifyTime;
+                        publishProgress(progress, downloadSize, (float) totalSize);
+                    }
                 }
+                is.close();//till here, it works fine - .apk is download to my sdcard in download file
+                Log.d(TAG_NAME_UP, "Download Complete...");
             }
-            fos.close();
-            is.close();//till here, it works fine - .apk is download to my sdcard in download file
-            Log.d("Updater", "Download Complete...");
             return true;
 
         } catch (IOException e) {
@@ -105,17 +104,16 @@ public final class DownloadLatestUpdateFullScreen extends CoroutineAsyncTask<Str
         }
     }
 
+    @Override
     public void onProgressUpdate(@NonNull Float... progress) {
         Message msg = Message.obtain();
         msg.what = NewUpdateActivity.UPDATE_NOTIFICATION;
         Bundle bundle = new Bundle();
         bundle.putBoolean("ready", ready);
-        if (ready) {
-            if (progress.length >= 3) {
-                bundle.putFloat("download", progress[1]);
-                bundle.putFloat("total", progress[2]);
-                bundle.putFloat("progress", progress[0]);
-            }
+        if (ready && (progress.length >= 3)) {
+            bundle.putFloat("download", progress[1]);
+            bundle.putFloat("total", progress[2]);
+            bundle.putFloat("progress", progress[0]);
         }
         msg.setData(bundle);
         handler.sendMessage(msg);
@@ -127,7 +125,8 @@ public final class DownloadLatestUpdateFullScreen extends CoroutineAsyncTask<Str
         processmsg.what = NewUpdateActivity.PROCESSING_DOWNLOAD;
         handler.sendMessage(processmsg);
 
-        if (!passed) {
+        boolean passVal = passed;
+        if (!passVal) {
             //Update failed, update notification
             Message msg = Message.obtain();
             msg.what = NewUpdateActivity.DOWNLOAD_FAIL;

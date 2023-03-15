@@ -6,11 +6,11 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
-import com.itachi1706.appupdater.object.CAAnalytics;
-import com.itachi1706.helperlib.helpers.PrefHelper;
-
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
+
+import com.itachi1706.appupdater.object.CAAnalytics;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 
 /**
  * Created by Kenneth on 17/3/2018.
@@ -51,7 +51,7 @@ public class AnalyticsHelper {
      * @deprecated Use {@link #getData(boolean)} instead
      * @return Analytics data or null if not enabled
      */
-    @Deprecated
+    @Deprecated(since = "2.4.2", forRemoval = true)
     @Nullable
     @WorkerThread
     public CAAnalytics getData() {
@@ -61,9 +61,10 @@ public class AnalyticsHelper {
 
     /**
      * Get relevant data if analytics is not disabled. You can choose which of the data to create as custom properties
-     * Remeber to follow https://firebase.google.com/docs/analytics/android/properties#set_user_properties for more information if using Firebase
+     * Remeber to follow <a href="https://firebase.google.com/docs/analytics/android/properties#set_user_properties">Firebase's Documentation</a> for more information if using Firebase
      * Sample user properties fields: debug_mode, device_manufacturer, device_model, device_codename, device_fingerprint, device_cpu_abi,
      * device_tags, app_version_code, app_version, android_sdk_version, android_version, android_sec_patch
+     * @param debugMode boolean Whether to include debug mode or not
      * @return Analytics data or null if not enabled
      */
     @Nullable
@@ -73,12 +74,11 @@ public class AnalyticsHelper {
 
         //Debug Info Get
         String version = "Unknown";
-        int versionCode = 0;
+        long versionCode = 0;
         if (pInfo != null) {
             version = pInfo.versionName;
-            versionCode = pInfo.versionCode;
+            versionCode = MigrationHelper.getVersionCodeCompat(pInfo);
         }
-        boolean newAbiData = false;
 
         // Generate data
         CAAnalytics analytics = new CAAnalytics();
@@ -93,10 +93,10 @@ public class AnalyticsHelper {
             String[] support = Build.SUPPORTED_ABIS;
             if (support.length > 0) {
                 analytics.setdCPU(support[0]);
-                newAbiData = true;
             }
+        } else {
+            analytics.setdCPU(Build.CPU_ABI);
         }
-        if (!newAbiData) analytics.setdCPU(Build.CPU_ABI);
         analytics.setdFingerprint(Build.FINGERPRINT);
         analytics.setdTags(Build.TAGS);
         analytics.setdCodename(Build.PRODUCT);

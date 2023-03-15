@@ -10,7 +10,13 @@ import androidx.annotation.Keep;
 @Keep
 public final class AppUpdateObject {
     private int index;
-    private String id, packageName, appName, dateCreated, latestVersion, latestVersionCode, apptype;
+    private String id;
+    private String packageName;
+    private String appName;
+    private String dateCreated;
+    private String latestVersion;
+    private String latestVersionCode;
+    private String apptype;
     private AppUpdateMessageObject[] updateMessage;
 
     public AppUpdateObject() {

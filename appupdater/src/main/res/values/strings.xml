@@ -59,8 +59,8 @@
     <string name="pref_debug_board">Board</string>
     <string name="pref_debug_bootloader">Bootloader</string>
     <string name="pref_debug_brand">Brand</string>
-    <string name="pref_debug_cpu_type_1">CPU Type</string>
-    <string name="pref_debug_cpu_type_2">CPU Type 2</string>
+    <string name="pref_debug_cpu_type_1">Primary CPU Types</string>
+    <string name="pref_debug_cpu_type_2">Secondary CPU Types</string>
     <string name="pref_debug_device">Device</string>
     <string name="pref_debug_build_id">Build ID</string>
     <string name="pref_debug_fingerprint">Fingerprint</string>

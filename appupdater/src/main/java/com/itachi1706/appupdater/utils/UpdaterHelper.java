@@ -19,8 +19,8 @@ import com.itachi1706.helperlib.helpers.ConnectivityHelper;
 @SuppressWarnings("unused")
 public final class UpdaterHelper {
 
-    public static int HTTP_QUERY_TIMEOUT = 15000; //15 seconds timeout
-    public static String UPDATER_NOTIFICATION_CHANNEL = "app_update_channel";
+    public static final int HTTP_QUERY_TIMEOUT = 15000; //15 seconds timeout
+    public static final String UPDATER_NOTIFICATION_CHANNEL = "app_update_channel";
 
     private UpdaterHelper() {
         throw new IllegalStateException("Utility class");

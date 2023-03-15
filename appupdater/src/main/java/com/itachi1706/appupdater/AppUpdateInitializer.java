@@ -81,11 +81,9 @@ public final class AppUpdateInitializer {
         if (mActivity == null) {
             return; // NO-OP
         }
-        if (this.checkSideload) {
-            if (!ValidationHelper.checkSideloaded(mActivity)) {
-                Log.i("Updater", "App is not sideloaded, disabling update check");
-                return;
-            }
+        if (this.checkSideload && (!ValidationHelper.checkSideloaded(mActivity))) {
+            Log.i("Updater", "App is not sideloaded, disabling update check");
+            return;
         }
         if (this.wifiCheck) {
             if (UpdaterHelper.canCheckUpdate(sp, mActivity)) {
@@ -94,30 +92,6 @@ public final class AppUpdateInitializer {
             return;
         }
         update(mActivity);
-    }
-
-    /**
-     * Checks for Update if the app is not sideloaded
-     *
-     * @deprecated Use {@link AppUpdateInitializer#checkForUpdate()} instead and the various flag setters to set wifi check
-     * @param doOnlyOnWifiCheck If the app should only check for update on WIFI
-     */
-    @Deprecated
-    public void checkForUpdate(boolean doOnlyOnWifiCheck) {
-        checkForUpdate(doOnlyOnWifiCheck, true);
-    }
-
-    /**
-     * Checks For Update
-     * @deprecated Use {@link AppUpdateInitializer#checkForUpdate()} instead and the various flag setters to set wifi and sideload checks
-     * @param doOnlyOnWifiCheck If the app should only check for update on WIFI
-     * @param onlyDoCheckForSideloadInstalls If the app should only check for update if the app is sideloaded
-     */
-    @Deprecated
-    public void checkForUpdate(boolean doOnlyOnWifiCheck, boolean onlyDoCheckForSideloadInstalls) {
-        this.wifiCheck = doOnlyOnWifiCheck;
-        this.checkSideload = onlyDoCheckForSideloadInstalls;
-        checkForUpdate();
     }
 
     private void update(Activity mActivity) {
