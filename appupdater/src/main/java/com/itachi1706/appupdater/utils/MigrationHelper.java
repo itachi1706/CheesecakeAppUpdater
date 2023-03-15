@@ -8,7 +8,7 @@ import android.view.WindowManager;
 
 /**
  * This is just a basic helper class to help with migration
- * The methods here will eventually head over to <a href="https://github.com/itachi1706/AndroidHelperLib>AndroidHelperLib</a> instead
+ * The methods here will eventually head over to <a href="https://github.com/itachi1706/AndroidHelperLib">AndroidHelperLib</a> instead
  */
 @SuppressWarnings("deprecation")
 public class MigrationHelper {

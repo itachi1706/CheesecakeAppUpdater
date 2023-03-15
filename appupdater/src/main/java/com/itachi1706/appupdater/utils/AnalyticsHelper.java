@@ -64,6 +64,7 @@ public class AnalyticsHelper {
      * Remeber to follow <a href="https://firebase.google.com/docs/analytics/android/properties#set_user_properties">Firebase's Documentation</a> for more information if using Firebase
      * Sample user properties fields: debug_mode, device_manufacturer, device_model, device_codename, device_fingerprint, device_cpu_abi,
      * device_tags, app_version_code, app_version, android_sdk_version, android_version, android_sec_patch
+     * @param debugMode boolean Whether to include debug mode or not
      * @return Analytics data or null if not enabled
      */
     @Nullable
