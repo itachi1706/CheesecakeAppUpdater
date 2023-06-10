@@ -17,6 +17,11 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Local publishing test to ensure working
+      run: ./gradlew clean build signAarPublication publishAarPublicationToMavenLocal
+      env:
+        GPG_SIGN_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+        GPG_SIGN_PASSWORD: ${{ secrets.GPG_SIGNING_PASSWORD }}
   artifactory:
     name: Release to Artifactory
     if: startsWith(github.ref, 'refs/tags/')
