@@ -17,10 +17,13 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Generate Local Properties file
+      env:
+        GPG_SIGN_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+      run: echo $GPG_SIGN_KEY | base64 --decode > ./local.properties
     - name: Local publishing test to ensure working
       run: ./gradlew clean build signAarPublication publishAarPublicationToMavenLocal
       env:
-        GPG_SIGN_KEY: ${{ secrets.GPG_SIGNING_KEY }}
         GPG_SIGN_PASSWORD: ${{ secrets.GPG_SIGNING_PASSWORD }}
   artifactory:
     name: Release to Artifactory
@@ -37,13 +40,16 @@ jobs:
           java-version: 11
       - name: Make Gradle executable
         run: chmod +x gradlew
+      - name: Generate Local Properties file
+        env:
+          GPG_SIGN_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+        run: echo $GPG_SIGN_KEY | base64 --decode > ./local.properties
       - name: Generate Artifactory artifact and publish release and upload
         run: ./gradlew clean build signAarPublication artifactoryPublish
         env:
           ARTIFACTORY_CONTEXTURL: ${{ secrets.ARTIFACTORYCONTEXTURL }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORYPASSWORD }}
           ARTIFACTORY_USER: ${{ secrets.ARTIFACTORYUSER }}
-          GPG_SIGN_KEY: ${{ secrets.GPG_SIGNING_KEY }}
           GPG_SIGN_PASSWORD: ${{ secrets.GPG_SIGNING_PASSWORD }}
       - name: Move Library AAR file to main folder
         run: mv ./\appupdater/build/outputs/aar/appupdater-release.aar ./appupdater-release.aar
@@ -85,12 +91,15 @@ jobs:
           java-version: 11
       - name: Make Gradle executable
         run: chmod +x gradlew
+      - name: Generate Local Properties file
+        env:
+          GPG_SIGN_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+        run: echo $GPG_SIGN_KEY | base64 --decode > ./local.properties
       - name: Generate Maven Central artifact and publish release and upload
         run: ./gradlew clean build signAarPublication publish
         env:
           OSSRH_PASSWORD: ${{ secrets.OSSRHPASSWORD }}
           OSSRH_USER: ${{ secrets.OSSRHUSER }}
-          GPG_SIGN_KEY: ${{ secrets.GPG_SIGNING_KEY }}
           GPG_SIGN_PASSWORD: ${{ secrets.GPG_SIGNING_PASSWORD }}
       - name: Finish Up
         run: echo Upload successful. Maintainers can proceed onto https://s01.oss.sonatype.org to release the artifacts when capable
