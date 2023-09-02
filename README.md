@@ -58,7 +58,22 @@ dependencies {
 }
 ```
 
-## Usage - Artifactory
+## Usage - GitHub Packages
+To use this library in an Android Project, add the following lines into your app-level build.gradle file
+
+```gradle
+repositories {
+	maven {
+		url "https://maven.pkg.github.com/itachi1706"
+	}
+}
+
+dependencies {
+  implementation 'com.itachi1706.appupdater:appupdater:<latest-version>' // See badge for latest version
+}
+```
+
+## Usage - Artifactory (DEPRECATED)
 To use this library in an Android Project, add the following lines into your app-level build.gradle file
 
 ```gradle
