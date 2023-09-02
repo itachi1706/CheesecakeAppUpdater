@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.1] - 2023-09-02
+### :bug: Bug Fixes
+- [`079dca6`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/079dca61618a3849273836e5d7f2aeaa83cf9926) - Add Keep for UpdateShell to prevent ProGuard crashes *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+### :wrench: Chores
+- [`060065d`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/060065d2b9cb2870a90b35f70ad854e1f545ed47) - Update and removed artifactory *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+
 ## [3.0.0] - 2023-03-16
 ### :boom: BREAKING CHANGES
 - due to [`82eb3e1`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/82eb3e1915112d774c163c9903d635eb4f212ebb) - Remove deprecated code *(commit by [@itachi1706](https://github.com/itachi1706))*:
@@ -31,3 +39,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [2.5.1]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/2.5.0...2.5.1
 [3.0.0]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/2.5.1...3.0.0
+[3.0.1]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/3.0.0...3.0.1
