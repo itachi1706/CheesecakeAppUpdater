@@ -43,7 +43,7 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.google.android.material:material:1.8.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
     implementation 'androidx.browser:browser:1.5.0'
     api 'com.itachi1706.helpers:helperlib:1.4.1'
 }
