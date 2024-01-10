@@ -22,7 +22,7 @@ jobs:
         GPG_SIGN_KEY: ${{ secrets.GPG_SIGNING_KEY }}
       run: echo $GPG_SIGN_KEY | base64 --decode > ./local.properties
     - name: Local publishing test to ensure working
-      run: ./gradlew clean build signAarPublication publishReleasePublicationToMavenLocal
+      run: ./gradlew clean build publishReleasePublicationToMavenLocal
       env:
         GPG_SIGN_PASSWORD: ${{ secrets.GPG_SIGNING_PASSWORD }}
   mavenCentral:
