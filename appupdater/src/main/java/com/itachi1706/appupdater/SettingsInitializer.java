@@ -238,7 +238,7 @@ public final class SettingsInitializer {
     private CustomTabsIntent getCustomTabs(Context context) {
         if (customTabsIntent == null) {
             TypedValue colorTmp = new TypedValue();
-            context.getTheme().resolveAttribute(R.attr.colorPrimary, colorTmp, true);
+            context.getTheme().resolveAttribute(androidx.appcompat.R.attr.colorPrimary, colorTmp, true);
             final int colorPrimary = colorTmp.data;
             customTabsIntent = new CustomTabsIntent.Builder()
                     .setDefaultColorSchemeParams(new CustomTabColorSchemeParams.Builder().setToolbarColor(colorPrimary).build())
