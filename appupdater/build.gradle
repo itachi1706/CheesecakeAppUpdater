@@ -1,20 +1,18 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-
-repositories {
-    google()
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
-    compileSdkVersion 33
-    buildToolsVersion "33.0.2"
+    compileSdk 34
     namespace 'com.itachi1706.appupdater'
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 33
+        minSdk 19
+        targetSdk 34
         versionCode 447
         versionName "3.0.2"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
     }
@@ -25,11 +23,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
     }
 }
 
@@ -39,12 +44,11 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation 'com.google.code.gson:gson:2.10.1'
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
-    implementation 'androidx.browser:browser:1.5.0'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.browser:browser:1.7.0'
     api 'com.itachi1706.helpers:helperlib:1.4.1'
 }
 

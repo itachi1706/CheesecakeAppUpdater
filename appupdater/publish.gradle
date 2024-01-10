@@ -1,42 +1,50 @@
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    archiveClassifier.set("sources")
+apply {
+    plugin 'maven-publish'
+    plugin 'signing'
 }
 
-task javadoc(type: Javadoc) {
+tasks.register('androidJavadoc', Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    exclude '**/BuildConfig.java'
-    excludes = ['**/*.kt'] // < ---- Exclude all kotlin files from javadoc file.
+    android.libraryVariants.all { variant ->
+        if (variant.name == 'release') {
+            owner.classpath += variant.javaCompileProvider.get().classpath
+        }
+    }
+
+    exclude '**/R.html', '**/R.*.html', '**/index.html'
+    options.encoding 'utf-8'
+    options {
+        addStringOption 'docencoding', 'utf-8'
+        addStringOption 'charset', 'utf-8'
+        links 'https://docs.oracle.com/javase/7/docs/api/'
+        links 'https://d.android.com/reference'
+        links 'https://developer.android.com/reference/androidx/'
+    }
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier.set("javadoc")
-    from javadoc.destinationDir
+tasks.register('androidJavadocJar', Jar) {
+    dependsOn androidJavadoc
+    archiveClassifier.set('javadoc')
+    from androidJavadoc.destinationDir
+
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
 }
+
+tasks.register('javaSourcesJar', Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+Properties localProps = new Properties()
+def localPropFile = file('../local.properties')
+if (localPropFile.canRead()) { localProps.load(new FileInputStream(localPropFile)) }
 
 afterEvaluate {
-    javadoc.classpath += files(android.libraryVariants.collect { variant ->
-        variant.javaCompileProvider.get().classpath.files
-    })
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-version android.defaultConfig.versionName
-group 'com.itachi1706.appupdater'
-
-afterEvaluate {
-    Properties localProps = new Properties()
-    def localPropFile = file('../local.properties')
-    if (localPropFile.canRead()) { localProps.load(new FileInputStream(localPropFile)) }
-
     def ossrhUsername = localProps != null && localProps.containsKey('ossrhUsername') ? localProps.getProperty('ossrhUsername') : System.getenv('OSSRH_USER')
     def ossrhPassword = localProps != null && localProps.containsKey('ossrhPassword') ? localProps.getProperty('ossrhPassword') : System.getenv('OSSRH_PASSWORD')
 
@@ -46,6 +54,7 @@ afterEvaluate {
     publishing {
         repositories {
             maven {
+                name = "sonatype"
                 def releaseRepo = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
                 def snapshotRepo = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
                 url = version.endsWith('SNAPSHOT') ? snapshotRepo : releaseRepo
@@ -56,7 +65,7 @@ afterEvaluate {
             }
             maven {
                 name = "GHPackages"
-                url = uri("https://maven.pkg.github.com/itachi1706/CheesecakeAppUpdater")
+                url = uri(GH_PACKAGES_URI)
                 credentials {
                     username = ghUser
                     password = ghKey
@@ -64,50 +73,45 @@ afterEvaluate {
             }
         }
         publications {
-            aar(MavenPublication) {
+            release(MavenPublication) {
                 from components.release
-                groupId = this.group
-                artifactId = 'appupdater'
-                version = this.version
 
+//                artifact androidJavadocJar
+//                artifact javaSourcesJar
+
+                groupId = REL_GROUP
+                version = android.defaultConfig.versionName
                 pom {
-                    name = 'Cheesecake App Updater'
-                    description = 'Internal Android App Updating Library'
-                    url = 'https://github.com/itachi1706/CheesecakeAppUpdater'
-                    inceptionYear = '2016'
-
-                    packaging = 'aar'
-
+                    name = artifactId
+                    description = POM_DESCRIPTION
+                    url = POM_URL
                     licenses {
                         license {
-                            name = 'The MIT License (MIT)'
-                            url = 'https://opensource.org/licenses/MIT'
+                            name = POM_LICENCE_NAME
+                            url = POM_LICENCE_URL
                         }
                     }
                     scm {
-                        connection = 'https://github.com/itachi1706/CheesecakeAppUpdater.git'
-                        url = 'https://github.com/itachi1706/CheesecakeAppUpdater'
-
+                        connection = POM_SCM_CONNECTION
+                        url = POM_SCM_URL
                     }
                     developers {
                         developer {
-                            id = 'itachi1706'
-                            name = 'Kenneth'
+                            id = POM_DEVELOPER_ID
+                            name = POM_DEVELOPER_NAME
+                            email = POM_DEVELOPER_EMAIL
                         }
                     }
                 }
 
-                // Tell maven to prepare the generated "*.aar" file for publishing
-                artifact(sourcesJar)
-                artifact(javadocJar)
             }
         }
     }
+}
 
-    signing {
-        def signingKey = localProps != null && localProps.containsKey('signing.key') ? localProps.getProperty('signing.key') : System.getenv('GPG_SIGN_KEY')
-        def signingPassword = localProps != null && localProps.containsKey('signing.password') ? localProps.getProperty('signing.password') : System.getenv('GPG_SIGN_PASSWORD')
-        useInMemoryPgpKeys(signingKey, signingPassword)
-        sign publishing.publications.aar
-    }
+signing {
+    def signingKey = localProps != null && localProps.containsKey('signing.key') ? localProps.getProperty('signing.key') : System.getenv('GPG_SIGN_KEY')
+    def signingPassword = localProps != null && localProps.containsKey('signing.password') ? localProps.getProperty('signing.password') : System.getenv('GPG_SIGN_PASSWORD')
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications
 }
