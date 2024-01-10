@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         minSdk 19
-        targetSdk 33
+        targetSdk 34
         versionCode 447
         versionName "3.0.2"
 
