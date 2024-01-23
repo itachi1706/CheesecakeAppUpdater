@@ -49,7 +49,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.browser:browser:1.7.0'
-    api 'com.itachi1706.helpers:helperlib:1.4.1'
+    api 'com.itachi1706.helpers:helperlib:1.4.3'
 }
 
 apply from: 'publish.gradle'
