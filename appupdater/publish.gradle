@@ -80,7 +80,7 @@ afterEvaluate {
 //                artifact javaSourcesJar
 
                 groupId = REL_GROUP
-                version = android.defaultConfig.versionName
+                version = project.ext.version
                 pom {
                     name = artifactId
                     description = POM_DESCRIPTION

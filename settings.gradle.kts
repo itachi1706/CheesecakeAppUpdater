@@ -10,11 +10,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {url "https://plugins.gradle.org/m2/"}
+        maven {url =uri("https://plugins.gradle.org/m2/")}
     }
 }
 
-rootProject.name='Cheesecake App Updater'
-include ':app', ':appupdater'
+rootProject.name="Cheesecake App Updater"
+include(":app", ":appupdater")
 
 
