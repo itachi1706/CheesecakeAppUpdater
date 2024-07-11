@@ -3,8 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
-ext.set("version", "3.0.2")
-ext.set("versionCode", 447)
+ext.set("version", "3.0.3")
+ext.set("versionCode", 489)
 
 android {
     compileSdk = 34
