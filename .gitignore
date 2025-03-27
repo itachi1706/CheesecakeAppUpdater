@@ -49,3 +49,4 @@ fabric.properties
 # IntelliJ
 *.iml
 app/release
+/.kotlin
