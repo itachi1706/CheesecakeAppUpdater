@@ -74,7 +74,7 @@ jobs:
           prerelease: false
           files: appupdater-release.aar
       - name: Commit CHANGELOG.md
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           branch: master
           commit_message: 'docs: update CHANGELOG.md for ${{ github.ref_name }} [skip ci]'
