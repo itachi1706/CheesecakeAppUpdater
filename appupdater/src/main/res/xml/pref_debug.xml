@@ -7,7 +7,6 @@
         <Preference android:title="@string/pref_debug_bootloader" android:key="view_bootloader_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
         <Preference android:title="@string/pref_debug_brand" android:key="view_brand_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
         <Preference android:title="@string/pref_debug_cpu_type_1" android:key="view_cpu1_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
-        <Preference android:title="@string/pref_debug_cpu_type_2" android:key="view_cpu2_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
         <Preference android:title="@string/pref_debug_device" android:key="view_device_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
         <Preference android:title="@string/pref_debug_build_id" android:key="view_display_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>
         <Preference android:title="@string/pref_debug_fingerprint" android:key="view_fingerprint_ver" android:summary="@string/placeholder_unavailable" android:selectable="false"/>

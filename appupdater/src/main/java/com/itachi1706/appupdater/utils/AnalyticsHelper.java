@@ -47,17 +47,6 @@ public class AnalyticsHelper {
         return mSharedPreference.contains(ANALYTICS_PREF) && mSharedPreference.getBoolean(ANALYTICS_PREF, mDefaultMode); // Manual opt out
     }
 
-    /**
-     * @deprecated Use {@link #getData(boolean)} instead
-     * @return Analytics data or null if not enabled
-     */
-    @Deprecated(since = "2.4.2", forRemoval = true)
-    @Nullable
-    @WorkerThread
-    public CAAnalytics getData() {
-        return getData(false);
-    }
-
 
     /**
      * Get relevant data if analytics is not disabled. You can choose which of the data to create as custom properties
@@ -89,13 +78,9 @@ public class AnalyticsHelper {
         analytics.setAppVer(version);
         analytics.setSdkString(Build.VERSION.RELEASE);
         analytics.setSdkver(Build.VERSION.SDK_INT);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            String[] support = Build.SUPPORTED_ABIS;
-            if (support.length > 0) {
-                analytics.setdCPU(support[0]);
-            }
-        } else {
-            analytics.setdCPU(Build.CPU_ABI);
+        String[] support = Build.SUPPORTED_ABIS;
+        if (support.length > 0) {
+            analytics.setdCPU(support[0]);
         }
         analytics.setdFingerprint(Build.FINGERPRINT);
         analytics.setdTags(Build.TAGS);

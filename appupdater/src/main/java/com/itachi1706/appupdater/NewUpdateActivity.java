@@ -24,6 +24,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
@@ -59,7 +61,6 @@ public class NewUpdateActivity extends AppCompatActivity {
     private String fileName;
     private AppUpdateObject update;
     private Intent installIntent;
-    private boolean processing = false;
     private int notificationIcon;
     private UpdateHandler mHandler;
 
@@ -70,9 +71,20 @@ public class NewUpdateActivity extends AppCompatActivity {
     private static final String TAG = "NewUpdateAct";
     private final Random random = new Random();
 
+    private OnBackPressedCallback preventBackCallback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        preventBackCallback = new OnBackPressedCallback(false) {
+            @Override
+            public void handleOnBackPressed() {
+                Toast.makeText(getApplicationContext(), "Unable to exit while updating", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        getOnBackPressedDispatcher().addCallback(this, preventBackCallback);
 
         if (!getIntent().hasExtra("update")) {
             Log.e(TAG, "No Update Message in intent. Exiting");
@@ -175,7 +187,7 @@ public class NewUpdateActivity extends AppCompatActivity {
             progressBar.setProgress(0);
             progressBar.setIndeterminate(true);
             progressText.setText(getString(R.string.progress, 0f));
-            processing = true;
+            preventBackCallback.setEnabled(true);
             if (getSupportActionBar() != null && getSupportActionBar().isShowing()) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             }
@@ -284,7 +296,7 @@ public class NewUpdateActivity extends AppCompatActivity {
         }
 
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             NewUpdateActivity activity = mActivity.get();
             super.handleMessage(msg);
             switch (msg.what) {
@@ -312,7 +324,7 @@ public class NewUpdateActivity extends AppCompatActivity {
         if (getSupportActionBar() != null && getSupportActionBar().isShowing()) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        processing = false;
+        preventBackCallback.setEnabled(false);
         if (notification == null) return;
         notification.setAutoCancel(true).setOngoing(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -320,12 +332,6 @@ public class NewUpdateActivity extends AppCompatActivity {
         } else {
             notification.setContentInfo(null);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (!processing) super.onBackPressed();
-        else Toast.makeText(getApplicationContext(), "Unable to exit while updating", Toast.LENGTH_SHORT).show();
     }
 
     private void updateNotification(boolean ready, Float... progress) {

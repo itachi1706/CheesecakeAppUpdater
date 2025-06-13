@@ -48,6 +48,10 @@ public class ViewLogsActivity extends AppCompatActivity {
             return true;
         });
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         StringBuilder log = new StringBuilder();
         try {
             Process process = Runtime.getRuntime().exec("logcat -d");
@@ -108,6 +112,9 @@ public class ViewLogsActivity extends AppCompatActivity {
                     startActivity(chooserIntent);
                 } else NotifyUserUtil.createShortToast(getApplicationContext(), "Error sharing application logs: " + e.getCause());
             }
+            return true;
+        } else if (item.getItemId() == android.R.id.home) {
+            finish();
             return true;
         } else return super.onOptionsItemSelected(item);
     }

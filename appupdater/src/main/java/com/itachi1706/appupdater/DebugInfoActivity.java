@@ -3,7 +3,9 @@ package com.itachi1706.appupdater;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -13,11 +15,23 @@ public class DebugInfoActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new GeneralPreferenceFragment())
                 .commit();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     /**
      * This fragment shows general preferences only. It is used when the
@@ -35,22 +49,19 @@ public class DebugInfoActivity extends AppCompatActivity {
             findPreference("view_brand_ver").setSummary(Build.BRAND);
 
             String cpu1;
-            String cpu2 = "Unused";
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                String[] abisArr = Build.SUPPORTED_ABIS;
-                // Join abis to a single string seperated by a comma
-                StringBuilder abis = new StringBuilder();
-                for (String abi : abisArr) {
-                    abis.append(abi).append(", ");
+
+            String[] abisArr = Build.SUPPORTED_ABIS;
+            // Join abis to a single string seperated by a comma
+            StringBuilder abis = new StringBuilder();
+            if (abisArr != null && abisArr.length > 0) {
+                abis.append(abisArr[0]); // Append the first ABI
+                for (int i = 1; i < abisArr.length; i++) { // Then append ", " and subsequent ABIs
+                    abis.append(", ").append(abisArr[i]);
                 }
-                cpu1 = abis.toString();
-            } else {
-                cpu1 = Build.CPU_ABI;
-                cpu2 = Build.CPU_ABI2;
             }
+            cpu1 = abis.toString();
 
             findPreference("view_cpu1_ver").setSummary(cpu1);
-            findPreference("view_cpu2_ver").setSummary(cpu2);
             findPreference("view_device_ver").setSummary(Build.DEVICE);
             findPreference("view_display_ver").setSummary(Build.DISPLAY);
             findPreference("view_fingerprint_ver").setSummary(Build.FINGERPRINT);
