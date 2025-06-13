@@ -49,22 +49,16 @@ public class DebugInfoActivity extends AppCompatActivity {
             findPreference("view_brand_ver").setSummary(Build.BRAND);
 
             String cpu1;
-            String cpu2 = "Unused";
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                String[] abisArr = Build.SUPPORTED_ABIS;
-                // Join abis to a single string seperated by a comma
-                StringBuilder abis = new StringBuilder();
-                for (String abi : abisArr) {
-                    abis.append(abi).append(", ");
-                }
-                cpu1 = abis.toString();
-            } else {
-                cpu1 = Build.CPU_ABI;
-                cpu2 = Build.CPU_ABI2;
+
+            String[] abisArr = Build.SUPPORTED_ABIS;
+            // Join abis to a single string seperated by a comma
+            StringBuilder abis = new StringBuilder();
+            for (String abi : abisArr) {
+                abis.append(abi).append(", ");
             }
+            cpu1 = abis.toString();
 
             findPreference("view_cpu1_ver").setSummary(cpu1);
-            findPreference("view_cpu2_ver").setSummary(cpu2);
             findPreference("view_device_ver").setSummary(Build.DEVICE);
             findPreference("view_display_ver").setSummary(Build.DISPLAY);
             findPreference("view_fingerprint_ver").setSummary(Build.FINGERPRINT);
