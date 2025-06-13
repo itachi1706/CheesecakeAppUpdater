@@ -47,11 +47,15 @@ jobs:
       - name: Generate artifact, publish release and upload to Maven Central and GitHub Packages
         run: ./gradlew clean build publish
         env:
-          OSSRH_PASSWORD: ${{ secrets.OSSRHPASSWORD }}
-          OSSRH_USER: ${{ secrets.OSSRHUSER }}
+          MAVENCENTRAL_PASSWORD: ${{ secrets.MAVENCENTRALPASSWORD }}
+          MAVENCENTRAL_USER: ${{ secrets.MAVENCENTRALUSER }}
           GPG_SIGN_PASSWORD: ${{ secrets.GPG_SIGNING_PASSWORD }}
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ github.token }}
+      - name: (Temp) Curl to stage the release # Temporary until Gradle maven-publish supports Maven Central
+        run: |
+          curl -i -X 'POST' 'https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/com.itachi1706?publishing_type=user_managed' -H 'accept: */*' -H 'Authorization: Bearer ${{ secrets.MAVENCENTRALAUTHORIZATION }}' -d ''
+          echo "Completed. Please go to https://central.sonatype.com/publishing/deployments to verify the release"
       - name: Move Library AAR file to main folder
         run: mv ./\appupdater/build/outputs/aar/appupdater-release.aar ./appupdater-release.aar
       - name: Update CHANGELOG

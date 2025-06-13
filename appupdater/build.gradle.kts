@@ -7,8 +7,8 @@ ext.set("version", "3.0.3")
 ext.set("versionCode", 489)
 
 android {
-    compileSdk = 34
     namespace = "com.itachi1706.appupdater"
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 19

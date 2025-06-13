@@ -45,8 +45,8 @@ def localPropFile = file('../local.properties')
 if (localPropFile.canRead()) { localProps.load(new FileInputStream(localPropFile)) }
 
 afterEvaluate {
-    def ossrhUsername = localProps != null && localProps.containsKey('ossrhUsername') ? localProps.getProperty('ossrhUsername') : System.getenv('OSSRH_USER')
-    def ossrhPassword = localProps != null && localProps.containsKey('ossrhPassword') ? localProps.getProperty('ossrhPassword') : System.getenv('OSSRH_PASSWORD')
+    def mavenCentralUsername = localProps != null && localProps.containsKey('mavenCentralUsername') ? localProps.getProperty('mavenCentralUsername') : System.getenv('MAVENCENTRAL_USER')
+    def mavenCentralPassword = localProps != null && localProps.containsKey('mavenCentralPassword') ? localProps.getProperty('mavenCentralPassword') : System.getenv('MAVENCENTRAL_PASSWORD')
 
     def ghUser = localProps != null && localProps.containsKey('gpr.user') ? localProps.getProperty('gpr.user') : System.getenv('GITHUB_ACTOR')
     def ghKey = localProps != null && localProps.containsKey('gpr.key') ? localProps.getProperty('gpr.key') : System.getenv('GITHUB_TOKEN')
@@ -55,13 +55,14 @@ afterEvaluate {
         repositories {
             maven {
                 name = "sonatype"
-                def releaseRepo = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-                def snapshotRepo = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                def releaseRepo = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
+                def snapshotRepo = "https://central.sonatype.com/repository/maven-snapshots/"
                 url = version.endsWith('SNAPSHOT') ? snapshotRepo : releaseRepo
                 credentials {
-                    username = ossrhUsername
-                    password = ossrhPassword
+                    username = mavenCentralUsername
+                    password = mavenCentralPassword
                 }
+                // Temp: Go to https://ossrh-staging-api.central.sonatype.com/swagger-ui/#/ and authenticate with mavenCentralAuthorization, then try to post the submitted repo key
             }
             maven {
                 name = "GHPackages"
