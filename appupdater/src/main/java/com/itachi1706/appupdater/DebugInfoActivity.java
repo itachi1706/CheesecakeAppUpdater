@@ -3,7 +3,9 @@ package com.itachi1706.appupdater;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -13,11 +15,23 @@ public class DebugInfoActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new GeneralPreferenceFragment())
                 .commit();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     /**
      * This fragment shows general preferences only. It is used when the
