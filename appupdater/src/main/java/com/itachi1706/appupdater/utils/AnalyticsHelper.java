@@ -47,17 +47,6 @@ public class AnalyticsHelper {
         return mSharedPreference.contains(ANALYTICS_PREF) && mSharedPreference.getBoolean(ANALYTICS_PREF, mDefaultMode); // Manual opt out
     }
 
-    /**
-     * @deprecated Use {@link #getData(boolean)} instead
-     * @return Analytics data or null if not enabled
-     */
-    @Deprecated(since = "2.4.2", forRemoval = true)
-    @Nullable
-    @WorkerThread
-    public CAAnalytics getData() {
-        return getData(false);
-    }
-
 
     /**
      * Get relevant data if analytics is not disabled. You can choose which of the data to create as custom properties
