@@ -53,8 +53,11 @@ public class DebugInfoActivity extends AppCompatActivity {
             String[] abisArr = Build.SUPPORTED_ABIS;
             // Join abis to a single string seperated by a comma
             StringBuilder abis = new StringBuilder();
-            for (String abi : abisArr) {
-                abis.append(abi).append(", ");
+            if (abisArr != null && abisArr.length > 0) {
+                abis.append(abisArr[0]); // Append the first ABI
+                for (int i = 1; i < abisArr.length; i++) { // Then append ", " and subsequent ABIs
+                    abis.append(", ").append(abisArr[i]);
+                }
             }
             cpu1 = abis.toString();
 
