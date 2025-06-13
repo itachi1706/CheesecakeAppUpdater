@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.4] - 2025-06-13
+### :sparkles: New Features
+- [`d69292b`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/d69292bb5470f586c472cc89eafec4c3fb4a1d3e) - Upgraded to AGP 8.9 *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+### :wrench: Chores
+- [`bf6da7d`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/bf6da7ddb650d40aae442af6a58ce53e61d96388) - **deps**: Upgraded to AGP 8.9.1 *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`afa1458`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/afa1458ee17c9ac8d7aebd325908bee1ef4e8d81) - **deps**: bump stefanzweifel/git-auto-commit-action from 5 to 6 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+
+
 ## [3.0.3] - 2024-07-11
 ### :sparkles: New Features
 - [`01fe733`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/01fe7335ad3ae9ec569d7d4b4f7065cebfdd82a5) - Upgrade to SDK 34 support *(commit by [@itachi1706](https://github.com/itachi1706))*
@@ -66,3 +75,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [3.0.1]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/3.0.0...3.0.1
 [3.0.2]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/3.0.1...3.0.2
 [3.0.3]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/3.0.2...3.0.3
+[3.0.4]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/3.0.3...3.0.4
