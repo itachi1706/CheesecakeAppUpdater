@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2025-06-13
+### :boom: BREAKING CHANGES
+- due to [`7fafa26`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/7fafa26469008e566af084c10ab8409b991ba93e) - Bumped Min SDK to 21 *(commit by [@itachi1706](https://github.com/itachi1706))*:
+
+  Bumped Min SDK to 21
+
+- due to [`008d98a`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/008d98a44635e06640b6e7f58c718751948343e3) - Removed deprecated code *(commit by [@itachi1706](https://github.com/itachi1706))*:
+
+  Removed deprecated code
+
+
+### :sparkles: New Features
+- [`bc3f94a`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/bc3f94a6355685a0f6a89495a28fac6c48cbbdd7) - Compiling against SDK 35 *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`4a7558d`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/4a7558d8f93a5fe66228d9390b3b3c58a6401e05) - Bump sample app as well *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`7fafa26`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/7fafa26469008e566af084c10ab8409b991ba93e) - Bumped Min SDK to 21 *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`57c0929`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/57c09299b0bd93d9eb868e0a9bc7b69d50b19006) - Added back button for Viewing logs and Device Info pages *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`3b29265`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/3b292653bd858deae95001d90fe9dc75da8d2acd) - Removed CPU2 from Device Info *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`a1992ab`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/a1992ab874df3b57fca8f72100c6222a78ea4a2f) - Refactored how we handle back button press prevention for Android 13 *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`008d98a`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/008d98a44635e06640b6e7f58c718751948343e3) - Removed deprecated code *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+### :recycle: Refactors
+- [`bfc28bf`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/bfc28bf050744b8c6a8354ef1d44ccfe9731fe12) - Update appupdater/src/main/java/com/itachi1706/appupdater/DebugInfoActivity.java *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+### :wrench: Chores
+- [`bc9d782`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/bc9d782a4d26d5856ec49f28f979284c1a0e7833) - Removed Lollipop code *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+
 ## [3.0.4] - 2025-06-13
 ### :sparkles: New Features
 - [`d69292b`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/d69292bb5470f586c472cc89eafec4c3fb4a1d3e) - Upgraded to AGP 8.9 *(commit by [@itachi1706](https://github.com/itachi1706))*
@@ -76,3 +103,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [3.0.2]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/3.0.1...3.0.2
 [3.0.3]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/3.0.2...3.0.3
 [3.0.4]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/3.0.3...3.0.4
+[4.0.0]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/3.0.4...4.0.0
