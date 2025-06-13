@@ -89,13 +89,9 @@ public class AnalyticsHelper {
         analytics.setAppVer(version);
         analytics.setSdkString(Build.VERSION.RELEASE);
         analytics.setSdkver(Build.VERSION.SDK_INT);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            String[] support = Build.SUPPORTED_ABIS;
-            if (support.length > 0) {
-                analytics.setdCPU(support[0]);
-            }
-        } else {
-            analytics.setdCPU(Build.CPU_ABI);
+        String[] support = Build.SUPPORTED_ABIS;
+        if (support.length > 0) {
+            analytics.setdCPU(support[0]);
         }
         analytics.setdFingerprint(Build.FINGERPRINT);
         analytics.setdTags(Build.TAGS);
