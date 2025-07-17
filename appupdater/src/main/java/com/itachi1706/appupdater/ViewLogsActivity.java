@@ -41,6 +41,7 @@ public class ViewLogsActivity extends AppCompatActivity {
         ScrollView v = new ScrollView(this);
         logText = new TextView(this);
         setContentView(v);
+        v.setFitsSystemWindows(true);
 
         v.addView(logText);
         logText.setOnLongClickListener(v1 -> {

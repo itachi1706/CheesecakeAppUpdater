@@ -11,6 +11,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.root.fitsSystemWindows = true
         binding.viewSettings.setOnClickListener { startActivity(Intent(this, SettingsActivity::class.java)) }
     }
 }
