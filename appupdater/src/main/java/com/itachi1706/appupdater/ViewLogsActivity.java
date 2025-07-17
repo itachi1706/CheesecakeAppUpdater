@@ -18,6 +18,10 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.itachi1706.appupdater.utils.MigrationHelper;
 import com.itachi1706.helperlib.utils.NotifyUserUtil;
@@ -40,7 +44,13 @@ public class ViewLogsActivity extends AppCompatActivity {
 
         ScrollView v = new ScrollView(this);
         logText = new TextView(this);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(v);
+        ViewCompat.setOnApplyWindowInsetsListener(v, (view, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            view.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         v.addView(logText);
         logText.setOnLongClickListener(v1 -> {

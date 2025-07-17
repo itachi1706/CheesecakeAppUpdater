@@ -234,7 +234,7 @@ public final class AppUpdateChecker extends CoroutineAsyncTask<Void, Void, Strin
         String message = "Latest Version: " + updater.getLatestVersion() + "<br /><br />";
         message += UpdaterHelper.getChangelogStringFromArray(updater.getUpdateMessage());
         if (!mActivity.isFinishing()) {
-            if (fullScreen && Build.VERSION.SDK_INT <= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // U
+            if (fullScreen && Build.VERSION.SDK_INT <= Build.VERSION_CODES.BAKLAVA) {
                 // Launch Full Screen Updater
                 Intent intent = new Intent(mActivity, NewUpdateActivity.class);
                 intent.putExtra("update", gson.toJson(updater));
