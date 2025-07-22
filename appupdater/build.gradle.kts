@@ -3,8 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
-ext.set("version", "4.0.0")
-ext.set("versionCode", 537)
+ext.set("version", "4.0.1")
+ext.set("versionCode", 552)
 
 android {
     namespace = "com.itachi1706.appupdater"
