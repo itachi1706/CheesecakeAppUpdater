@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
     namespace = "com.itachi1706.cheesecakeappupdatersample"
 
     defaultConfig {
         applicationId = "com.itachi1706.cheesecakeappupdatersample"
         minSdk = 21
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
