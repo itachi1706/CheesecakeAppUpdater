@@ -64,7 +64,7 @@ public class ViewLogsActivity extends AppCompatActivity {
             }
             logText.setText(log.toString());
         } catch (IOException e) {
-            Log.e("ViewLogs", "Error viewing app log. Exception: " + e.toString());
+            Log.e("ViewLogs", "Error viewing app log. Exception: " + e);
             e.printStackTrace();
         }
 
