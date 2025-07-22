@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.1] - 2025-07-22
+### :sparkles: New Features
+- [`7d97a12`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/7d97a123875c3fbca41a7c1bc57b9ac934c37418) - Compile against SDK 36 *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`6259f24`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/6259f249a99d899fb0e1263800fa16264bd235cc) - CAUANDLIB-62 Add support for Edge-to-Edge *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`9a7a172`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/9a7a1728276aee2ff5299d66db2de41cf7008345) - Target SDK 36 for sample app *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+### :bug: Bug Fixes
+- [`9c8d47e`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/9c8d47e1dc9a6c7a6703119a699a77c853296136) - Switched to using helper functions for Edge to Edge *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+### :recycle: Refactors
+- [`0c1a845`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/0c1a84556a959103dcc09119e42e74f06a21389e) - Code cleanup *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`2720c0e`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/2720c0ec7b888de4029735402ff3b625f8037249) - Removed some code that is no longer needed *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+### :wrench: Chores
+- [`dc2ebd0`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/dc2ebd09e834612e7e4dad1d91442c9a321300de) - **deps**: Upgrade AGP to 8.11.1 *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`c8351ea`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/c8351eaa9300c645e3a4e009c639c241a36f8fbb) - Remove fitsSystemWindows instead *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+
 ## [4.0.0] - 2025-06-13
 ### :boom: BREAKING CHANGES
 - due to [`7fafa26`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/7fafa26469008e566af084c10ab8409b991ba93e) - Bumped Min SDK to 21 *(commit by [@itachi1706](https://github.com/itachi1706))*:
@@ -104,3 +122,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [3.0.3]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/3.0.2...3.0.3
 [3.0.4]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/3.0.3...3.0.4
 [4.0.0]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/3.0.4...4.0.0
+[4.0.1]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/4.0.0...4.0.1
