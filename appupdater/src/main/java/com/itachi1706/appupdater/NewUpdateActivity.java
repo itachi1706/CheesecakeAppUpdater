@@ -56,18 +56,14 @@ public class NewUpdateActivity extends AppCompatActivity {
 
     NotificationManager manager;
 
-    private String fullUpdateMessage;
     private String updateLink;
     private String filePath;
     private String fileName;
-    private AppUpdateObject update;
     private Intent installIntent;
     private int notificationIcon;
-    private UpdateHandler mHandler;
 
     private NotificationCompat.Builder notification = null;
     private int notificationId;
-    private boolean internalCache = false;
 
     private static final String TAG = "NewUpdateAct";
     private final Random random = new Random();
@@ -77,6 +73,11 @@ public class NewUpdateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String fullUpdateMessage;
+        boolean internalCache;
+        UpdateHandler mHandler;
+        AppUpdateObject update;
 
         preventBackCallback = new OnBackPressedCallback(false) {
             @Override

@@ -10,11 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="13dp"
         android:layout_marginStart="13dp"
         android:layout_marginTop="13dp"
         android:text="@string/what_new"
@@ -25,9 +22,7 @@
         android:id="@+id/tvUpdateMsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/lblWhatsNew"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_alignStart="@+id/lblWhatsNew"
         android:layout_below="@+id/lblWhatsNew"
         android:layout_marginTop="14dp"
@@ -38,9 +33,7 @@
         style="?android:attr/buttonBarButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvUpdateMsg"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_alignStart="@+id/tvUpdateMsg"
         android:layout_below="@+id/tvUpdateMsg"
         android:text="@string/show_more" />
@@ -49,7 +42,6 @@
         android:id="@+id/lblDlUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/lblUnknownSource"
         android:layout_alignStart="@+id/lblUnknownSource"
         android:layout_below="@+id/btnEnableUnknown"
         android:layout_marginTop="8dp"
@@ -63,7 +55,6 @@
         android:text="@string/lbl_unknown_enable"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_below="@+id/btnMore"
-        android:layout_alignLeft="@+id/btnMore"
         android:layout_alignStart="@+id/btnMore"
         android:layout_marginTop="14dp" />
 
@@ -71,7 +62,6 @@
         android:id="@+id/lblInstallUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btnDownload"
         android:layout_alignStart="@+id/btnDownload"
         android:layout_below="@+id/btnDownload"
         android:layout_marginTop="16dp"
@@ -84,7 +74,6 @@
         android:layout_height="wrap_content"
         android:text="@string/enable"
         android:layout_below="@+id/lblUnknownSource"
-        android:layout_alignLeft="@+id/lblUnknownSource"
         android:layout_alignStart="@+id/lblUnknownSource" />
 
     <Button
@@ -93,7 +82,6 @@
         android:layout_height="wrap_content"
         android:text="@string/download"
         android:layout_below="@+id/ll_progress"
-        android:layout_alignLeft="@+id/lblDlUpdate"
         android:layout_alignStart="@+id/lblDlUpdate"
         android:layout_marginTop="12dp" />
 
@@ -101,7 +89,6 @@
         android:id="@+id/btnInstall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/lblInstallUpdate"
         android:layout_alignStart="@+id/lblInstallUpdate"
         android:layout_below="@+id/lblInstallUpdate"
         android:text="@string/install" />
@@ -112,7 +99,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@+id/lblDlUpdate"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:paddingLeft="14dp"
         android:paddingRight="14dp"
@@ -122,8 +108,6 @@
             android:id="@+id/pbProgress"
             style="?android:attr/progressBarStyleHorizontal"
             android:progress="100"
-            android:paddingRight="4dp"
-            android:paddingLeft="0dp"
             android:paddingStart="0dp"
             android:paddingEnd="4dp"
             android:layout_width="wrap_content"
