@@ -5,27 +5,16 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.OnApplyWindowInsetsListener
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.preference.Preference
 import com.itachi1706.appupdater.EasterEggResMultiMusicPrefFragment
 import com.itachi1706.appupdater.SettingsInitializer
+import com.itachi1706.helperlib.helpers.EdgeToEdgeHelper
 
 class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        setContentView(R.layout.settings_activity)
-        val content = findViewById<View>(R.id.settings)
-        ViewCompat.setOnApplyWindowInsetsListener(content) { v: View?, windowInsets: WindowInsetsCompat? ->
-            // Get the insets for the system bars (status bar, navigation bar) and apply padding
-            val insets = windowInsets!!.getInsets(WindowInsetsCompat.Type.systemBars())
-            v!!.setPadding(insets.left, insets.top, insets.right, insets.bottom)
-            WindowInsetsCompat.CONSUMED // Indicate that we have consumed the insets
-        }
+        EdgeToEdgeHelper.setEdgeToEdgeWithContentView(R.id.settings, this, R.layout.settings_activity)
         supportFragmentManager.beginTransaction().replace(R.id.settings, SettingsFragment()).commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }

@@ -4,14 +4,12 @@ package com.itachi1706.appupdater;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.PreferenceFragmentCompat;
+
+import com.itachi1706.helperlib.helpers.EdgeToEdgeHelper;
 
 
 public class DebugInfoActivity extends AppCompatActivity {
@@ -19,14 +17,7 @@ public class DebugInfoActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        View content = findViewById(android.R.id.content);
-        ViewCompat.setOnApplyWindowInsetsListener(content, (v, windowInsets) -> {
-            // Get the insets for the system bars (status bar, navigation bar) and apply padding
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
-
-            return WindowInsetsCompat.CONSUMED; // Indicate that we have consumed the insets
-        });
+        EdgeToEdgeHelper.setViewEdgeToEdge(findViewById(android.R.id.content));
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

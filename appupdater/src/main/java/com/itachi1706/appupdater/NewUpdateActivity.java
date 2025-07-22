@@ -29,10 +29,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.gson.Gson;
 import com.itachi1706.appupdater.internal.DownloadLatestUpdateFullScreen;
@@ -41,6 +37,7 @@ import com.itachi1706.appupdater.object.AppUpdateObject;
 import com.itachi1706.appupdater.utils.UpdaterHelper;
 import com.itachi1706.helperlib.deprecation.HtmlDep;
 import com.itachi1706.helperlib.deprecation.PendingIntentDep;
+import com.itachi1706.helperlib.helpers.EdgeToEdgeHelper;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -115,14 +112,7 @@ public class NewUpdateActivity extends AppCompatActivity {
             finish();
             return;
         }
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        setContentView(R.layout.activity_new_update);
-        View rootView = findViewById(android.R.id.content);
-        ViewCompat.setOnApplyWindowInsetsListener(rootView, (view, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            view.setPadding(insets.left, insets.top, insets.right, insets.bottom);
-            return WindowInsetsCompat.CONSUMED;
-        });
+        EdgeToEdgeHelper.setEdgeToEdgeWithContentView(android.R.id.content, this, R.layout.activity_new_update);
 
         showMore = findViewById(R.id.btnMore);
         enableUnknown = findViewById(R.id.btnEnableUnknown);
@@ -252,12 +242,10 @@ public class NewUpdateActivity extends AppCompatActivity {
             }
         } else {
             try {
-                //noinspection deprecation
                 isNonPlayAppAllowed = Settings.Secure.getInt(getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS) == 1;
             } catch (Settings.SettingNotFoundException e) {
-                e.printStackTrace();
-                // Presume not enabled
                 Log.e(TAG, "Presuming Unknown Sources Unchecked");
+                Log.e(TAG, "Exception: " + e.getMessage());
             }
         }
 
