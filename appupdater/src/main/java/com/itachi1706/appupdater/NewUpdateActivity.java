@@ -36,8 +36,8 @@ import com.itachi1706.appupdater.object.AppUpdateMessageObject;
 import com.itachi1706.appupdater.object.AppUpdateObject;
 import com.itachi1706.appupdater.utils.UpdaterHelper;
 import com.itachi1706.helperlib.deprecation.HtmlDep;
-import com.itachi1706.helperlib.deprecation.PendingIntentDep;
-import com.itachi1706.helperlib.helpers.EdgeToEdgeHelper;
+import com.itachi1706.helperlib.deprecation.PendingIntentDepKt;
+import com.itachi1706.helperlib.helpers.EdgeToEdgeHelperKt;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -113,7 +113,7 @@ public class NewUpdateActivity extends AppCompatActivity {
             finish();
             return;
         }
-        EdgeToEdgeHelper.setEdgeToEdgeWithContentView(android.R.id.content, this, R.layout.activity_new_update);
+        EdgeToEdgeHelperKt.setEdgeToEdgeWithContentView(this, android.R.id.content, R.layout.activity_new_update);
 
         showMore = findViewById(R.id.btnMore);
         enableUnknown = findViewById(R.id.btnEnableUnknown);
@@ -379,7 +379,7 @@ public class NewUpdateActivity extends AppCompatActivity {
                                     except)))
                     .setSmallIcon(notificationIcon).setProgress(0, 0, false);
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateLink));
-            PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(this, 0, intent);
+            PendingIntent pendingIntent = PendingIntentDepKt.getImmutableActivity(this, 0, intent);
             notification.setContentIntent(pendingIntent);
         } else {
             notification.setContentTitle(getString(R.string.notification_title_exception_download))
@@ -389,7 +389,7 @@ public class NewUpdateActivity extends AppCompatActivity {
                             .bigText(getString(R.string.notification_content_download_fail_expanded)))
                     .setSmallIcon(notificationIcon).setProgress(0, 0, false);
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateLink));
-            PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(this, 0, intent);
+            PendingIntent pendingIntent = PendingIntentDepKt.getImmutableActivity(this, 0, intent);
             notification.setContentIntent(pendingIntent);
         }
         manager.notify(notificationId, notification.build());
@@ -408,7 +408,7 @@ public class NewUpdateActivity extends AppCompatActivity {
 
         //Notify User and add intent to invoke update
         if (notification == null) return;
-        PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(this, 0, installIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntentDepKt.getImmutableActivity(this, 0, installIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         notification.setContentTitle(getString(R.string.notification_title_download_success))
                 .setTicker(getString(R.string.notification_ticker_download_success))

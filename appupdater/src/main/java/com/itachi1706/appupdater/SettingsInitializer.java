@@ -23,7 +23,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.itachi1706.appupdater.internal.AppUpdateChecker;
 import com.itachi1706.appupdater.utils.UpdaterHelper;
-import com.itachi1706.helperlib.helpers.PrefHelper;
+import com.itachi1706.helperlib.helpers.PrefHelperKt;
 import com.itachi1706.helperlib.helpers.ValidationHelper;
 import com.itachi1706.helperlib.utils.NotifyUserUtil;
 
@@ -285,7 +285,7 @@ public final class SettingsInitializer {
             return this;
         }
 
-        final SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(mActivity);
+        final SharedPreferences sp = PrefHelperKt.getDefaultSharedPreferencesThreadSafe(mActivity);
         fragment.addPreferencesFromResource(R.xml.pref_updater);
         Preference launchUpdaterPref = fragment.findPreference("launch_updater");
         launchUpdaterPref.setOnPreferenceClickListener(preference -> {

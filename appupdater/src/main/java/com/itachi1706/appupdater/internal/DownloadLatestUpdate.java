@@ -15,7 +15,7 @@ import androidx.core.content.FileProvider;
 
 import com.itachi1706.appupdater.R;
 import com.itachi1706.helperlib.concurrent.CoroutineAsyncTask;
-import com.itachi1706.helperlib.deprecation.PendingIntentDep;
+import com.itachi1706.helperlib.deprecation.PendingIntentDepKt;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -176,7 +176,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
                                         except.getLocalizedMessage())))
                         .setSmallIcon(notificationicon).setProgress(0, 0, false);
                 Intent intent = new Intent(Intent.ACTION_VIEW, link);
-                PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(activity, 0, intent);
+                PendingIntent pendingIntent = PendingIntentDepKt.getImmutableActivity(activity, 0, intent);
                 notification.setContentIntent(pendingIntent);
             } else {
                 notification.setContentTitle(activity.getString(R.string.notification_title_exception_download))
@@ -186,7 +186,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
                                 .bigText(activity.getString(R.string.notification_content_download_fail_expanded)))
                         .setSmallIcon(notificationicon).setProgress(0, 0, false);
                 Intent intent = new Intent(Intent.ACTION_VIEW, link);
-                PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(activity, 0, intent);
+                PendingIntent pendingIntent = PendingIntentDepKt.getImmutableActivity(activity, 0, intent);
                 notification.setContentIntent(pendingIntent);
             }
             manager.notify(notificationID, notification.build());
@@ -214,7 +214,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
         activity.startActivity(intent);
 
         //Notify User and add intent to invoke update
-        PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntentDepKt.getImmutableActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         notification.setContentTitle(activity.getString(R.string.notification_title_download_success))
                 .setTicker(activity.getString(R.string.notification_ticker_download_success))
                 .setContentText(activity.getString(R.string.notification_content_download_success))

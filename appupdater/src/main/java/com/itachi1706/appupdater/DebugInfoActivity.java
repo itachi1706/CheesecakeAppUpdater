@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.itachi1706.helperlib.helpers.EdgeToEdgeHelper;
+import com.itachi1706.helperlib.helpers.EdgeToEdgeHelperKt;
 
 
 public class DebugInfoActivity extends AppCompatActivity {
@@ -17,7 +17,7 @@ public class DebugInfoActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        EdgeToEdgeHelper.setViewEdgeToEdge(findViewById(android.R.id.content));
+        EdgeToEdgeHelperKt.setViewEdgeToEdge(findViewById(android.R.id.content));
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
