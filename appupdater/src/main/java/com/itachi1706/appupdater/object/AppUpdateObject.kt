@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Suppress("unused")
 @Keep
 @Serializable
-class AppUpdateObject {
+data class AppUpdateObject {
     val index: Int = 0
     val id: String? = null
     val packageName: String? = null
