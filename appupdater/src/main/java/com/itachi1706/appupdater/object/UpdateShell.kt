@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Suppress("unused")
 @Keep
 @Serializable
-class UpdateShell {
+data class UpdateShell {
     val msg: AppUpdateObject? = null
     val error: Int = 0
 }
