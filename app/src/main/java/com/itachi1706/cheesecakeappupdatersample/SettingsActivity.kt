@@ -7,13 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import com.itachi1706.appupdater.EasterEggResMultiMusicPrefFragment
 import com.itachi1706.appupdater.SettingsInitializer
-import com.itachi1706.helperlib.temp.EdgeToEdgeHelperTmp
+import com.itachi1706.helperlib.helpers.EdgeToEdgeHelper
 
 class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        EdgeToEdgeHelperTmp.setEdgeToEdgeWithContentView(R.id.settings, this, R.layout.settings_activity)
+        EdgeToEdgeHelper.setEdgeToEdgeWithContentView(R.id.settings, this, R.layout.settings_activity)
         supportFragmentManager.beginTransaction().replace(R.id.settings, SettingsFragment()).commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }

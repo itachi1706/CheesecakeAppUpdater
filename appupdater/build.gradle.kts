@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 ext.set("version", "4.0.1")
@@ -50,9 +51,9 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.core.ktx)
     implementation(libs.preference.ktx)
-    implementation(libs.gson)
     implementation(libs.material)
     implementation(libs.browser)
+    implementation(libs.kotlinx.serialization.json)
     api(libs.helperlib)
 }
 

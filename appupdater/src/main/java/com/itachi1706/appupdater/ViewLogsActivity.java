@@ -20,7 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.itachi1706.appupdater.utils.MigrationHelper;
-import com.itachi1706.helperlib.helpers.EdgeToEdgeHelperKt;
+import com.itachi1706.helperlib.helpers.EdgeToEdgeHelper;
 import com.itachi1706.helperlib.utils.NotifyUserUtil;
 
 import java.io.BufferedReader;
@@ -41,7 +41,7 @@ public class ViewLogsActivity extends AppCompatActivity {
 
         ScrollView v = new ScrollView(this);
         logText = new TextView(this);
-        EdgeToEdgeHelperKt.setEdgeToEdgeWithContentView(this, v);
+        EdgeToEdgeHelper.setEdgeToEdgeWithContentView(v, this);
 
         v.addView(logText);
         logText.setOnLongClickListener(v1 -> {

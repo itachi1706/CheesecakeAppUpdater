@@ -2,7 +2,6 @@ package com.itachi1706.appupdater.internal;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,11 +10,12 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.FileProvider;
 
 import com.itachi1706.appupdater.R;
 import com.itachi1706.helperlib.concurrent.CoroutineAsyncTask;
-import com.itachi1706.helperlib.deprecation.PendingIntentDepKt;
+import com.itachi1706.helperlib.deprecation.PendingIntentDep;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,7 +35,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
     private Uri link;
     private String filePath;
     private final NotificationCompat.Builder notification;
-    private final NotificationManager manager;
+    private final NotificationManagerCompat manager;
     private final int notificationID;
     private final int notificationicon;
     private boolean ready = false;
@@ -55,7 +55,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
      * @param internalCache Whether to save update APK file in internal or external cache
      */
     DownloadLatestUpdate(Activity activity, NotificationCompat.Builder notificationBuilder,
-                         NotificationManager notifyManager, int notifcationID, int notificationicon, boolean internalCache) {
+                         NotificationManagerCompat notifyManager, int notifcationID, int notificationicon, boolean internalCache) {
         super(TASK_NAME);
         this.activity = activity;
         this.notification = notificationBuilder;
@@ -176,7 +176,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
                                         except.getLocalizedMessage())))
                         .setSmallIcon(notificationicon).setProgress(0, 0, false);
                 Intent intent = new Intent(Intent.ACTION_VIEW, link);
-                PendingIntent pendingIntent = PendingIntentDepKt.getImmutableActivity(activity, 0, intent);
+                PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(activity, 0, intent);
                 notification.setContentIntent(pendingIntent);
             } else {
                 notification.setContentTitle(activity.getString(R.string.notification_title_exception_download))
@@ -186,7 +186,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
                                 .bigText(activity.getString(R.string.notification_content_download_fail_expanded)))
                         .setSmallIcon(notificationicon).setProgress(0, 0, false);
                 Intent intent = new Intent(Intent.ACTION_VIEW, link);
-                PendingIntent pendingIntent = PendingIntentDepKt.getImmutableActivity(activity, 0, intent);
+                PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(activity, 0, intent);
                 notification.setContentIntent(pendingIntent);
             }
             manager.notify(notificationID, notification.build());
@@ -214,7 +214,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
         activity.startActivity(intent);
 
         //Notify User and add intent to invoke update
-        PendingIntent pendingIntent = PendingIntentDepKt.getImmutableActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         notification.setContentTitle(activity.getString(R.string.notification_title_download_success))
                 .setTicker(activity.getString(R.string.notification_ticker_download_success))
                 .setContentText(activity.getString(R.string.notification_content_download_success))
