@@ -10,14 +10,15 @@ import kotlinx.serialization.Serializable
 @Suppress("unused")
 @Keep
 @Serializable
-data class AppUpdateMessageObject {
-    val index: Int = 0
-    val id: String? = null
-    val appid: String? = null
-    val updateText: String? = null
-    val dateModified: String? = null
-    val versionCode: String? = null
-    val versionName: String? = null
-    val labels: String = ""
+data class AppUpdateMessageObject(
+    val index: Int = 0,
+    val id: String? = null,
+    val appid: String? = null,
+    val updateText: String? = null,
+    val dateModified: String? = null,
+    val versionCode: String? = null,
+    val versionName: String? = null,
+    val labels: String = "",
     val url: String? = null
+) {
 }
