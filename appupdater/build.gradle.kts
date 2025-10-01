@@ -51,7 +51,6 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.core.ktx)
     implementation(libs.preference.ktx)
-    implementation(libs.gson)
     implementation(libs.material)
     implementation(libs.browser)
     implementation(libs.kotlinx.serialization.json)

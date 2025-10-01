@@ -109,7 +109,7 @@ class NewUpdateActivity : AppCompatActivity() {
             finish()
             return
         }
-        
+
         EdgeToEdgeHelper.setEdgeToEdgeWithContentView(android.R.id.content, this, R.layout.activity_new_update)
 
         showMore = findViewById(R.id.btnMore)
