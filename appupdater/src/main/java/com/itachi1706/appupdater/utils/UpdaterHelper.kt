@@ -91,7 +91,7 @@ object UpdaterHelper {
         } else {
             val json = Json {ignoreUnknownKeys = true}
             val updater = json.decodeFromString<AppUpdateObject>(changelog)
-            if (updater.updateMessage.size == 0) {
+            if (updater.updateMessage.isEmpty()) {
                 AlertDialog.Builder(activity).setTitle("No Changelog")
                     .setMessage("No changelog found. Please check if you can connect to the server or if the changelog is available.")
                     .setPositiveButton(android.R.string.ok, null).show()
