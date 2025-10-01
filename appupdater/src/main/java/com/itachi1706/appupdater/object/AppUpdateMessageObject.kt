@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Suppress("unused")
 @Keep
 @Serializable
-class AppUpdateMessageObject {
+data class AppUpdateMessageObject {
     val index: Int = 0
     val id: String? = null
     val appid: String? = null
