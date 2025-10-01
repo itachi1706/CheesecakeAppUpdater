@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
 import com.itachi1706.appupdater.object.CAAnalytics;
-import com.itachi1706.helperlib.helpers.PrefHelperKt;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 
 /**
  * Created by Kenneth on 17/3/2018.
@@ -30,7 +30,7 @@ public class AnalyticsHelper {
      * @param defaultMode Whether it should be enabled by default or not
      */
     public AnalyticsHelper(Context context, boolean defaultMode) {
-        this.mSharedPreference = PrefHelperKt.getDefaultSharedPreferencesThreadSafe(context);
+        this.mSharedPreference = PrefHelper.getDefaultSharedPreferences(context);
         this.mDefaultMode = defaultMode;
         try {
             this.pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
