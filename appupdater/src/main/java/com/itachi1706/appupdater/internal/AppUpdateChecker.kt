@@ -116,7 +116,7 @@ class AppUpdateChecker @JvmOverloads constructor(
             }
         }
 
-        if (updater.updateMessage.size == 0) {
+        if (updater.updateMessage.isEmpty()) {
             Log.e(TAG, "No Update Messages")
             return
         }
