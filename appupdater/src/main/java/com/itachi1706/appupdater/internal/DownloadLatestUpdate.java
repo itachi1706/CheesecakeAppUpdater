@@ -2,7 +2,6 @@ package com.itachi1706.appupdater.internal;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,6 +10,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.FileProvider;
 
 import com.itachi1706.appupdater.R;
@@ -35,7 +35,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
     private Uri link;
     private String filePath;
     private final NotificationCompat.Builder notification;
-    private final NotificationManager manager;
+    private final NotificationManagerCompat manager;
     private final int notificationID;
     private final int notificationicon;
     private boolean ready = false;
@@ -55,7 +55,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
      * @param internalCache Whether to save update APK file in internal or external cache
      */
     DownloadLatestUpdate(Activity activity, NotificationCompat.Builder notificationBuilder,
-                         NotificationManager notifyManager, int notifcationID, int notificationicon, boolean internalCache) {
+                         NotificationManagerCompat notifyManager, int notifcationID, int notificationicon, boolean internalCache) {
         super(TASK_NAME);
         this.activity = activity;
         this.notification = notificationBuilder;
