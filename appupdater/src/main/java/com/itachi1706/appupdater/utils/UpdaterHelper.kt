@@ -30,7 +30,7 @@ object UpdaterHelper {
             // Get labels
             changelogBuilder.append(" ${obj.labels}</b><br/>")
 
-            changelogBuilder.append(obj.updateText.replace("\r\n", "<br/>").replace("\n", "<br/>"))
+            changelogBuilder.append(obj.updateText?.replace("\r\n", "<br/>")?.replace("\n", "<br/>"))
             changelogBuilder.append("<br/><br/>")
         }
         return changelogBuilder.toString()

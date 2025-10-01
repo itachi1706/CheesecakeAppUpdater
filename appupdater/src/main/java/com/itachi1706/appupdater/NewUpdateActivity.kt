@@ -134,7 +134,7 @@ class NewUpdateActivity : AppCompatActivity() {
             applicationContext.cacheDir
         } else {
             applicationContext.externalCacheDir
-        }).toString() + "${File.separator}downloads${File.separator}"
+        }).toString() + "${File.separator}download${File.separator}"
         fileName = "app-update_${update.latestVersion}.apk"
         val mHandler = UpdateHandler(Looper.getMainLooper(), this)
         notificationId = Random.nextInt()
@@ -166,7 +166,7 @@ class NewUpdateActivity : AppCompatActivity() {
                 Log.d(TAG, lbl)
                 val sb = StringBuilder()
                 if (lbl.isNotEmpty()) sb.append("$lbl<br/>")
-                sb.append(m.updateText.replace("\r\n", "<br/>"))
+                sb.append(m.updateText?.replace("\r\n", "<br/>"))
                 updateMessage = sb.toString()
                 updateLink = m.url
                 break
@@ -218,7 +218,7 @@ class NewUpdateActivity : AppCompatActivity() {
                 .setPositiveButton(R.string.dialog_action_positive_close, null).show()
         }
 
-        updateMessages?.text = fromHtml(fullUpdateMessage)
+        updateMessages?.text = fromHtml(updateMessage)
 
         // Create notification channel required
         val mChannel = NotificationChannelCompat.Builder(UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL,
