@@ -106,8 +106,18 @@ public class ViewLogsActivity extends AppCompatActivity {
         if (e.getCause() instanceof TransactionTooLargeException) {
             // Too large for intent, switching to save text file and sharing it
             Log.w(shareTag, "Application logs too large, converting to file for sharing");
-            File tmp = new File(getCacheDir(), "logs" + File.separator + "log-" + System.currentTimeMillis() + ".txt");
-            if (!saveLogToFile(tmp, logTextFull)) {
+            File tmp;
+            try {
+                File logDirs = new File(getCacheDir(), "logs");
+                //noinspection ResultOfMethodCallIgnored
+                logDirs.mkdirs();
+                tmp = File.createTempFile("log-", ".txt", logDirs);
+                try (FileWriter fw = new FileWriter(tmp)) {
+                    fw.append(logTextFull);
+                    fw.flush();
+                }
+            } catch (IOException e1) {
+                Log.e("ViewLogs", "Error saving log to file. Exception: " + e1.getMessage(), e1);
                 NotifyUserUtil.createShortToast(getApplicationContext(), "Unable to share application logs");
                 return;
             }
@@ -122,24 +132,8 @@ public class ViewLogsActivity extends AppCompatActivity {
             shareFileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Intent chooserIntent = Intent.createChooser(shareFileIntent, "Share Log file for " + getPackageName() + " with");
             startActivity(chooserIntent);
-        } else NotifyUserUtil.createShortToast(getApplicationContext(), "Error sharing application logs: " + e.getCause());
-    }
-
-    private boolean saveLogToFile(File file, String logs) {
-        try {
-            if (file.exists() && !file.delete()) return false;
-            if (file.getParentFile() != null) {
-                //noinspection ResultOfMethodCallIgnored
-                file.getParentFile().mkdirs();
-            }
-            try (FileWriter fw = new FileWriter(file)) {
-                fw.append(logs);
-                fw.flush();
-            }
-            return true;
-        } catch (IOException e) {
-            Log.e("ViewLogs", "Error saving log to file. Exception: " + e.getMessage(), e);
-            return false;
+        } else {
+            NotifyUserUtil.createShortToast(getApplicationContext(), "Error sharing application logs: " + e.getCause());
         }
     }
 
