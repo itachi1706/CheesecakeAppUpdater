@@ -22,6 +22,7 @@ import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.itachi1706.appupdater.internal.AppUpdateChecker;
+import com.itachi1706.appupdater.internal.PathBasedAppUpdateChecker;
 import com.itachi1706.appupdater.utils.UpdaterHelper;
 import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.helperlib.helpers.ValidationHelper;
@@ -48,6 +49,14 @@ public final class SettingsInitializer {
     private boolean internalCache = false;
     private boolean showOnlyForSideload = true;
     private boolean showInstallLocation = true;
+
+    /**
+     * Use path based API (v2) or query based API (v1 - legacy)
+     * This is currently false by default for compatibility reasons.
+     * We will move it to true by default in the next major release
+     * At that time the old method will be deprecated
+     */
+    private boolean usePathBasedApi = false;
 
     private static final String FDROID_REPO = "fdroid";
     private static final String ISSUE_TRACKING = "issuetracker";
@@ -162,6 +171,16 @@ public final class SettingsInitializer {
     public SettingsInitializer setFDroidRepo(boolean enabled, @Nullable String repoURL) {
         this.fdroid = enabled;
         this.fdroidURL = repoURL;
+        return this;
+    }
+
+    /**
+     * Use path based API (v2) or query based API (v1 - legacy)
+     * @param enabled true to use path based API, false to use query based API
+     * @return The instance itself
+     */
+    public SettingsInitializer setPathBasedApi(boolean enabled) {
+        this.usePathBasedApi = enabled;
         return this;
     }
 
@@ -289,7 +308,15 @@ public final class SettingsInitializer {
         fragment.addPreferencesFromResource(R.xml.pref_updater);
         Preference launchUpdaterPref = fragment.findPreference("launch_updater");
         launchUpdaterPref.setOnPreferenceClickListener(preference -> {
-            new AppUpdateChecker(mActivity, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor();
+            if (!usePathBasedApi) {
+                Log.i("SettingsInit", "Using Query Based API for App Update Checker");
+                new AppUpdateChecker(mActivity, sp, notificationIcon, serverUrl, fullscreen, internalCache).executeOnExecutor();
+            } else {
+                Log.i("SettingsInit", "Using Path Based API for App Update Checker");
+                PathBasedAppUpdateChecker chk = new PathBasedAppUpdateChecker(mActivity.getApplicationContext(), sp, false, notificationIcon, "version-changelog", serverUrl, fullscreen, internalCache);
+                chk.checkForUpdates();
+            }
+
             return false;
         });
 
