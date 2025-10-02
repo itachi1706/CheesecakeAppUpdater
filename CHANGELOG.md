@@ -4,6 +4,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.0] - 2025-10-02
+### :sparkles: New Features
+- [`d8d5aa4`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/d8d5aa4bb4aa5c4fb9d77901af77dae79fc9c7c2) - Added Kotlin Serialization libraries *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`2a40e22`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/2a40e228d7d8c19a32dd176efbebd062015ed74b) - Replaced Gson with Kotlin JSON *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`9fb2712`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/9fb27121c71c8da8a9399a76c16f3396a76b9393) - CAUANDLIB-63 Implemented new pathing function *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+### :bug: Bug Fixes
+- [`26fb7eb`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/26fb7ebdb57a5d0948bfba17450ed0d50a3b72a0) - Fixed serialization *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`eb4de05`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/eb4de050a32b8c774f96ae34e8199e6b8b762707) - Resolve data classes lint errors *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+### :wrench: Chores
+- [`04c1846`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/04c1846bb2b3c6c57af28aaa1c33c93167324ce3) - **deps**: bump actions/setup-java from 4 to 5 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`b7575d4`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/b7575d495dcfd805ac056dd1cacb5c75e20c4142) - **deps**: bump actions/checkout from 4 to 5 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`37f190e`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/37f190ecac7641cbd899ca3c2074d33ccb452ac7) - Updated dependency *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`d80f8c9`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/d80f8c9cc56327484f42650c8fbd1c9f60cff865) - Upgraded to rolled back Helperlib *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`c3cf864`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/c3cf86465d87fca475a4c88a90fbbd844a539130) - Removed Gson libraries *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`c9122a6`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/c9122a6d1365ad0b3007381805d8dcfc3a21664a) - Update appupdater/src/main/java/com/itachi1706/appupdater/utils/UpdaterHelper.kt *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`8e6de19`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/8e6de19db52b41f3eb270945cf9af6fd1e99df1c) - Update appupdater/src/main/java/com/itachi1706/appupdater/utils/UpdaterHelper.kt *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`1d83084`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/1d83084325dbdc7da3297b41bf4c4d9d9791c770) - Update appupdater/src/main/java/com/itachi1706/appupdater/internal/AppUpdateChecker.kt *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`a2699b6`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/a2699b6d27b958d145a332ccc67e30bff5191147) - Update appupdater/src/main/java/com/itachi1706/appupdater/object/AppUpdateMessageObject.kt *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`d281dd4`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/d281dd4c0e16457876b8e9ef44f27b762cb68c6b) - Update appupdater/src/main/java/com/itachi1706/appupdater/object/AppUpdateObject.kt *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`8d2b94a`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/8d2b94a6cfdc95e0d503f1387eba114d58b8ba14) - Update appupdater/src/main/java/com/itachi1706/appupdater/object/UpdateShell.kt *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`7c02d47`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/7c02d470cfc321c1dd917c87229edbc62295a5e1) - Resolve all review comments *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`7283c47`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/7283c472c9877f55af818d9135c7a25f6dd9b6be) - Sonar fixes *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`0c18556`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/0c1855642bf45a551c4157d92d0fbfc6c365c49a) - More sonar fixes *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`f50dd30`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/f50dd3056811d6c83a171b427b5af5a709c58480) - Streamlined log file *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`027773a`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/027773a3fa828f7726275e05337fe975b9c5ada8) - Remove from library *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`12b8cde`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/12b8cde65f2e85f703fab453a5103406895c7428) - Forgot to remove this file as well *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+
 ## [4.0.1] - 2025-07-22
 ### :sparkles: New Features
 - [`7d97a12`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/7d97a123875c3fbca41a7c1bc57b9ac934c37418) - Compile against SDK 36 *(commit by [@itachi1706](https://github.com/itachi1706))*
@@ -123,3 +153,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [3.0.4]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/3.0.3...3.0.4
 [4.0.0]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/3.0.4...4.0.0
 [4.0.1]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/4.0.0...4.0.1
+[4.1.0]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/4.0.1...4.1.0
