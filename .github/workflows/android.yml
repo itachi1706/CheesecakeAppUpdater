@@ -53,8 +53,10 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ github.token }}
       - name: (Temp) Curl to stage the release # Temporary until Gradle maven-publish supports Maven Central
+        env:
+            MVN_AUTH: ${{ secrets.MAVENCENTRALAUTHORIZATION }}
         run: |
-          curl -i -X 'POST' 'https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/com.itachi1706?publishing_type=user_managed' -H 'accept: */*' -H 'Authorization: Bearer ${{ secrets.MAVENCENTRALAUTHORIZATION }}' -d ''
+          curl -i -X 'POST' 'https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/com.itachi1706?publishing_type=user_managed' -H 'accept: */*' -H 'Authorization: Bearer $MVN_AUTH' -d ''
           echo "Completed. Please go to https://central.sonatype.com/publishing/deployments to verify the release"
       - name: Move Library AAR file to main folder
         run: mv ./\appupdater/build/outputs/aar/appupdater-release.aar ./appupdater-release.aar
