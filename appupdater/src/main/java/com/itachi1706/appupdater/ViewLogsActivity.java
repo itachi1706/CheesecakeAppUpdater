@@ -64,8 +64,7 @@ public class ViewLogsActivity extends AppCompatActivity {
             }
             logText.setText(log.toString());
         } catch (IOException e) {
-            Log.e("ViewLogs", "Error viewing app log. Exception: " + e);
-            e.printStackTrace();
+            Log.e("ViewLogs", "Error viewing app log. Exception: " + e.getMessage(), e);
         }
 
         DisplayMetrics displayMetrics = MigrationHelper.getDisplayMetricsCompat(this, getWindowManager());
@@ -92,49 +91,49 @@ public class ViewLogsActivity extends AppCompatActivity {
             try {
                 startActivity(Intent.createChooser(shareTextIntent, "Share Logs for " + getPackageName() + " with"));
             } catch (RuntimeException e) {
-                if (e.getCause() instanceof TransactionTooLargeException) {
-                    // Too large for intent, switching to save text file and sharing it
-                    Log.w(SHARE_TAG, "Application logs too large, converting to file for sharing");
-                    File tmp = new File(getCacheDir(), "logs" + File.separator + "log-" + System.currentTimeMillis() + ".txt");
-                    if (!saveLogToFile(tmp, logTextFull)) {
-                        NotifyUserUtil.createShortToast(getApplicationContext(), "Unable to share application logs");
-                        return true;
-                    }
-                    Log.i(SHARE_TAG, "Temp log file created. Generating uri for share");
-                    Intent shareFileIntent = new Intent(Intent.ACTION_SEND);
-                    shareFileIntent.setType("text/plain");
-                    Uri logUri = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) ? FileProvider.getUriForFile(getBaseContext(),
-                            getApplicationContext().getPackageName() + ".appupdater.provider", tmp) : Uri.fromFile(tmp);
-                    Log.d(SHARE_TAG, "Uri generated: " + logUri);
-                    shareFileIntent.putExtra(Intent.EXTRA_SUBJECT, "Application Logcat for " + getPackageName());
-                    shareFileIntent.putExtra(Intent.EXTRA_STREAM, logUri);
-                    shareFileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    Intent chooserIntent = Intent.createChooser(shareFileIntent, "Share Log file for " + getPackageName() + " with");
-                    startActivity(chooserIntent);
-                } else NotifyUserUtil.createShortToast(getApplicationContext(), "Error sharing application logs: " + e.getCause());
+                handleShareLogException(e, logTextFull, SHARE_TAG);
             }
             return true;
         } else if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
-        } else return super.onOptionsItemSelected(item);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
-    private boolean saveLogToFile(File file, String logs) {
-        try {
-            if (file.exists() && !file.delete()) return false;
-            if (file.getParentFile() != null) {
+    private void handleShareLogException(RuntimeException e, String logTextFull, String shareTag) {
+        if (e.getCause() instanceof TransactionTooLargeException) {
+            // Too large for intent, switching to save text file and sharing it
+            Log.w(shareTag, "Application logs too large, converting to file for sharing");
+            File tmp;
+            try {
+                File logDirs = new File(getCacheDir(), "logs");
                 //noinspection ResultOfMethodCallIgnored
-                file.getParentFile().mkdirs();
+                logDirs.mkdirs();
+                tmp = File.createTempFile("log-", ".txt", logDirs);
+                try (FileWriter fw = new FileWriter(tmp)) {
+                    fw.append(logTextFull);
+                    fw.flush();
+                }
+            } catch (IOException e1) {
+                Log.e("ViewLogs", "Error saving log to file. Exception: " + e1.getMessage(), e1);
+                NotifyUserUtil.createShortToast(getApplicationContext(), "Unable to share application logs");
+                return;
             }
-            try (FileWriter fw = new FileWriter(file)) {
-                fw.append(logs);
-                fw.flush();
-            }
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+            Log.i(shareTag, "Temp log file created. Generating uri for share");
+            Intent shareFileIntent = new Intent(Intent.ACTION_SEND);
+            shareFileIntent.setType("text/plain");
+            Uri logUri = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) ? FileProvider.getUriForFile(getBaseContext(),
+                    getApplicationContext().getPackageName() + ".appupdater.provider", tmp) : Uri.fromFile(tmp);
+            Log.d(shareTag, "Uri generated: " + logUri);
+            shareFileIntent.putExtra(Intent.EXTRA_SUBJECT, "Application Logcat for " + getPackageName());
+            shareFileIntent.putExtra(Intent.EXTRA_STREAM, logUri);
+            shareFileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Intent chooserIntent = Intent.createChooser(shareFileIntent, "Share Log file for " + getPackageName() + " with");
+            startActivity(chooserIntent);
+        } else {
+            NotifyUserUtil.createShortToast(getApplicationContext(), "Error sharing application logs: " + e.getCause());
         }
     }
 
