@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.itachi1706.appupdater.internal.AppUpdateChecker;
+import com.itachi1706.appupdater.internal.PathBasedAppUpdateChecker;
 import com.itachi1706.appupdater.utils.UpdaterHelper;
 import com.itachi1706.helperlib.helpers.ValidationHelper;
 
@@ -25,6 +26,14 @@ public final class AppUpdateInitializer {
     private boolean internalCache = false;
     private boolean wifiCheck = false;
     private boolean checkSideload = true;
+
+    /**
+     * Use path based API (v2) or query based API (v1 - legacy)
+     * This is currently false by default for compatibility reasons.
+     * We will move it to true by default in the next major release
+     * At that time the old method will be deprecated
+     */
+    private boolean usePathBasedApi = false;
 
     public AppUpdateInitializer(Activity mActivity, SharedPreferences sp, int mNotificationIcon, String baseURL) {
         this.mActivityRef = new WeakReference<>(mActivity);
@@ -66,6 +75,16 @@ public final class AppUpdateInitializer {
     }
 
     /**
+     * Use path based API (v2) or query based API (v1 - legacy)
+     * @param enabled true to use path based API, false to use query based API
+     * @return The instance itself
+     */
+    public AppUpdateInitializer setPathBasedApi(boolean enabled) {
+        this.usePathBasedApi = enabled;
+        return this;
+    }
+
+    /**
      * Sets a flag to allow checking for updates only on sideloaded installs
      * This is true by default to prevent Google Play from flagging it
      * @param onlyCheckSideloaded true to only check sideloaded APKs, false otherwise
@@ -96,6 +115,14 @@ public final class AppUpdateInitializer {
 
     private void update(Activity mActivity) {
         Log.i("Updater", "Checking for new updates...");
-        new AppUpdateChecker(mActivity, sp, true, mNotificationIcon, baseURL, fullscreen, internalCache).executeOnExecutor();
+        if (!usePathBasedApi) {
+            Log.d("Updater", "Using Query Based API");
+            new AppUpdateChecker(mActivity, sp, true, mNotificationIcon, baseURL, fullscreen, internalCache).executeOnExecutor();
+        } else {
+            Log.d("Updater", "Using Path Based API");
+            PathBasedAppUpdateChecker chk = new PathBasedAppUpdateChecker(mActivity.getApplicationContext(), sp, true, mNotificationIcon,
+                    "version-changelog", baseURL, fullscreen, internalCache);
+            chk.checkForUpdates();
+        }
     }
 }

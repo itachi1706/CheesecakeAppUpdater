@@ -3,12 +3,14 @@ package com.itachi1706.appupdater.internal;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.FileProvider;
@@ -30,7 +32,7 @@ import java.net.URL;
  * NOT FOR NON LIBRARY USE
  */
 public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float, Boolean> {
-    private final Activity activity;
+    private final Context context; 
     private Exception except = null;
     private Uri link;
     private String filePath;
@@ -57,7 +59,27 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
     DownloadLatestUpdate(Activity activity, NotificationCompat.Builder notificationBuilder,
                          NotificationManagerCompat notifyManager, int notifcationID, int notificationicon, boolean internalCache) {
         super(TASK_NAME);
-        this.activity = activity;
+        this.context = activity.getApplicationContext();
+        this.notification = notificationBuilder;
+        this.manager = notifyManager;
+        this.notificationID = notifcationID;
+        this.notificationicon = notificationicon;
+        this.internalCache = internalCache;
+    }
+
+    /**
+     * Called from AppUpdateChecker if the user decides to invoke anything
+     * @param context Application Context
+     * @param notificationBuilder Notification Builder Object
+     * @param notifyManager Notification Manager Object
+     * @param notifcationID Notification ID
+     * @param notificationicon Icon for notification
+     * @param internalCache Whether to save update APK file in internal or external cache
+     */
+    DownloadLatestUpdate(Context context, NotificationCompat.Builder notificationBuilder,
+                         NotificationManagerCompat notifyManager, int notifcationID, int notificationicon, boolean internalCache) {
+        super(TASK_NAME);
+        this.context = context;
         this.notification = notificationBuilder;
         this.manager = notifyManager;
         this.notificationID = notifcationID;
@@ -66,7 +88,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
     }
 
     private boolean deleteLegacyDownloads() {
-        File folder = new File(activity.getApplicationContext().getExternalFilesDir(null) + File.separator + "download" + File.separator);
+        File folder = new File(context.getExternalFilesDir(null) + File.separator + "download" + File.separator);
         if (!folder.exists()) return true; // Dont have the folder so its deleted
         File file = new File(folder, APK_NAME); // Try to find file to delete
         return !file.exists() || file.delete(); // Tries to delete file if it exists
@@ -86,7 +108,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
             Log.d(TAG_NAME_UP, "Starting Download...");
 
             if (!deleteLegacyDownloads()) Log.e(TAG_NAME_UP, "Unable to delete legacy file. Skipping file deletion"); // Delete old downloaded apk
-            filePath = ((this.internalCache) ? activity.getApplicationContext().getCacheDir() : activity.getApplicationContext().getExternalCacheDir()) + File.separator + "download" + File.separator;
+            filePath = ((this.internalCache) ? context.getCacheDir() : context.getExternalCacheDir()) + File.separator + "download" + File.separator;
             Log.i(TAG_NAME_UP, "Downloading to " + filePath);
             File folder = new File(filePath);
             if (!folder.exists() && (!tryAndCreateFolder(folder))) {
@@ -167,26 +189,26 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
             //Update failed, update notification
             if (except != null) {
                 //Print Exception
-                notification.setContentTitle(activity.getString(R.string.notification_title_exception_download))
-                        .setTicker(activity.getString(R.string.notification_ticker_download_fail))
-                        .setContentText(activity.getString(R.string.notification_content_download_fail_exception,
+                notification.setContentTitle(context.getString(R.string.notification_title_exception_download))
+                        .setTicker(context.getString(R.string.notification_ticker_download_fail))
+                        .setContentText(context.getString(R.string.notification_content_download_fail_exception,
                                 except.getLocalizedMessage()))
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(activity.getString(R.string.notification_content_download_fail_exception_expanded,
+                                .bigText(context.getString(R.string.notification_content_download_fail_exception_expanded,
                                         except.getLocalizedMessage())))
                         .setSmallIcon(notificationicon).setProgress(0, 0, false);
                 Intent intent = new Intent(Intent.ACTION_VIEW, link);
-                PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(activity, 0, intent);
+                PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(context, 0, intent);
                 notification.setContentIntent(pendingIntent);
             } else {
-                notification.setContentTitle(activity.getString(R.string.notification_title_exception_download))
-                        .setTicker(activity.getString(R.string.notification_ticker_download_fail))
-                        .setContentText(activity.getString(R.string.notification_content_download_fail))
+                notification.setContentTitle(context.getString(R.string.notification_title_exception_download))
+                        .setTicker(context.getString(R.string.notification_ticker_download_fail))
+                        .setContentText(context.getString(R.string.notification_content_download_fail))
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(activity.getString(R.string.notification_content_download_fail_expanded)))
+                                .bigText(context.getString(R.string.notification_content_download_fail_expanded)))
                         .setSmallIcon(notificationicon).setProgress(0, 0, false);
                 Intent intent = new Intent(Intent.ACTION_VIEW, link);
-                PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(activity, 0, intent);
+                PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(context, 0, intent);
                 notification.setContentIntent(pendingIntent);
             }
             manager.notify(notificationID, notification.build());
@@ -201,8 +223,8 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
         Log.d("DEBUG", "Retrieving from " + file.getAbsolutePath());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Log.i(TAG_NAME_DL, "Post-Nougat: Using new Content URI method");
-            Log.i(TAG_NAME_DL, "Invoking Content Provider " + activity.getApplicationContext().getPackageName() + ".appupdater.provider");
-            Uri contentUri = FileProvider.getUriForFile(activity.getBaseContext(), activity.getApplicationContext().getPackageName()
+            Log.i(TAG_NAME_DL, "Invoking Content Provider " + context.getPackageName() + ".appupdater.provider");
+            Uri contentUri = FileProvider.getUriForFile(context, context.getPackageName()
                     + ".appupdater.provider", file);
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -211,13 +233,13 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
             intent.setDataAndType(Uri.fromFile(new File(filePath + APK_NAME)), "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
-        activity.startActivity(intent);
+        context.startActivity(intent);
 
         //Notify User and add intent to invoke update
-        PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notification.setContentTitle(activity.getString(R.string.notification_title_download_success))
-                .setTicker(activity.getString(R.string.notification_ticker_download_success))
-                .setContentText(activity.getString(R.string.notification_content_download_success))
+        PendingIntent pendingIntent = PendingIntentDep.getImmutableActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notification.setContentTitle(context.getString(R.string.notification_title_download_success))
+                .setTicker(context.getString(R.string.notification_ticker_download_success))
+                .setContentText(context.getString(R.string.notification_content_download_success))
                 .setAutoCancel(true).setContentIntent(pendingIntent)
                 .setSmallIcon(notificationicon).setProgress(0, 0, false);
         manager.notify(notificationID, notification.build());
