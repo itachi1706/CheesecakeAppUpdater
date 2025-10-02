@@ -121,7 +121,7 @@ public final class AppUpdateInitializer {
         } else {
             Log.d("Updater", "Using Path Based API");
             PathBasedAppUpdateChecker chk = new PathBasedAppUpdateChecker(mActivity.getApplicationContext(), sp, true, mNotificationIcon,
-                    baseURL, fullscreen, internalCache);
+                    "version-changelog", baseURL, fullscreen, internalCache);
             chk.checkForUpdates();
         }
     }

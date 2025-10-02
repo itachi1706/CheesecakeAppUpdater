@@ -88,7 +88,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
     }
 
     private boolean deleteLegacyDownloads() {
-        File folder = new File(context.getApplicationContext().getExternalFilesDir(null) + File.separator + "download" + File.separator);
+        File folder = new File(context.getExternalFilesDir(null) + File.separator + "download" + File.separator);
         if (!folder.exists()) return true; // Dont have the folder so its deleted
         File file = new File(folder, APK_NAME); // Try to find file to delete
         return !file.exists() || file.delete(); // Tries to delete file if it exists
@@ -108,7 +108,7 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
             Log.d(TAG_NAME_UP, "Starting Download...");
 
             if (!deleteLegacyDownloads()) Log.e(TAG_NAME_UP, "Unable to delete legacy file. Skipping file deletion"); // Delete old downloaded apk
-            filePath = ((this.internalCache) ? context.getApplicationContext().getCacheDir() : context.getApplicationContext().getExternalCacheDir()) + File.separator + "download" + File.separator;
+            filePath = ((this.internalCache) ? context.getCacheDir() : context.getExternalCacheDir()) + File.separator + "download" + File.separator;
             Log.i(TAG_NAME_UP, "Downloading to " + filePath);
             File folder = new File(filePath);
             if (!folder.exists() && (!tryAndCreateFolder(folder))) {
@@ -223,8 +223,8 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
         Log.d("DEBUG", "Retrieving from " + file.getAbsolutePath());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Log.i(TAG_NAME_DL, "Post-Nougat: Using new Content URI method");
-            Log.i(TAG_NAME_DL, "Invoking Content Provider " + context.getApplicationContext().getPackageName() + ".appupdater.provider");
-            Uri contentUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName()
+            Log.i(TAG_NAME_DL, "Invoking Content Provider " + context.getPackageName() + ".appupdater.provider");
+            Uri contentUri = FileProvider.getUriForFile(context, context.getPackageName()
                     + ".appupdater.provider", file);
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);

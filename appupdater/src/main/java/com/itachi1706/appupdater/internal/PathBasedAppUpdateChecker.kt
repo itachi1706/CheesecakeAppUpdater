@@ -39,8 +39,8 @@ class PathBasedAppUpdateChecker @JvmOverloads constructor(
         const val TAG = "Updater-Path"
     }
 
-    var localVersionCode = 0L
-    var packageName = ""
+    private var localVersionCode = 0L
+    private var packageName = ""
 
     fun checkForUpdates() {
         val pInfo = try {
@@ -49,7 +49,7 @@ class PathBasedAppUpdateChecker @JvmOverloads constructor(
                 0
             )
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e(TAG, "Failed to get package info: Error: ${e.message}", e)
             null
         }
         packageName = pInfo?.packageName ?: ""
@@ -99,36 +99,35 @@ class PathBasedAppUpdateChecker @JvmOverloads constructor(
     }
 
     private fun processRestOfData(serverVersion: Long, json: Json, updater: AppUpdateObject) {
-        Log.i(AppUpdateChecker.Companion.TAG, "Server: $serverVersion | Local: $localVersionCode")
+        Log.i(TAG, "Server: $serverVersion | Local: $localVersionCode")
 
         sp.edit { putString(changelogLocation, json.encodeToString(updater)) }
 
         if (localVersionCode >= serverVersion) {
-            Log.i(AppUpdateChecker.Companion.TAG, "App is on the latest version")
+            Log.i(TAG, "App is on the latest version")
             if (!isMain) {
                 AlertDialog.Builder(context).setTitle(R.string.dialog_title_latest_update)
                     .setMessage(R.string.dialog_message_latest_update)
-                    .setNegativeButton(R.string.dialog_action_positive_close, null).show();
+                    .setNegativeButton(R.string.dialog_action_positive_close, null).show()
                 return
             }
         }
 
         if (updater.updateMessage.isEmpty()) {
-            Log.e(AppUpdateChecker.Companion.TAG, "No Update Messages")
+            Log.e(TAG, "No Update Messages")
             return
         }
 
         // Parse Message
         val updateLink = updater.updateMessage[0].url
-        Log.i(
-            AppUpdateChecker.Companion.TAG,
-            "Update Found! Generating update message. Latest Version: ${updater.latestVersion} (${updater.latestVersionCode})"
-        )
-        var message = "Latest Version: ${updater.latestVersion}<br/><br/>"
-        message += UpdaterHelper.getChangelogStringFromArray(updater.updateMessage)
+        Log.i(TAG, "Update Found! Generating update message. Latest Version: ${updater.latestVersion} (${updater.latestVersionCode})")
+        val message = buildString {
+            append("Latest Version: ${updater.latestVersion}<br/><br/>")
+            append(UpdaterHelper.getChangelogStringFromArray(updater.updateMessage))
+        }
         if (fullScreen && Build.VERSION.SDK_INT <= Build.VERSION_CODES.BAKLAVA) {
             // Full screen updater
-            Log.d(AppUpdateChecker.Companion.TAG, "Launching Full Screen Updater Activity")
+            Log.d(TAG, "Launching Full Screen Updater Activity")
             val intent = Intent(context, NewUpdateActivity::class.java)
             intent.apply {
                 putExtra("update", json.encodeToString(updater))
@@ -141,15 +140,9 @@ class PathBasedAppUpdateChecker @JvmOverloads constructor(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 try {
                     context.packageManager.canRequestPackageInstalls()
-                    Log.i(
-                        AppUpdateChecker.Companion.TAG,
-                        "REQUEST_INSTALL_PACKAGES granted, showing dialog"
-                    )
-                } catch (e: SecurityException) {
-                    Log.e(
-                        AppUpdateChecker.Companion.TAG,
-                        "REQUEST_INSTALL_PACKAGES not granted, showing warning dialog"
-                    )
+                    Log.i(TAG, "REQUEST_INSTALL_PACKAGES granted, showing dialog")
+                } catch (_: SecurityException) {
+                    Log.e(TAG, "REQUEST_INSTALL_PACKAGES not granted, showing warning dialog")
                     AlertDialog.Builder(context)
                         .setTitle(R.string.no_perm_package_install_dialog_title)
                         .setMessage(R.string.no_perm_package_install_dialog_message)
@@ -164,7 +157,7 @@ class PathBasedAppUpdateChecker @JvmOverloads constructor(
                 .setNegativeButton("Don't Update", null)
                 .setPositiveButton("Update") { _, _ ->
                     val manager = NotificationManagerCompat.from(context)
-                    // Create noticication channel
+                    // Create notification channel
                     val mChannel = NotificationChannelCompat.Builder(
                         UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL,
                         NotificationManagerCompat.IMPORTANCE_LOW
