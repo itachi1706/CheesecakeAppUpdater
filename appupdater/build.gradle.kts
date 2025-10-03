@@ -4,8 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-ext.set("version", "4.1.0")
-ext.set("versionCode", 606)
+ext.set("version", "4.1.1")
+ext.set("versionCode", 700)
 
 android {
     namespace = "com.itachi1706.appupdater"
