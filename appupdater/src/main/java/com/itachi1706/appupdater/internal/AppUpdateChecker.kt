@@ -112,8 +112,8 @@ class AppUpdateChecker @JvmOverloads constructor(
                         mActivity.getString(R.string.toast_message_latest_update)
                     )
                 }
-                return
             }
+            return
         }
 
         if (updater.updateMessage.isEmpty()) {

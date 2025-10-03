@@ -109,8 +109,8 @@ class PathBasedAppUpdateChecker @JvmOverloads constructor(
                 AlertDialog.Builder(context).setTitle(R.string.dialog_title_latest_update)
                     .setMessage(R.string.dialog_message_latest_update)
                     .setNegativeButton(R.string.dialog_action_positive_close, null).show()
-                return
             }
+            return
         }
 
         if (updater.updateMessage.isEmpty()) {
