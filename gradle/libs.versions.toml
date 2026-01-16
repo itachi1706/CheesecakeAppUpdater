@@ -1,5 +1,5 @@
 [versions]
-android-library = "8.13.0"
+android-library = "9.0.0"
 android-application = "8.13.0"
 browser = "1.9.0"
 constraintlayout = "2.2.1"
