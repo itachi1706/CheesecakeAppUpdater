@@ -55,7 +55,7 @@ public class DebugInfoActivity extends AppCompatActivity {
             String cpu1;
 
             String[] abisArr = Build.SUPPORTED_ABIS;
-            // Join abis to a single string seperated by a comma
+            // Join abis to a single string separated by a comma
             StringBuilder abis = new StringBuilder();
             if (abisArr != null && abisArr.length > 0) {
                 abis.append(abisArr[0]); // Append the first ABI

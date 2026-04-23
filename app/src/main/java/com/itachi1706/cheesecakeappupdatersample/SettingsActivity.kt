@@ -23,7 +23,6 @@ class SettingsActivity : AppCompatActivity() {
 
     class SettingsFragment : EasterEggResMultiMusicPrefFragment() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-//            val serverUri = "https://api.itachi1706.com/api/appupdatechecker.php?action=androidretrievedata&packagename="
             val serverUri = "https://api.itachi1706.com/v1"
             SettingsInitializer().setFullscreen(true).explodeUpdaterSettings(activity, R.mipmap.ic_launcher, serverUri,
                 resources.getString(R.string.link_legacy), resources.getString(R.string.link_updates), this)
@@ -37,7 +36,6 @@ class SettingsActivity : AppCompatActivity() {
                 }
                 .setIssueTracking(true, "https://itachi1706.atlassian.net/browse/CAUANDLIB")
                 .setBugReporting(true, "https://itachi1706.atlassian.net/servicedesk/customer/portal/3")
-                .setFDroidRepo(true, "fdroidrepos://fdroid.itachi1706.com/repo?fingerprint=B321F84BCAC7C296CF50923FF98965B11019BB5FD30C8B8F3A39F2F649AF9691")
                 .setPathBasedApi(true)
                 .explodeInfoSettings(this)
             super.init()

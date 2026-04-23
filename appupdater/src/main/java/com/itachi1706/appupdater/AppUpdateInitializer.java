@@ -27,6 +27,8 @@ public final class AppUpdateInitializer {
     private boolean wifiCheck = false;
     private boolean checkSideload = true;
 
+    private static final String TAG = "Updater";
+
     /**
      * Use path based API (v2) or query based API (v1 - legacy)
      * This is currently false by default for compatibility reasons.
@@ -101,7 +103,7 @@ public final class AppUpdateInitializer {
             return; // NO-OP
         }
         if (this.checkSideload && (!ValidationHelper.checkSideloaded(mActivity))) {
-            Log.i("Updater", "App is not sideloaded, disabling update check");
+            Log.i(TAG, "App is not sideloaded, disabling update check");
             return;
         }
         if (this.wifiCheck) {
@@ -114,12 +116,12 @@ public final class AppUpdateInitializer {
     }
 
     private void update(Activity mActivity) {
-        Log.i("Updater", "Checking for new updates...");
+        Log.i(TAG, "Checking for new updates...");
         if (!usePathBasedApi) {
-            Log.d("Updater", "Using Query Based API");
+            Log.d(TAG, "Using Query Based API");
             new AppUpdateChecker(mActivity, sp, true, mNotificationIcon, baseURL, fullscreen, internalCache).executeOnExecutor();
         } else {
-            Log.d("Updater", "Using Path Based API");
+            Log.d(TAG, "Using Path Based API");
             PathBasedAppUpdateChecker chk = new PathBasedAppUpdateChecker(mActivity.getApplicationContext(), sp, true, mNotificationIcon,
                     "version-changelog", baseURL, fullscreen, internalCache);
             chk.checkForUpdates();

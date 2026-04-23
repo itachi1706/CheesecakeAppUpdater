@@ -43,14 +43,13 @@ class AppUpdateChecker @JvmOverloads constructor(
 
     override fun doInBackground(vararg params: Unit?): String {
         var url = this.baseUrl
-        var packageName = ""
-        var pInfo = try {
+        val pInfo = try {
             mActivity.applicationContext.packageManager.getPackageInfo(mActivity.applicationContext.packageName, 0)
         } catch (e: Exception) {
             e.printStackTrace()
             null
         }
-        packageName = pInfo?.packageName ?: ""
+        val packageName = pInfo?.packageName ?: ""
         url += packageName
         val urlHelper = URLHelper(url)
 
@@ -69,7 +68,7 @@ class AppUpdateChecker @JvmOverloads constructor(
         val json = Json { ignoreUnknownKeys = true }
         val shell = try {
             json.decodeFromString<UpdateShell>(result ?: "")
-        } catch (e: SerializationException) {
+        } catch (_: SerializationException) {
             Log.e(TAG, "Invalid JSON, might not have internet")
             return
         }
@@ -142,7 +141,7 @@ class AppUpdateChecker @JvmOverloads constructor(
                     try {
                         mActivity.packageManager.canRequestPackageInstalls()
                         Log.i(TAG, "REQUEST_INSTALL_PACKAGES granted, showing dialog")
-                    } catch (e: SecurityException) {
+                    } catch (_: SecurityException) {
                         Log.e(TAG, "REQUEST_INSTALL_PACKAGES not granted, showing warning dialog")
                         AlertDialog.Builder(mActivity)
                             .setTitle(R.string.no_perm_package_install_dialog_title)
@@ -176,7 +175,13 @@ class AppUpdateChecker @JvmOverloads constructor(
                             .setOngoing(true)
                             .setTicker(mActivity.getString(R.string.notification_ticker_starting_download))
                         val notificationId = Random.nextInt()
-                        manager.notify(notificationId, mBuilder.build())
+                        // Check if allowed to post notification
+                        if (manager.areNotificationsEnabled()) {
+                            manager.notify(notificationId, mBuilder.build())
+                        } else {
+                            Log.e(TAG, "Notifications are not enabled, cannot show download progress")
+                            createShortToast(mActivity.applicationContext, mActivity.getString(R.string.download_started_no_notification))
+                        }
                         DownloadLatestUpdate(mActivity, mBuilder, manager, notificationId, notificationIcon, internalCache).executeOnExecutor(updateLink)
                     }.show()
             }
