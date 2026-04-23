@@ -78,7 +78,11 @@ class NewUpdateActivity : AppCompatActivity() {
 
         preventBackCallback = object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() {
-                Toast.makeText(applicationContext, "Unable to exit while updating", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Unable to exit while updating",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -110,7 +114,11 @@ class NewUpdateActivity : AppCompatActivity() {
             return
         }
 
-        EdgeToEdgeHelper.setEdgeToEdgeWithContentView(android.R.id.content, this, R.layout.activity_new_update)
+        EdgeToEdgeHelper.setEdgeToEdgeWithContentView(
+            android.R.id.content,
+            this,
+            R.layout.activity_new_update
+        )
 
         showMore = findViewById(R.id.btnMore)
         enableUnknown = findViewById(R.id.btnEnableUnknown)
@@ -146,16 +154,32 @@ class NewUpdateActivity : AppCompatActivity() {
         Log.d(TAG, "Retrieving from ${file.absolutePath}")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Log.i(TAG, "Post-Nougat: Using new Content URI Method")
-            Log.i(TAG, "Invoking Content Provider ${applicationContext.packageName}.appupdater.provider")
-            val contentUri = FileProvider.getUriForFile(baseContext, "${applicationContext.packageName}.appupdater.provider", file)
+            Log.i(
+                TAG,
+                "Invoking Content Provider ${applicationContext.packageName}.appupdater.provider"
+            )
+            val contentUri = FileProvider.getUriForFile(
+                baseContext,
+                "${applicationContext.packageName}.appupdater.provider",
+                file
+            )
             installIntent?.setDataAndType(contentUri, "application/vnd.android.package-archive")
             installIntent?.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
         } else {
             Log.i(TAG, "Pre-Nougat: Fallbacking to old method as they dont support contenturis")
-            installIntent?.setDataAndType(Uri.fromFile(File(filePath + fileName)), "application/vnd.android.package-archive")
+            installIntent?.setDataAndType(
+                Uri.fromFile(File(filePath + fileName)),
+                "application/vnd.android.package-archive"
+            )
             installIntent?.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
 
+        // Setup Screen
+        setupScreen(internalCache, update, mHandler)
+
+    }
+
+    private fun setupScreen(internalCache: Boolean, update: AppUpdateObject, mHandler: Handler) {
         // Parse update
         val fullUpdateMessage = UpdaterHelper.getChangelogStringFromArray(update.updateMessage)
         var updateMessage = "No Update Message"
@@ -173,7 +197,7 @@ class NewUpdateActivity : AppCompatActivity() {
             }
         }
 
-        // Setup Screen
+        // Setup screen elements
         enableUnknown?.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startActivity(Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES))
@@ -198,15 +222,20 @@ class NewUpdateActivity : AppCompatActivity() {
                 }
             }
 
-            notification = NotificationCompat.Builder(applicationContext, UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL)
+            notification = NotificationCompat.Builder(
+                applicationContext,
+                UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL
+            )
             notification!!.setContentTitle(applicationContext.getString(R.string.notification_title_starting_download))
                 .setContentText(applicationContext.getString(R.string.notification_content_starting_download))
                 .setProgress(0, 0, true).setSmallIcon(notificationIcon).setAutoCancel(false)
                 .setOngoing(true)
                 .setTicker(applicationContext.getString(R.string.notification_ticker_starting_download))
             sendNotification()
-            DownloadLatestUpdateFullScreen(if (internalCache) applicationContext.cacheDir else applicationContext.externalCacheDir,
-                update.latestVersion, mHandler).executeOnExecutor(updateLink)
+            DownloadLatestUpdateFullScreen(
+                if (internalCache) applicationContext.cacheDir else applicationContext.externalCacheDir,
+                update.latestVersion, mHandler
+            ).executeOnExecutor(updateLink)
         }
         install?.setOnClickListener {
             Log.d(TAG, "Invoking Package Manager")
@@ -221,8 +250,10 @@ class NewUpdateActivity : AppCompatActivity() {
         updateMessages?.text = fromHtml(updateMessage)
 
         // Create notification channel required
-        val mChannel = NotificationChannelCompat.Builder(UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL,
-            NotificationManagerCompat.IMPORTANCE_LOW)
+        val mChannel = NotificationChannelCompat.Builder(
+            UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL,
+            NotificationManagerCompat.IMPORTANCE_LOW
+        )
             .setName("App Updates")
             .setDescription("Notifications when updating the application")
             .setLightsEnabled(true)
@@ -239,7 +270,7 @@ class NewUpdateActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             try {
                 isNonPlayAppAllowed = packageManager.canRequestPackageInstalls()
-            } catch (e: SecurityException) {
+            } catch (_: SecurityException) {
                 Log.e(TAG, "REQUEST_INSTALL_PACKAGES permission not granted")
                 AlertDialog.Builder(this).setTitle(R.string.no_perm_package_install_dialog_title)
                     .setMessage(R.string.no_perm_package_install_dialog_message)
@@ -291,8 +322,10 @@ class NewUpdateActivity : AppCompatActivity() {
         }
     }
 
-    inner class UpdateHandler(mainLooper: Looper, activity: NewUpdateActivity?) : Handler(mainLooper) {
-        var mActivity: WeakReference<NewUpdateActivity?> = WeakReference<NewUpdateActivity?>(activity)
+    class UpdateHandler(mainLooper: Looper, activity: NewUpdateActivity?) :
+        Handler(mainLooper) {
+        var mActivity: WeakReference<NewUpdateActivity?> =
+            WeakReference<NewUpdateActivity?>(activity)
 
         override fun handleMessage(msg: Message) {
             val activity = mActivity.get()
@@ -342,20 +375,23 @@ class NewUpdateActivity : AppCompatActivity() {
     private fun updateNotification(ready: Boolean, vararg progress: Float?) {
         if (notification == null) return
         if (ready) {
+            val p0 = progress[0] ?: 0f // NOSONAR - Invalid as its from a vararg and might not exist
+            val p1 = progress[1] ?: 0f // NOSONAR - Invalid as its from a vararg and might not exist
+            val p2 = progress[2] ?: 0f // NOSONAR - Invalid as its from a vararg and might not exist
+
             // Downloading new update... (Download Size / Total Size)
-            val downloadMB = (progress[1]!! / 1024.0 / 1024.0 * 100).roundToInt().toDouble() / 100
-            val downloadSizeMB =
-                (progress[2]!! / 1024.0 / 1024.0 * 100).roundToInt().toDouble() / 100
-            notification?.setProgress(100, progress[0]!!.roundToInt(), false)
+            val downloadMB = (p1 / 1024.0 / 1024.0 * 100).roundToInt().toDouble() / 100
+            val downloadSizeMB = (p2 / 1024.0 / 1024.0 * 100).roundToInt().toDouble() / 100
+            notification?.setProgress(100, p0.roundToInt(), false)
             progressBar?.isIndeterminate = false
-            progressBar?.progress = progress[0]!!.roundToInt()
+            progressBar?.progress = p0.roundToInt()
             progressText?.text = getString(R.string.progress, progress[0])
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 // Nougat onwards will have a new progressText style
-                notification?.setSubText(progress[0]?.roundToInt().toString() + "%")
+                notification?.setSubText(p0.roundToInt().toString() + "%")
                 notification?.setContentText("(" + downloadMB + "/" + downloadSizeMB + "MB)")
             } else {
-                notification?.setContentInfo(progress[0]?.roundToInt().toString() + "%")
+                notification?.setContentInfo(p0.roundToInt().toString() + "%")
                 notification?.setContentText("Downloading new update... (" + downloadMB + "/" + downloadSizeMB + "MB)")
             }
         } else {
@@ -366,9 +402,9 @@ class NewUpdateActivity : AppCompatActivity() {
 
     @SuppressLint("UnspecifiedImmutableFlag")
     private fun handleFailure(except: String) {
-        // Reenable download button, reset progressText bar, delete failed download
-        download!!.setVisibility(View.VISIBLE)
-        progressLayout!!.setVisibility(View.GONE)
+        // Re-enable download button, reset progressText bar, delete failed download
+        download!!.visibility = View.VISIBLE
+        progressLayout!!.visibility = View.GONE
         install!!.setEnabled(false)
         download!!.setText(R.string.download)
         deleteDownload()
@@ -438,9 +474,11 @@ class NewUpdateActivity : AppCompatActivity() {
     }
 
     private fun sendNotification() {
+        val currentNotification = notification ?: return
+
         manager?.let {
             if (it.areNotificationsEnabled()) {
-                it.notify(notificationId, notification!!.build())
+                it.notify(notificationId, currentNotification.build())
             }
         }
     }

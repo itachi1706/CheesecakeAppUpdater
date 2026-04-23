@@ -43,14 +43,13 @@ class AppUpdateChecker @JvmOverloads constructor(
 
     override fun doInBackground(vararg params: Unit?): String {
         var url = this.baseUrl
-        var packageName = ""
-        var pInfo = try {
+        val pInfo = try {
             mActivity.applicationContext.packageManager.getPackageInfo(mActivity.applicationContext.packageName, 0)
         } catch (e: Exception) {
             e.printStackTrace()
             null
         }
-        packageName = pInfo?.packageName ?: ""
+        val packageName = pInfo?.packageName ?: ""
         url += packageName
         val urlHelper = URLHelper(url)
 
@@ -69,7 +68,7 @@ class AppUpdateChecker @JvmOverloads constructor(
         val json = Json { ignoreUnknownKeys = true }
         val shell = try {
             json.decodeFromString<UpdateShell>(result ?: "")
-        } catch (e: SerializationException) {
+        } catch (_: SerializationException) {
             Log.e(TAG, "Invalid JSON, might not have internet")
             return
         }
@@ -142,7 +141,7 @@ class AppUpdateChecker @JvmOverloads constructor(
                     try {
                         mActivity.packageManager.canRequestPackageInstalls()
                         Log.i(TAG, "REQUEST_INSTALL_PACKAGES granted, showing dialog")
-                    } catch (e: SecurityException) {
+                    } catch (_: SecurityException) {
                         Log.e(TAG, "REQUEST_INSTALL_PACKAGES not granted, showing warning dialog")
                         AlertDialog.Builder(mActivity)
                             .setTitle(R.string.no_perm_package_install_dialog_title)

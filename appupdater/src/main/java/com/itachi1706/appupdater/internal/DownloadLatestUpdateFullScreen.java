@@ -98,7 +98,7 @@ public final class DownloadLatestUpdateFullScreen extends CoroutineAsyncTask<Str
             return true;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG_NAME_UP, "Error Downloading Update. Exception: " + e.getMessage(), e);
             except = e;
             return false;
         }

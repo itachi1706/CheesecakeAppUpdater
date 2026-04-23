@@ -72,6 +72,7 @@ public final class SettingsInitializer {
 
     /**
      * Sets if we should use the fullscreen version of the updater
+     *
      * @param fullscreen To use full screen updater activity or not
      * @return This object instance for chaining
      */
@@ -83,6 +84,7 @@ public final class SettingsInitializer {
     /**
      * Sets a flag to hide fields if app is not sideloaded
      * This is true by default to prevent Google Play from flagging it
+     *
      * @param showOnlyForSideload Do not show any field if app is not sideloaded
      * @return The object to allow chaining
      */
@@ -93,6 +95,7 @@ public final class SettingsInitializer {
 
     /**
      * Sets if we should use the fullscreen version of the updater
+     *
      * @param showInstallLocation Only show install location field if app is sideloaded
      * @return This object instance for chaining
      */
@@ -116,7 +119,8 @@ public final class SettingsInitializer {
 
     /**
      * To enable the Open Source License Preference where on user click, you could use to show the licenses in your app
-     * @param enabled Whether to show the preference or not
+     *
+     * @param enabled  Whether to show the preference or not
      * @param listener Action to do when user clicks on the app (null for no action)
      * @return The instance itself
      */
@@ -128,7 +132,8 @@ public final class SettingsInitializer {
 
     /**
      * To enable the About App Preference where on user click, you could use to display information about the application
-     * @param enabled Whether to show the preference or not
+     *
+     * @param enabled  Whether to show the preference or not
      * @param listener Action to do when user clicks on the app (null for no action)
      * @return The instance itself
      */
@@ -140,8 +145,9 @@ public final class SettingsInitializer {
 
     /**
      * To enable the Issue Tracker Preference where on user click, you could link to your issue tracker instead
+     *
      * @param enabled Whether to show the preference or not
-     * @param url Link to the issue tracker
+     * @param url     Link to the issue tracker
      * @return The instance itself
      */
     public SettingsInitializer setIssueTracking(boolean enabled, @Nullable String url) {
@@ -152,8 +158,9 @@ public final class SettingsInitializer {
 
     /**
      * To enable the Bug Report Preference where on user click, you could link to your bug report/feature request/support page
+     *
      * @param enabled Whether to show the preference or not
-     * @param url Link to the bug report page (support page)
+     * @param url     Link to the bug report page (support page)
      * @return The instance itself
      */
     public SettingsInitializer setBugReporting(boolean enabled, @Nullable String url) {
@@ -164,6 +171,7 @@ public final class SettingsInitializer {
 
     /**
      * To enable the F-Droid Preference where on user click, you could go to F-Droid repo
+     *
      * @param enabled Whether to show the preference or not
      * @param repoURL Link to the F-Droid Repository
      * @return The instance itself
@@ -176,6 +184,7 @@ public final class SettingsInitializer {
 
     /**
      * Use path based API (v2) or query based API (v1 - legacy)
+     *
      * @param enabled true to use path based API, false to use query based API
      * @return The instance itself
      */
@@ -187,6 +196,7 @@ public final class SettingsInitializer {
     /**
      * Explodes general info settings in your preference fragment
      * NOTE: This is automatically exploded if you use a EasterEgg fragment
+     *
      * @param fragment The preference fragment compat object
      * @return The instance itself
      */
@@ -204,7 +214,7 @@ public final class SettingsInitializer {
             packName = pInfo.packageName;
             versionCode = PackageInfoCompat.getLongVersionCode(pInfo);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            Log.e("Settings-PkgMgr", "Package not found when trying to get version and package name. Error: " + e.getMessage(), e);
         }
         androidx.preference.Preference verPref = fragment.findPreference("view_app_version");
         verPref.setSummary(version + "-b" + versionCode);
@@ -228,14 +238,16 @@ public final class SettingsInitializer {
 
     @SuppressWarnings("ConstantConditions")
     private void prefCheckToggle(boolean check, String pref, PreferenceFragmentCompat fragment, Preference.OnPreferenceClickListener listener) {
-        if (!check) ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(pref));
+        if (!check)
+            ((PreferenceCategory) fragment.findPreference(CATEGORY_INFO)).removePreference(fragment.findPreference(pref));
         else fragment.findPreference(pref).setOnPreferenceClickListener(listener);
     }
 
     private void prefCheckToggle(boolean check, String pref, PreferenceFragmentCompat fragment, String url) {
         prefCheckToggle(check, pref, fragment, preference -> {
             boolean result = launchCustomTabs(fragment.getContext(), url);
-            if (!result) NotifyUserUtil.createShortToast(fragment.getContext(), "F-Droid is not installed on this device!");
+            if (!result && fragment.getContext() != null)
+                NotifyUserUtil.createShortToast(fragment.getContext(), "F-Droid is not installed on this device!");
             return result;
         });
     }
@@ -254,6 +266,7 @@ public final class SettingsInitializer {
     }
 
     private CustomTabsIntent customTabsIntent = null;
+
     private CustomTabsIntent getCustomTabs(Context context) {
         if (customTabsIntent == null) {
             TypedValue colorTmp = new TypedValue();
@@ -272,22 +285,30 @@ public final class SettingsInitializer {
         String installLocation;
         String location = ValidationHelper.getInstallLocation(mActivity);
         switch (ValidationHelper.checkInstallLocation(mActivity)) {
-            case ValidationHelper.GOOGLE_PLAY: installLocation = "Google Play (" + location + ")"; break;
-            case ValidationHelper.AMAZON: installLocation = "Amazon App Store (" + location + ")"; break;
+            case ValidationHelper.GOOGLE_PLAY:
+                installLocation = "Google Play (" + location + ")";
+                break;
+            case ValidationHelper.AMAZON:
+                installLocation = "Amazon App Store (" + location + ")";
+                break;
             case ValidationHelper.SIDELOAD:
-            default: installLocation = "Sideloaded"; if (location != null) installLocation += " (" + location + ")"; break;
+            default:
+                installLocation = "Sideloaded";
+                if (location != null) installLocation += " (" + location + ")";
+                break;
         }
         return installLocation;
     }
 
     /**
      * Explodes updater settings in your preference fragment
-     * @param activity The activity object
+     *
+     * @param activity         The activity object
      * @param notificationIcon Notification Icon Resource ID
-     * @param serverUrl Base Server URL
-     * @param legacyLink URL To full list of app downloads
-     * @param updateLink URL to latest app download
-     * @param fragment The preference fragment compat object
+     * @param serverUrl        Base Server URL
+     * @param legacyLink       URL To full list of app downloads
+     * @param updateLink       URL to latest app download
+     * @param fragment         The preference fragment compat object
      * @return The instance of this object for chaining
      */
     @SuppressWarnings("ConstantConditions")
