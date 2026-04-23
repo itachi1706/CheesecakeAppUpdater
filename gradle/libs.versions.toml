@@ -1,6 +1,6 @@
 [versions]
-android-library = "8.13.0"
-android-application = "8.13.0"
+android-library = "8.13.2"
+android-application = "8.13.2"
 browser = "1.9.0"
 constraintlayout = "2.2.1"
 core-ktx = "1.17.0"
@@ -31,6 +31,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 [plugins]
 android-library = { id = "com.android.library", version.ref = "android-library" }
 android-application = { id = "com.android.application", version.ref = "android-application" }
+jacoco = { id = "jacoco" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }

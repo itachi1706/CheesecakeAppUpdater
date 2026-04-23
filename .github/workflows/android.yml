@@ -17,6 +17,8 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Run Unit Tests
+      run: ./gradlew test
     - name: Generate Local Properties file
       env:
         GPG_SIGN_KEY: ${{ secrets.GPG_SIGNING_KEY }}
