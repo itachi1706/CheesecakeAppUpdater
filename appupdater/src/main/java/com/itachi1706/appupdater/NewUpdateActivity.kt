@@ -343,13 +343,13 @@ class NewUpdateActivity : AppCompatActivity() {
         if (notification == null) return
         if (ready) {
             // Downloading new update... (Download Size / Total Size)
-            val downloadMB = Math.round((progress[1]!! / 1024.0 / 1024.0 * 100)).toDouble() / 100
+            val downloadMB = (progress[1]!! / 1024.0 / 1024.0 * 100).roundToInt().toDouble() / 100
             val downloadSizeMB =
-                Math.round((progress[2]!! / 1024.0 / 1024.0 * 100)).toDouble() / 100
-            notification?.setProgress(100, Math.round(progress[0]!!), false)
-            progressBar?.setIndeterminate(false)
-            progressBar?.setProgress(Math.round(progress[0]!!))
-            progressText?.setText(getString(R.string.progress, progress[0]))
+                (progress[2]!! / 1024.0 / 1024.0 * 100).roundToInt().toDouble() / 100
+            notification?.setProgress(100, progress[0]!!.roundToInt(), false)
+            progressBar?.isIndeterminate = false
+            progressBar?.progress = progress[0]!!.roundToInt()
+            progressText?.text = getString(R.string.progress, progress[0])
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 // Nougat onwards will have a new progressText style
                 notification?.setSubText(progress[0]?.roundToInt().toString() + "%")
