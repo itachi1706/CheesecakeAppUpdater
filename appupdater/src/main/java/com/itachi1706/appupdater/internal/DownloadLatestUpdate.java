@@ -171,7 +171,9 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
         } else {
             notification.setProgress(0, 0, true);
         }
-        manager.notify(notificationID, notification.build());
+        if (manager.areNotificationsEnabled()) {
+            manager.notify(notificationID, notification.build());
+        }
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
@@ -242,7 +244,9 @@ public final class DownloadLatestUpdate extends CoroutineAsyncTask<String, Float
                 .setContentText(context.getString(R.string.notification_content_download_success))
                 .setAutoCancel(true).setContentIntent(pendingIntent)
                 .setSmallIcon(notificationicon).setProgress(0, 0, false);
-        manager.notify(notificationID, notification.build());
+        if (manager.areNotificationsEnabled()) {
+            manager.notify(notificationID, notification.build());
+        }
     }
 
     private boolean tryAndCreateFolder(File folder) {

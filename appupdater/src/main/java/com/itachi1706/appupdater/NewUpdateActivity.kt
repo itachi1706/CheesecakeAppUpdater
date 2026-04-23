@@ -204,7 +204,7 @@ class NewUpdateActivity : AppCompatActivity() {
                 .setProgress(0, 0, true).setSmallIcon(notificationIcon).setAutoCancel(false)
                 .setOngoing(true)
                 .setTicker(applicationContext.getString(R.string.notification_ticker_starting_download))
-            manager?.notify(notificationId, notification!!.build())
+            sendNotification()
             DownloadLatestUpdateFullScreen(if (internalCache) applicationContext.cacheDir else applicationContext.externalCacheDir,
                 update.latestVersion, mHandler).executeOnExecutor(updateLink)
         }
@@ -361,7 +361,7 @@ class NewUpdateActivity : AppCompatActivity() {
         } else {
             notification!!.setProgress(0, 0, true)
         }
-        manager!!.notify(notificationId, notification!!.build())
+        sendNotification()
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
@@ -410,7 +410,7 @@ class NewUpdateActivity : AppCompatActivity() {
             val pendingIntent = getImmutableActivity(this, 0, intent)
             notification!!.setContentIntent(pendingIntent)
         }
-        manager!!.notify(notificationId, notification!!.build())
+        sendNotification()
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
@@ -434,7 +434,15 @@ class NewUpdateActivity : AppCompatActivity() {
             .setContentText(getString(R.string.notification_content_download_success))
             .setAutoCancel(true).setContentIntent(pendingIntent)
             .setSmallIcon(notificationIcon).setProgress(0, 0, false)
-        manager!!.notify(notificationId, notification!!.build())
+        sendNotification()
+    }
+
+    private fun sendNotification() {
+        manager?.let {
+            if (it.areNotificationsEnabled()) {
+                it.notify(notificationId, notification!!.build())
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

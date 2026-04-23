@@ -176,7 +176,13 @@ class AppUpdateChecker @JvmOverloads constructor(
                             .setOngoing(true)
                             .setTicker(mActivity.getString(R.string.notification_ticker_starting_download))
                         val notificationId = Random.nextInt()
-                        manager.notify(notificationId, mBuilder.build())
+                        // Check if allowed to post notification
+                        if (manager.areNotificationsEnabled()) {
+                            manager.notify(notificationId, mBuilder.build())
+                        } else {
+                            Log.e(TAG, "Notifications are not enabled, cannot show download progress")
+                            createShortToast(mActivity.applicationContext, mActivity.getString(R.string.download_started_no_notification))
+                        }
                         DownloadLatestUpdate(mActivity, mBuilder, manager, notificationId, notificationIcon, internalCache).executeOnExecutor(updateLink)
                     }.show()
             }

@@ -180,7 +180,9 @@ class PathBasedAppUpdateChecker @JvmOverloads constructor(
                         .setOngoing(true)
                         .setTicker(context.getString(R.string.notification_ticker_starting_download))
                     val notificationId = Random.nextInt()
-                    manager.notify(notificationId, mBuilder.build())
+                    if (manager.areNotificationsEnabled()) {
+                        manager.notify(notificationId, mBuilder.build())
+                    }
                     DownloadLatestUpdate(
                         context,
                         mBuilder,
