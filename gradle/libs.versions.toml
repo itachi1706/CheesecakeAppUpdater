@@ -13,7 +13,7 @@ kotlin = "2.2.21"
 kotlinxSerializationJson = "1.10.0"
 material = "1.13.0"
 preference-ktx = "1.2.1"
-sonarqube = "7.2.2.6593"
+sonarqube = "7.2.3.7755"
 
 [libraries]
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
