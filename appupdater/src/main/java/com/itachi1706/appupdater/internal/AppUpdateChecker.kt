@@ -13,6 +13,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.edit
 import com.itachi1706.appupdater.NewUpdateActivity
 import com.itachi1706.appupdater.R
+import com.itachi1706.appupdater.`object`.AppUpdateObject
 import com.itachi1706.appupdater.`object`.UpdateShell
 import com.itachi1706.appupdater.utils.MigrationHelper
 import com.itachi1706.appupdater.utils.UpdaterHelper
@@ -44,7 +45,10 @@ class AppUpdateChecker @JvmOverloads constructor(
     override fun doInBackground(vararg params: Unit?): String {
         var url = this.baseUrl
         val pInfo = try {
-            mActivity.applicationContext.packageManager.getPackageInfo(mActivity.applicationContext.packageName, 0)
+            mActivity.applicationContext.packageManager.getPackageInfo(
+                mActivity.applicationContext.packageName,
+                0
+            )
         } catch (e: Exception) {
             e.printStackTrace()
             null
@@ -78,11 +82,13 @@ class AppUpdateChecker @JvmOverloads constructor(
             return
         }
 
-        val updater = shell.msg
-        if (updater == null) return
+        val updater = shell.msg ?: return
 
         val pInfo = try {
-            mActivity.applicationContext.packageManager.getPackageInfo(mActivity.applicationContext.packageName, 0)
+            mActivity.applicationContext.packageManager.getPackageInfo(
+                mActivity.applicationContext.packageName,
+                0
+            )
         } catch (e: Exception) {
             e.printStackTrace()
             null
@@ -121,8 +127,15 @@ class AppUpdateChecker @JvmOverloads constructor(
         }
 
         // Parse Message
+        parseMessage(updater, json)
+    }
+
+    private fun parseMessage(updater: AppUpdateObject, json: Json) {
         val updateLink = updater.updateMessage[0].url
-        Log.i(TAG, "Update Found! Generating update message. Latest Version: ${updater.latestVersion} (${updater.latestVersionCode})")
+        Log.i(
+            TAG,
+            "Update Found! Generating update message. Latest Version: ${updater.latestVersion} (${updater.latestVersionCode})"
+        )
         var message = "Latest Version: ${updater.latestVersion}<br/><br/>"
         message += UpdaterHelper.getChangelogStringFromArray(updater.updateMessage)
         if (!mActivity.isFinishing) {
@@ -137,19 +150,8 @@ class AppUpdateChecker @JvmOverloads constructor(
                 }
                 mActivity.startActivity(intent)
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    try {
-                        mActivity.packageManager.canRequestPackageInstalls()
-                        Log.i(TAG, "REQUEST_INSTALL_PACKAGES granted, showing dialog")
-                    } catch (_: SecurityException) {
-                        Log.e(TAG, "REQUEST_INSTALL_PACKAGES not granted, showing warning dialog")
-                        AlertDialog.Builder(mActivity)
-                            .setTitle(R.string.no_perm_package_install_dialog_title)
-                            .setMessage(R.string.no_perm_package_install_dialog_message)
-                            .setPositiveButton(R.string.dialog_action_positive_close, null)
-                            .show()
-                        return
-                    }
+                if (!requestInstallPermsIfAllowed()) {
+                    return
                 }
 
                 AlertDialog.Builder(mActivity).setTitle("A New Update is Available!")
@@ -157,9 +159,11 @@ class AppUpdateChecker @JvmOverloads constructor(
                     .setNegativeButton("Don't Update", null)
                     .setPositiveButton("Update") { _, _ ->
                         val manager = NotificationManagerCompat.from(mActivity)
-                        // Create noticication channel
-                        val mChannel = NotificationChannelCompat.Builder(UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL,
-                            NotificationManagerCompat.IMPORTANCE_LOW)
+                        // Create notification channel
+                        val mChannel = NotificationChannelCompat.Builder(
+                            UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL,
+                            NotificationManagerCompat.IMPORTANCE_LOW
+                        )
                             .setName("App Updates")
                             .setDescription("Notifications when updating the application")
                             .setLightsEnabled(true)
@@ -167,7 +171,10 @@ class AppUpdateChecker @JvmOverloads constructor(
                             .build()
                         manager.createNotificationChannel(mChannel)
 
-                        val mBuilder = NotificationCompat.Builder(mActivity, UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL)
+                        val mBuilder = NotificationCompat.Builder(
+                            mActivity,
+                            UpdaterHelper.UPDATER_NOTIFICATION_CHANNEL
+                        )
                             .setContentTitle(mActivity.getString(R.string.notification_title_starting_download))
                             .setContentText(mActivity.getString(R.string.notification_content_starting_download))
                             .setProgress(0, 0, true).setSmallIcon(notificationIcon)
@@ -179,12 +186,43 @@ class AppUpdateChecker @JvmOverloads constructor(
                         if (manager.areNotificationsEnabled()) {
                             manager.notify(notificationId, mBuilder.build())
                         } else {
-                            Log.e(TAG, "Notifications are not enabled, cannot show download progress")
-                            createShortToast(mActivity.applicationContext, mActivity.getString(R.string.download_started_no_notification))
+                            Log.e(
+                                TAG,
+                                "Notifications are not enabled, cannot show download progress"
+                            )
+                            createShortToast(
+                                mActivity.applicationContext,
+                                mActivity.getString(R.string.download_started_no_notification)
+                            )
                         }
-                        DownloadLatestUpdate(mActivity, mBuilder, manager, notificationId, notificationIcon, internalCache).executeOnExecutor(updateLink)
+                        DownloadLatestUpdate(
+                            mActivity,
+                            mBuilder,
+                            manager,
+                            notificationId,
+                            notificationIcon,
+                            internalCache
+                        ).executeOnExecutor(updateLink)
                     }.show()
             }
         }
+    }
+
+    private fun requestInstallPermsIfAllowed(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                mActivity.packageManager.canRequestPackageInstalls()
+                Log.i(TAG, "REQUEST_INSTALL_PACKAGES granted, showing dialog")
+            } catch (_: SecurityException) {
+                Log.e(TAG, "REQUEST_INSTALL_PACKAGES not granted, showing warning dialog")
+                AlertDialog.Builder(mActivity)
+                    .setTitle(R.string.no_perm_package_install_dialog_title)
+                    .setMessage(R.string.no_perm_package_install_dialog_message)
+                    .setPositiveButton(R.string.dialog_action_positive_close, null)
+                    .show()
+                return false
+            }
+        }
+        return true
     }
 }
