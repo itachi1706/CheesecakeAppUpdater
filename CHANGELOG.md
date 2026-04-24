@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.0] - 2026-04-24
+### :boom: BREAKING CHANGES
+- due to [`a990c51`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/a990c51b2b9eaa1c2b81dd3de532b3cc62da6300) - Bump dependencies *(commit by [@itachi1706](https://github.com/itachi1706))*:
+
+  Bump dependencies
+
+
+### :sparkles: New Features
+- [`ae033c7`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/ae033c7c0986f308d23fa8546f0938aae507c4c0) - Migrate to Material 3 *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+### :bug: Bug Fixes
+- [`7348389`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/734838976f9855222a00b4adfb9e776528f4b04f) - Resolved some notification permissions issues *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`489720b`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/489720bc17755f4f1430da26e16cf8924749a6eb) - Theme colors *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+### :recycle: Refactors
+- [`a79e1af`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/a79e1af3eb912d5a78619a7364e90ca1785c4e5c) - Resolve some sonar errors *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`ea3800b`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/ea3800b4532bc7387c73e1735405e3317dfe25d4) - Sonar fixes *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+### :white_check_mark: Tests
+- [`fa45b5c`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/fa45b5cfff3e0604a1e35736e41e6afa08551e57) - Added some pure unit tests *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+### :wrench: Chores
+- [`f460849`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/f460849c4c68a9c4dca6f4d031d11a1795b0ec86) - **deps**: bump stefanzweifel/git-auto-commit-action from 6 to 7 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`1ec10b5`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/1ec10b5276e4ae54d04949a0e03c071bea345abe) - **deps**: bump actions/checkout from 5 to 6 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`f84903d`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/f84903d49d2b5121643ee670c02edf45e41ec5b7) - **deps**: bump actions/cache from 4 to 5 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`e5b9887`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/e5b988753fcb996600860f73806afe957b06d074) - **deps**: bump softprops/action-gh-release from 2 to 3 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`a990c51`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/a990c51b2b9eaa1c2b81dd3de532b3cc62da6300) - **deps**: Bump dependencies *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`b2dbc5c`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/b2dbc5c982f92f6b22072d8030c7abbe8d0e71ed) - **deps**: bump requarks/changelog-action from 1.10.2 to 1.10.3 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`643f72f`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/643f72fa832956731978121e4064658bf4db5cca) - Remove unnecessary colors *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`f024c3c`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/f024c3c42496c345d1a961fac39639149eb0bb65) - Remove extra line *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`a586309`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/a5863090dec8ed7a0fbbfa6a52178dcc73333b1b) - Remove from night as well *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+
 ## [4.1.1] - 2025-10-03
 ### :bug: Bug Fixes
 - [`4a84623`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/4a846233a06a636403fe7710dba291d0524426b4) - Fixed updater showing even on latest version *(commit by [@itachi1706](https://github.com/itachi1706))*
@@ -160,3 +193,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [4.0.1]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/4.0.0...4.0.1
 [4.1.0]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/4.0.1...4.1.0
 [4.1.1]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/4.1.0...4.1.1
+[4.2.0]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/4.1.1...4.2.0
