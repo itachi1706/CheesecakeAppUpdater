@@ -6,8 +6,9 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-ext.set("version", "4.1.1")
-ext.set("versionCode", 700)
+ext.set("version", "4.2.0")
+ext.set("versionCode", 701)
+// we increment by 1 until commit count past the versionCode. 4.1.1 had a wrong code
 
 android {
     namespace = "com.itachi1706.appupdater"
