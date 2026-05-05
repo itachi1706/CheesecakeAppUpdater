@@ -2,8 +2,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.sonarqube)
 }
 
 ext.set("version", "4.2.0")
@@ -62,6 +62,13 @@ dependencies {
     implementation(libs.browser)
     implementation(libs.kotlinx.serialization.json)
     api(libs.helperlib)
+}
+
+sonarqube {
+    properties {
+        property("sonar.android.variant", "debug")
+        property("sonar.java.binaries", "build")
+    }
 }
 
 apply(from = "./publish.gradle")

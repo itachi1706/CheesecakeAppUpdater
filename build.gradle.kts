@@ -2,7 +2,6 @@
 plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.sonarqube)
 }
@@ -16,6 +15,5 @@ sonarqube {
         property("sonar.projectVersion", project(":appupdater").ext.get("version") ?: "1.0")
         property("sonar.tests", "src/test/java,src/test/kotlin")
         property("sonar.coverage.jacoco.xmlReportPaths", "**/build/reports/coverage/test/debug/report.xml")
-        property("sonar.java.binaries", "**/build/intermediates/javac/*/classes")
     }
 }
