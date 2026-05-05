@@ -52,7 +52,8 @@ sonarqube {
         // These paths cover both Java and Kotlin compiled outputs for the debug variant
         property("sonar.android.variant", "debug")
 
-        property("sonar.java.binaries", "build/intermediates/javac/debug/compileDebugJavaWithJavac/classes,build/tmp/kotlin-classes/debug")
+//        property("sonar.java.binaries", "build/intermediates/javac/debug/compileDebugJavaWithJavac/classes,build/tmp/kotlin-classes/debug")
+        property("sonar.java.binaries", "build")
 
         // Ensure sources and tests are indexed correctly
 //        property("sonar.sources", "src/main/java")
