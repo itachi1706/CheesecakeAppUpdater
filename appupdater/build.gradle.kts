@@ -69,6 +69,12 @@ sonarqube {
         // Manually provide compiled classes paths to satisfy the JavaSensor
         // These paths cover both Java and Kotlin compiled outputs for the debug variant
         property("sonar.android.variant", "debug")
+
+        property("sonar.java.binaries", "build/intermediates/javac/debug/compileDebugJavaWithJavac/classes,build/tmp/kotlin-classes/debug")
+
+        // Ensure sources and tests are indexed correctly
+        property("sonar.sources", "src/main/java,src/main/kotlin")
+        property("sonar.tests", "src/test/java,src/test/kotlin")
     }
 }
 

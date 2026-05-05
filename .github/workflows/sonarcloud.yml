@@ -31,11 +31,11 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
       - name: Run Lint first and coverage generation first
-        run: ./gradlew lint createDebugUnitTestCoverageReport
+        run: ./gradlew lint createDebugUnitTestCoverageReport assembleDebug
       - name: DEBUG List all folders and file count in a tree
         run: find . -type d -print0 | while IFS= read -r -d '' dir; do echo "$dir ($(find "$dir" -type f | wc -l) files)"; done
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build assembleDebug sonar --info --no-configuration-cache
+        run: ./gradlew build sonar --info --no-configuration-cache
