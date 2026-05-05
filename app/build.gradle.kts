@@ -55,8 +55,8 @@ sonarqube {
         property("sonar.java.binaries", "build/intermediates/javac/debug/compileDebugJavaWithJavac/classes,build/tmp/kotlin-classes/debug")
 
         // Ensure sources and tests are indexed correctly
-        property("sonar.sources", "src/main/java,src/main/kotlin")
-        property("sonar.tests", "src/test/java,src/test/kotlin")
+        property("sonar.sources", "src/main/java")
+        property("sonar.tests", "src/test/java")
     }
 }
 
