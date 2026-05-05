@@ -22,6 +22,9 @@ android {
         viewBinding = true
     }
     buildTypes {
+        getByName("debug") {
+            enableUnitTestCoverage = true
+        }
         getByName("release") {
             isMinifyEnabled = true
             proguardFiles(

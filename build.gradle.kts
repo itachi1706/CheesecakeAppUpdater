@@ -15,6 +15,5 @@ sonarqube {
         property("sonar.projectVersion", project(":appupdater").ext.get("version") ?: "1.0")
         property("sonar.tests", "src/test/java,src/test/kotlin")
         property("sonar.coverage.jacoco.xmlReportPaths", "**/build/reports/coverage/test/debug/report.xml")
-        property("sonar.java.binaries", "${rootDir}/app/build/intermediates/javac/debug/*/classes,${rootDir}/appupdater/build/intermediates/javac/debug/*/classes")
     }
 }

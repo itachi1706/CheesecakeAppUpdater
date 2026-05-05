@@ -31,7 +31,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
       - name: Run Lint first and coverage generation first
-        run: ./gradlew build lint createDebugUnitTestCoverageReport
+        run: ./gradlew lint createDebugUnitTestCoverageReport
       - name: DEBUG List all folders and file count in a tree
         run: find . -type d -print0 | while IFS= read -r -d '' dir; do echo "$dir ($(find "$dir" -type f | wc -l) files)"; done
       - name: Build and analyze
