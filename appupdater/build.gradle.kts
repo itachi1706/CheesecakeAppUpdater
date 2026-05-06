@@ -6,8 +6,8 @@ plugins {
     alias(libs.plugins.sonarqube)
 }
 
-ext.set("version", "4.2.0")
-ext.set("versionCode", 701)
+ext.set("version", "4.2.1")
+ext.set("versionCode", 702)
 // we increment by 1 until commit count past the versionCode. 4.1.1 had a wrong code
 
 android {
