@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.1] - 2026-05-06
+### :wrench: Chores
+- [`9278c79`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/9278c793cd0d5cfc00a3a0eac2d86a28a02adcc6) - **deps**: Bump AGP to 9.2 *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`ca319d2`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/ca319d23521e013d27e93d97b4e7db57e732b2f0) - Add debug line *(commit by [@itachi1706](https://github.com/itachi1706))*
+- [`ac12771`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/ac12771c74a7c5789a1f20d900c664026d3b4da5) - Various code cleanup *(commit by [@itachi1706](https://github.com/itachi1706))*
+
+
 ## [4.2.0] - 2026-04-24
 ### :boom: BREAKING CHANGES
 - due to [`a990c51`](https://github.com/itachi1706/CheesecakeAppUpdater/commit/a990c51b2b9eaa1c2b81dd3de532b3cc62da6300) - Bump dependencies *(commit by [@itachi1706](https://github.com/itachi1706))*:
@@ -194,3 +201,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [4.1.0]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/4.0.1...4.1.0
 [4.1.1]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/4.1.0...4.1.1
 [4.2.0]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/4.1.1...4.2.0
+[4.2.1]: https://github.com/itachi1706/CheesecakeAppUpdater/compare/4.2.0...4.2.1
