@@ -1,6 +1,6 @@
 [versions]
 android-library = "9.2.1"
-android-application = "9.2.0"
+android-application = "9.2.1"
 browser = "1.10.0"
 constraintlayout = "2.2.1"
 core-ktx = "1.18.0"
